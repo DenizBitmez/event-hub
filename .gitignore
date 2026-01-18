@@ -1,0 +1,13 @@
+# Standard .NET gitignore
+bin/
+obj/
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+nupkg/
+.env
+
+# MacOS
+.DS_Store
