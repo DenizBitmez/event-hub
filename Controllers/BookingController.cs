@@ -1,8 +1,7 @@
-using EventHub.Data;
-using EventHub.Models;
+using EventHub.DTOs;
+using EventHub.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using StackExchange.Redis;
 
 namespace EventHub.Controllers;
 
@@ -10,193 +9,63 @@ namespace EventHub.Controllers;
 [Route("api/[controller]")]
 public class BookingController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
-    private readonly IConnectionMultiplexer _redis;
+    private readonly IBookingService _bookingService;
 
-    public BookingController(ApplicationDbContext context, IConnectionMultiplexer redis)
+    public BookingController(IBookingService bookingService)
     {
-        _context = context;
-        _redis = redis;
+        _bookingService = bookingService;
     }
 
-    [HttpPost("naive")]
-    public async Task<IActionResult> BookTicketNaive([FromBody] int eventId)
+    /// <summary>
+    /// Books a ticket for an event securely handling high concurrency.
+    /// </summary>
+    [HttpPost]
+    [Authorize] // <--- Require Login
+    public async Task<IActionResult> BookTicket([FromBody] BookingRequest request)
     {
-        // 1. Fetch Event
-        var eventItem = await _context.Events.FindAsync(eventId);
-        if (eventItem == null) return NotFound("Event not found");
-
-        // 2. Check Capacity
-        if (eventItem.Capacity <= 0)
+        if (request.Quantity <= 0)
         {
-            return BadRequest("Sold Out!");
+            return BadRequest("Quantity must be greater than 0.");
         }
 
-        // Simulate some processing time (widen the race window)
-        await Task.Delay(50); 
-
-        // 3. Decrement Capacity
-        eventItem.Capacity--;
+        // SECURE: Get User ID from Token, don't trust the client body
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+        if (userIdClaim == null) return Unauthorized();
         
-        // 4. Create Ticket
-        _context.Tickets.Add(new Ticket 
-        { 
-            EventId = eventItem.Id,
-            OwnerName = $"User-{Guid.NewGuid()}" // Random user
-        });
+        request.UserId = int.Parse(userIdClaim.Value);
 
-        // 5. Save Changes
-        await _context.SaveChangesAsync();
-        
-        return Ok($"Ticket Booked! Remaining: {eventItem.Capacity}");
-    }
-
-    [HttpPost("reset")]
-    public async Task<IActionResult> Reset([FromBody] int capacity = 10)
-    {
-        var eventItem = await _context.Events.FindAsync(1);
-        if (eventItem != null)
-        {
-            eventItem.Capacity = capacity;
-            // Clear tickets
-            var tickets = _context.Tickets.Where(t => t.EventId == 1);
-            _context.Tickets.RemoveRange(tickets);
-        }
-        await _context.SaveChangesAsync();
-        return Ok($"Reset to {capacity} and cleared tickets.");
-    }
-
-    [HttpPost("pessimistic")]
-    public async Task<IActionResult> BookTicketPessimistic([FromBody] int eventId)
-    {
-        using var transaction = await _context.Database.BeginTransactionAsync();
         try
         {
-            // PESSIMISTIC LOCK: This SQL locks the row until transaction commit/rollback
-            // Other transactions trying to read this row with FOR UPDATE will WAIT.
-            var eventItem = await _context.Events
-                .FromSqlRaw("SELECT * FROM \"Events\" WHERE \"Id\" = {0} FOR UPDATE", eventId)
-                .SingleOrDefaultAsync();
+            var response = await _bookingService.BookTicketAsync(request);
 
-            if (eventItem == null) return NotFound("Event not found");
-
-            if (eventItem.Capacity <= 0)
+            if (response.Success)
             {
-                return BadRequest("Sold Out!");
+                return Ok(response);
             }
-
-            await Task.Delay(50); // Validate that lock makes them wait
-
-            eventItem.Capacity--;
-            
-            _context.Tickets.Add(new Ticket 
-            { 
-                EventId = eventItem.Id, 
-                OwnerName = $"User-{Guid.NewGuid()}" 
-            });
-
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
-            
-            return Ok($"Ticket Booked! Remaining: {eventItem.Capacity}");
-        }
-        catch (Exception)
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
-    }
-    [HttpPost("optimistic")]
-    public async Task<IActionResult> BookTicketOptimistic([FromBody] int eventId)
-    {
-        try
-        {
-            // 1. Read (No Lock)
-            var eventItem = await _context.Events.FindAsync(eventId);
-            if (eventItem == null) return NotFound("Event not found");
-
-            if (eventItem.Capacity <= 0)
+            else
             {
-                return BadRequest("Sold Out!");
-            }
-
-            // Simulate slight delay to increase race chance
-            await Task.Delay(20);
-
-            // 2. Modify
-            eventItem.Capacity--;
-            
-            // EF Core will automatically check if 'Version' matches the DB
-            // We must update the version so the NEXT person fails
-            eventItem.Version = Guid.NewGuid();
-
-            _context.Tickets.Add(new Ticket 
-            { 
-                EventId = eventItem.Id, 
-                OwnerName = $"User-{Guid.NewGuid()}" 
-            });
-
-            // 3. Save (Will throw DbUpdateConcurrencyException if Version changed)
-            await _context.SaveChangesAsync();
-            
-            return Ok($"Ticket Booked! Remaining: {eventItem.Capacity}");
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            // PROOF OF SUCCESS: The system prevented an overwrite!
-            // In a real app, we would retry here.
-            return Conflict("Concurrency Conflict! Someone else booked while you were looking. Please try again.");
-        }
-    }
-    [HttpPost("redis")]
-    public async Task<IActionResult> BookTicketRedis([FromBody] int eventId)
-    {
-        try
-        {
-            var db = _redis.GetDatabase();
-            var lockKey = $"lock:event:{eventId}";
-            var token = Guid.NewGuid().ToString();
-
-            // 1. Acquire Lock (SET NX PX)
-            if (!await db.LockTakeAsync(lockKey, token, TimeSpan.FromSeconds(10)))
-            {
-                 return StatusCode(429, "Server busy, please try again later (Lock not acquired)");
-            }
-
-            try
-            {
-                // 2. Critical Section (Protected by Redis)
-                var eventItem = await _context.Events.FindAsync(eventId);
-                if (eventItem == null) return NotFound("Event not found");
-
-                if (eventItem.Capacity <= 0)
+                // If Sold Out or other logic failure, return 409 Conflict or 400 BadRequest
+                // 409 Conflict is often semantic for "State didn't allow this" (e.g. sold out during race)
+                if (response.Message.Contains("Sold Out"))
                 {
-                    return BadRequest("Sold Out!");
+                    return Conflict(response); 
                 }
-
-                await Task.Delay(20); 
-
-                eventItem.Capacity--;
-
-                _context.Tickets.Add(new Ticket 
-                { 
-                    EventId = eventItem.Id, 
-                    OwnerName = $"User-Redis-{Guid.NewGuid()}" 
-                });
-
-                await _context.SaveChangesAsync();
-                
-                return Ok($"Ticket Booked! Remaining: {eventItem.Capacity}");
-            }
-            finally
-            {
-                // 3. Release Lock
-                await db.LockReleaseAsync(lockKey, token);
+                return BadRequest(response);
             }
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.ToString());
+            // Logged in Service, but return generic 500 here
+            return StatusCode(500, "An internal error occurred while processing your booking.");
         }
+    }
+
+    [HttpPost("reset")]
+    public IActionResult ResetStub()
+    {
+       // Ideally this should be a dev-only endpoint or handled via a separate AdminService.
+       // For now, I'm removing the inline implementation to separate concerns, 
+       // but if we need it for testing, we can re-add or put back in a TestController.
+       return StatusCode(501, "Reset functionality moved to direct DB access or Admin API for security.");
     }
 }

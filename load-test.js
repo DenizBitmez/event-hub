@@ -7,9 +7,14 @@ export const options = {
 };
 
 export default function () {
-  const url = 'http://localhost:5200/api/booking/naive'; // Adjust port if needed
-  const payload = JSON.stringify(1); // EventId = 1
-  
+  const url = 'http://localhost:5200/api/booking';
+  // Payload matches BookingRequest DTO
+  const payload = JSON.stringify({
+    EventId: 1,
+    UserId: Math.floor(Math.random() * 10000), // Random User ID
+    Quantity: 1
+  });
+
   const params = {
     headers: {
       'Content-Type': 'application/json',
@@ -19,10 +24,11 @@ export default function () {
   const res = http.post(url, payload, params);
 
   check(res, {
-    'is status 200': (r) => r.status === 200,
-    'is status 400 (Sold Out)': (r) => r.status === 400,
+    'is status 200 (Success)': (r) => r.status === 200,
+    'is status 409 (Sold Out)': (r) => r.status === 409,
+    'is status 400 (Bad Request)': (r) => r.status === 400,
   });
-  
-  // No sleep, hit as hard as possible? Or minimal sleep
+
   sleep(0.1);
 }
+
