@@ -17,4 +17,7 @@ public class Ticket
     public decimal PurchasePrice { get; set; } // Store price at time of booking
     
     public DateTime BookingDate { get; set; } = DateTime.UtcNow;
+
+    public int? SeatId { get; set; }
+    public Seat? Seat { get; set; }
 }

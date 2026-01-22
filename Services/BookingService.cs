@@ -9,6 +9,7 @@ public interface IBookingService
 {
     Task<BookingResponse> BookTicketAsync(BookingRequest request);
     Task<BookingResponse> CancelTicketAsync(int ticketId);
+    Task<BookingResponse> BookSeatAsync(BookingRequest request, int seatId);
 }
 
 public class BookingService : IBookingService
@@ -126,6 +127,51 @@ public class BookingService : IBookingService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error cancelling ticket {TicketId}", ticketId);
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
+    public async Task<BookingResponse> BookSeatAsync(BookingRequest request, int seatId)
+    {
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            // 1. Validate Seat
+            var seat = await _context.Seats.FindAsync(seatId);
+            if (seat == null) return new BookingResponse { Success = false, Message = "Seat not found" };
+            if (seat.EventId != request.EventId) return new BookingResponse { Success = false, Message = "Seat mismatch" };
+            
+            // Check usage (DB level check as final gate)
+            if (seat.Status == "Sold") return new BookingResponse { Success = false, Message = "Seat already sold" };
+
+            // 2. Mark Seat as Sold
+            seat.Status = "Sold";
+
+            // 3. Create Ticket
+            var ticket = new Ticket
+            {
+                EventId = request.EventId,
+                UserId = request.UserId,
+                SeatId = seatId,
+                PurchasePrice = 100, // Ideally fetch from Event or Seat Category
+                Status = "Confirmed",
+                BookingDate = DateTime.UtcNow
+            };
+            
+            _context.Tickets.Add(ticket);
+            
+            // 4. Decrement Capacity (Optional, but keeps stats consistent)
+            var eventItem = await _context.Events.FindAsync(request.EventId);
+            if(eventItem != null) eventItem.Capacity--;
+
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return new BookingResponse { Success = true, Message = "Seat Booked", TicketId = ticket.Id };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error booking seat {SeatId}", seatId);
             await transaction.RollbackAsync();
             throw;
         }
