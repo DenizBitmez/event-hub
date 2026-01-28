@@ -2,6 +2,7 @@ using EventHub.DTOs;
 using EventHub.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
 
 namespace EventHub.Controllers;
 
@@ -11,11 +12,13 @@ public class BookingController : ControllerBase
 {
     private readonly IBookingService _bookingService;
     private readonly IReservationService _reservationService;
+    private readonly IValidator<BookingRequest> _validator;
 
-    public BookingController(IBookingService bookingService, IReservationService reservationService)
+    public BookingController(IBookingService bookingService, IReservationService reservationService, IValidator<BookingRequest> validator)
     {
         _bookingService = bookingService;
         _reservationService = reservationService;
+        _validator = validator;
     }
 
     /// <summary>
@@ -25,9 +28,10 @@ public class BookingController : ControllerBase
     [Authorize] // <--- Require Login
     public async Task<IActionResult> BookTicket([FromBody] BookingRequest request)
     {
-        if (request.Quantity <= 0)
+        var validationResult = await _validator.ValidateAsync(request);
+        if (!validationResult.IsValid)
         {
-            return BadRequest("Quantity must be greater than 0.");
+            return BadRequest(validationResult.Errors);
         }
 
         // SECURE: Get User ID from Token, don't trust the client body
