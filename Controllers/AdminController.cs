@@ -3,6 +3,7 @@ using EventHub.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using EventHub.Models.Enums;
 
 namespace EventHub.Controllers;
 
@@ -28,10 +29,10 @@ public class AdminController : ControllerBase
             {
                 EventId = e.Id,
                 EventName = e.Name,
-                TotalCapacity = e.Capacity + _context.Tickets.Count(t => t.EventId == e.Id && t.Status != "Cancelled"), // Approx initial capacity
+                TotalCapacity = e.Capacity + _context.Tickets.Count(t => t.EventId == e.Id && t.Status != TicketStatus.Cancelled), // Approx initial capacity
                 RemainingCapacity = e.Capacity,
-                SoldTickets = _context.Tickets.Count(t => t.EventId == e.Id && t.Status == "Confirmed"),
-                Revenue = _context.Tickets.Where(t => t.EventId == e.Id && t.Status == "Confirmed").Sum(t => t.PurchasePrice)
+                SoldTickets = _context.Tickets.Count(t => t.EventId == e.Id && t.Status == TicketStatus.Confirmed),
+                Revenue = _context.Tickets.Where(t => t.EventId == e.Id && t.Status == TicketStatus.Confirmed).Sum(t => t.PurchasePrice)
             })
             .ToListAsync();
 

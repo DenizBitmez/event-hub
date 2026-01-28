@@ -1,6 +1,7 @@
 using EventHub.Data;
 using EventHub.DTOs;
 using EventHub.Models;
+using EventHub.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventHub.Services;
@@ -67,7 +68,7 @@ public class BookingService : IBookingService
                 EventId = eventItem.Id,
                 UserId = request.UserId, // Linked to real User
                 PurchasePrice = eventItem.Price,
-                Status = "Confirmed",
+                Status = TicketStatus.Confirmed,
                 BookingDate = DateTime.UtcNow
             };
 
@@ -102,10 +103,10 @@ public class BookingService : IBookingService
             var ticket = await _context.Tickets.FindAsync(ticketId);
             if (ticket == null) return new BookingResponse { Success = false, Message = "Ticket not found" };
 
-            if (ticket.Status == "Cancelled") return new BookingResponse { Success = false, Message = "Already cancelled" };
+            if (ticket.Status == TicketStatus.Cancelled) return new BookingResponse { Success = false, Message = "Already cancelled" };
 
             // 1. Mark as Cancelled
-            ticket.Status = "Cancelled";
+            ticket.Status = TicketStatus.Cancelled;
 
             // 2. Restore Capacity (Locking Event to ensure consistency)
             var eventItem = await _context.Events
@@ -154,7 +155,7 @@ public class BookingService : IBookingService
                 UserId = request.UserId,
                 SeatId = seatId,
                 PurchasePrice = 100, // Ideally fetch from Event or Seat Category
-                Status = "Confirmed",
+                Status = TicketStatus.Confirmed,
                 BookingDate = DateTime.UtcNow
             };
             

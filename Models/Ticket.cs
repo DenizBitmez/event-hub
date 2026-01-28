@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using EventHub.Models.Enums;
 
 namespace EventHub.Models;
 
@@ -12,7 +13,7 @@ public class Ticket
     public int? UserId { get; set; }
     public User? User { get; set; }
     
-    public string Status { get; set; } = "Confirmed"; // "Pending", "Confirmed", "Cancelled"
+    public TicketStatus Status { get; set; } = TicketStatus.Confirmed; // "Pending", "Confirmed", "Cancelled"
     
     public decimal PurchasePrice { get; set; } // Store price at time of booking
     
