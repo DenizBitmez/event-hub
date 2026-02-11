@@ -19,6 +19,21 @@ public class BookingController : ControllerBase
         _redis = redis;
     }
 
+    [HttpGet("events")]
+    public async Task<IActionResult> GetEvents()
+    {
+        var events = await _context.Events.ToListAsync();
+        return Ok(events);
+    }
+
+    [HttpGet("events/{id}")]
+    public async Task<IActionResult> GetEvent(int id)
+    {
+        var eventItem = await _context.Events.FindAsync(id);
+        if (eventItem == null) return NotFound("Event not found");
+        return Ok(eventItem);
+    }
+
     [HttpPost("naive")]
     public async Task<IActionResult> BookTicketNaive([FromBody] int eventId)
     {
