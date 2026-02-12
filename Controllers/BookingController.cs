@@ -21,12 +21,23 @@ public class BookingController : ControllerBase
         _validator = validator;
     }
 
-    /// <summary>
-    /// Books a ticket for an event securely handling high concurrency.
-    /// </summary>
-    [HttpPost]
-    [Authorize] // <--- Require Login
-    public async Task<IActionResult> BookTicket([FromBody] BookingRequest request)
+    [HttpGet("events")]
+    public async Task<IActionResult> GetEvents()
+    {
+        var events = await _context.Events.ToListAsync();
+        return Ok(events);
+    }
+
+    [HttpGet("events/{id}")]
+    public async Task<IActionResult> GetEvent(int id)
+    {
+        var eventItem = await _context.Events.FindAsync(id);
+        if (eventItem == null) return NotFound("Event not found");
+        return Ok(eventItem);
+    }
+
+    [HttpPost("naive")]
+    public async Task<IActionResult> BookTicketNaive([FromBody] int eventId)
     {
         var validationResult = await _validator.ValidateAsync(request);
         if (!validationResult.IsValid)

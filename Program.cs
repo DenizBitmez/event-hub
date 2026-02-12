@@ -51,6 +51,18 @@ builder.Services.AddControllers()
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 
+// Add CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 // 1. Database Context (PostgreSQL)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -138,7 +150,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseAuthentication(); // <--- Added
+app.UseCors("AllowFrontend");
+
 app.UseAuthorization();
 
 app.UseRateLimiter(); // <--- Rate Limiting Middleware
