@@ -3,6 +3,7 @@ using EventHub.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventHub.Controllers;
 
@@ -21,23 +22,8 @@ public class BookingController : ControllerBase
         _validator = validator;
     }
 
-    [HttpGet("events")]
-    public async Task<IActionResult> GetEvents()
-    {
-        var events = await _context.Events.ToListAsync();
-        return Ok(events);
-    }
-
-    [HttpGet("events/{id}")]
-    public async Task<IActionResult> GetEvent(int id)
-    {
-        var eventItem = await _context.Events.FindAsync(id);
-        if (eventItem == null) return NotFound("Event not found");
-        return Ok(eventItem);
-    }
-
     [HttpPost("naive")]
-    public async Task<IActionResult> BookTicketNaive([FromBody] int eventId)
+    public async Task<IActionResult> BookTicketNaive([FromBody] BookingRequest request)
     {
         var validationResult = await _validator.ValidateAsync(request);
         if (!validationResult.IsValid)
@@ -116,12 +102,34 @@ public class BookingController : ControllerBase
         return BadRequest(result);
     }
 
-    [HttpPost("reset")]
-    public IActionResult ResetStub()
+    [HttpGet("user/my-bookings")]
+    [Authorize]
+    public async Task<IActionResult> GetUserBookings([FromServices] EventHub.Data.ApplicationDbContext context)
     {
-       // Ideally this should be a dev-only endpoint or handled via a separate AdminService.
-       // For now, I'm removing the inline implementation to separate concerns, 
-       // but if we need it for testing, we can re-add or put back in a TestController.
-       return StatusCode(501, "Reset functionality moved to direct DB access or Admin API for security.");
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+        if (userIdClaim == null) return Unauthorized();
+        var userId = int.Parse(userIdClaim.Value);
+
+        var bookings = await context.Tickets
+            .Include(t => t.Event)
+            .Include(t => t.Seat)
+            .Where(t => t.UserId == userId)
+            .Select(t => new EventHub.DTOs.TicketDto
+            {
+                Id = t.Id,
+                EventName = t.Event.Name,
+                EventDate = t.Event.StartDate,
+                Venue = t.Event.Location,
+                SeatSection = t.Seat != null ? t.Seat.Section : "N/A",
+                SeatRow = t.Seat != null ? t.Seat.Row : "N/A",
+                SeatNumber = t.Seat != null ? t.Seat.Number : "N/A",
+                Price = t.PurchasePrice,
+                PurchaseDate = t.BookingDate,
+                Status = t.Status.ToString()
+            })
+            .OrderByDescending(t => t.PurchaseDate)
+            .ToListAsync();
+
+        return Ok(bookings);
     }
 }

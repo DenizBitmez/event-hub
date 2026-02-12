@@ -28,9 +28,10 @@ public class JwtService : IJwtService
 
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // Sub should be ID
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // Redundant but safe
             new Claim(ClaimTypes.Role, user.Role),
             new Claim(ClaimTypes.Name, user.FullName)
         };

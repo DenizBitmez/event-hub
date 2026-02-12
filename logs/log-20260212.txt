@@ -1,0 +1,2013 @@
+2026-02-12 14:29:14.031 +03:00 [INF] User profile is available. Using 'C:\Users\deniz\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-12 14:29:14.150 +03:00 [INF] Now listening on: http://localhost:5181
+2026-02-12 14:29:14.154 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-12 14:29:14.156 +03:00 [INF] Hosting environment: Development
+2026-02-12 14:29:14.157 +03:00 [INF] Content root path: C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub
+2026-02-12 14:29:23.689 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:29:23.767 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:29:23.784 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:29:24.634 +03:00 [INF] Executed DbCommand (29ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:29:24.710 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:29:24.724 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 934.5587ms
+2026-02-12 14:29:24.728 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:29:24.737 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 1048.9328ms
+2026-02-12 14:29:24.743 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - application/json null
+2026-02-12 14:29:24.773 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:29:24.778 +03:00 [INF] Route matched with {action = "SeedEvents", controller = "Admin"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SeedEvents(EventHub.Services.EventSeederService) on controller EventHub.Controllers.AdminController (EventHub).
+2026-02-12 14:29:24.809 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e)
+2026-02-12 14:29:24.815 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:29:24.817 +03:00 [INF] Executed action EventHub.Controllers.AdminController.SeedEvents (EventHub) in 36.4696ms
+2026-02-12 14:29:24.818 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:29:24.819 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - 200 null text/plain; charset=utf-8 76.5519ms
+2026-02-12 14:29:24.822 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/register - application/json null
+2026-02-12 14:29:24.828 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:29:24.831 +03:00 [INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(EventHub.Controllers.RegisterRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:29:24.890 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE u."Email" = @__request_Email_0)
+2026-02-12 14:29:24.951 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "FullName", "PasswordHash", "Role")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "Id";
+2026-02-12 14:29:24.969 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:29:24.972 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Register (EventHub) in 138.2022ms
+2026-02-12 14:29:24.973 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:29:24.974 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/register - 200 null text/plain; charset=utf-8 151.9481ms
+2026-02-12 14:29:24.976 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:29:24.980 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:29:24.981 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:29:24.986 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:29:24.989 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:29:24.990 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 7.363ms
+2026-02-12 14:29:24.991 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:29:24.991 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 14.9651ms
+2026-02-12 14:29:24.994 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - application/json null
+2026-02-12 14:29:24.998 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:29:25.002 +03:00 [INF] Route matched with {action = "GetEvents", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEvents(System.String, System.Nullable`1[System.DateTime], System.Nullable`1[System.DateTime]) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:29:25.063 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[@__location_0_contains='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT e."Id", e."Capacity", e."CategoryId", e."Description", e."EndDate", e."ImageUrl", e."IsActive", e."Location", e."Name", e."Price", e."StartDate", e."Version", c."Id", c."Description", c."Name"
+FROM "Events" AS e
+LEFT JOIN "Categories" AS c ON e."CategoryId" = c."Id"
+WHERE e."IsActive" AND e."Location" LIKE @__location_0_contains
+2026-02-12 14:29:25.070 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.Models.Event, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:29:25.086 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEvents (EventHub) in 81.2665ms
+2026-02-12 14:29:25.088 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:29:25.089 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - 200 null application/json; charset=utf-8 94.8026ms
+2026-02-12 14:33:14.974 +03:00 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e)
+2026-02-12 14:33:15.033 +03:00 [INF] Events Seeded Successfully
+2026-02-12 14:33:15.047 +03:00 [INF] User profile is available. Using 'C:\Users\deniz\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-12 14:33:15.104 +03:00 [INF] Now listening on: http://localhost:5181
+2026-02-12 14:33:15.107 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-12 14:33:15.108 +03:00 [INF] Hosting environment: Development
+2026-02-12 14:33:15.109 +03:00 [INF] Content root path: C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub
+2026-02-12 14:33:42.130 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:33:42.177 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:33:42.191 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:33:42.332 +03:00 [INF] Executed DbCommand (10ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:33:42.385 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:33:42.398 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 202.5979ms
+2026-02-12 14:33:42.404 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:33:42.409 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 280.7008ms
+2026-02-12 14:33:42.414 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - application/json null
+2026-02-12 14:33:42.448 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:33:42.459 +03:00 [INF] Route matched with {action = "SeedEvents", controller = "Admin"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SeedEvents(EventHub.Services.EventSeederService) on controller EventHub.Controllers.AdminController (EventHub).
+2026-02-12 14:33:42.512 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e)
+2026-02-12 14:33:42.515 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:33:42.516 +03:00 [INF] Executed action EventHub.Controllers.AdminController.SeedEvents (EventHub) in 55.1179ms
+2026-02-12 14:33:42.518 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:33:42.519 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - 200 null text/plain; charset=utf-8 105.3033ms
+2026-02-12 14:33:42.523 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/register - application/json null
+2026-02-12 14:33:42.529 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:33:42.532 +03:00 [INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(EventHub.Controllers.RegisterRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:33:42.545 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE u."Email" = @__request_Email_0)
+2026-02-12 14:33:42.612 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "FullName", "PasswordHash", "Role")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "Id";
+2026-02-12 14:33:42.625 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:33:42.628 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Register (EventHub) in 94.28ms
+2026-02-12 14:33:42.629 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:33:42.630 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/register - 200 null text/plain; charset=utf-8 107.2704ms
+2026-02-12 14:33:42.636 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:33:42.639 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:33:42.640 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:33:42.647 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:33:42.652 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:33:42.654 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 12.3261ms
+2026-02-12 14:33:42.656 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:33:42.657 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 21.2981ms
+2026-02-12 14:33:42.662 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - application/json null
+2026-02-12 14:33:42.668 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:33:42.673 +03:00 [INF] Route matched with {action = "GetEvents", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEvents(System.String, System.Nullable`1[System.DateTime], System.Nullable`1[System.DateTime]) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:33:42.743 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__location_0_contains='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT e."Id", e."Capacity", e."CategoryId", e."Description", e."EndDate", e."ImageUrl", e."IsActive", e."Location", e."Name", e."Price", e."StartDate", e."Version", c."Id", c."Description", c."Name"
+FROM "Events" AS e
+LEFT JOIN "Categories" AS c ON e."CategoryId" = c."Id"
+WHERE e."IsActive" AND e."Location" LIKE @__location_0_contains
+2026-02-12 14:33:42.748 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.Models.Event, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:33:42.771 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEvents (EventHub) in 95.5609ms
+2026-02-12 14:33:42.773 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:33:42.774 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - 200 null application/json; charset=utf-8 111.8627ms
+2026-02-12 14:33:52.727 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:33:52.729 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:33:52.730 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:33:52.744 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:33:52.747 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:33:52.748 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 16.8663ms
+2026-02-12 14:33:52.749 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:33:52.750 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 23.3112ms
+2026-02-12 14:33:52.754 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - application/json null
+2026-02-12 14:33:52.759 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:33:52.760 +03:00 [INF] Route matched with {action = "SeedEvents", controller = "Admin"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SeedEvents(EventHub.Services.EventSeederService) on controller EventHub.Controllers.AdminController (EventHub).
+2026-02-12 14:33:52.765 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e)
+2026-02-12 14:33:52.767 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:33:52.769 +03:00 [INF] Executed action EventHub.Controllers.AdminController.SeedEvents (EventHub) in 6.5988ms
+2026-02-12 14:33:52.770 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:33:52.770 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - 200 null text/plain; charset=utf-8 16.0731ms
+2026-02-12 14:33:52.773 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/register - application/json null
+2026-02-12 14:33:52.775 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:33:52.776 +03:00 [INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(EventHub.Controllers.RegisterRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:33:52.781 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE u."Email" = @__request_Email_0)
+2026-02-12 14:33:52.786 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "FullName", "PasswordHash", "Role")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "Id";
+2026-02-12 14:33:52.788 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:33:52.790 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Register (EventHub) in 12.2098ms
+2026-02-12 14:33:52.791 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:33:52.792 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/register - 200 null text/plain; charset=utf-8 19.0991ms
+2026-02-12 14:33:52.794 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:33:52.796 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:33:52.797 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:33:52.801 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:33:52.803 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:33:52.805 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 6.1235ms
+2026-02-12 14:33:52.806 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:33:52.807 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 12.0283ms
+2026-02-12 14:33:52.809 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - application/json null
+2026-02-12 14:33:52.812 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:33:52.813 +03:00 [INF] Route matched with {action = "GetEvents", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEvents(System.String, System.Nullable`1[System.DateTime], System.Nullable`1[System.DateTime]) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:33:52.818 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__location_0_contains='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT e."Id", e."Capacity", e."CategoryId", e."Description", e."EndDate", e."ImageUrl", e."IsActive", e."Location", e."Name", e."Price", e."StartDate", e."Version", c."Id", c."Description", c."Name"
+FROM "Events" AS e
+LEFT JOIN "Categories" AS c ON e."CategoryId" = c."Id"
+WHERE e."IsActive" AND e."Location" LIKE @__location_0_contains
+2026-02-12 14:33:52.820 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.Models.Event, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:33:52.821 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEvents (EventHub) in 6.8465ms
+2026-02-12 14:33:52.822 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:33:52.823 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - 200 null application/json; charset=utf-8 14.1247ms
+2026-02-12 14:34:05.633 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event - null null
+2026-02-12 14:34:05.637 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:34:05.638 +03:00 [INF] Route matched with {action = "GetEvents", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEvents(System.String, System.Nullable`1[System.DateTime], System.Nullable`1[System.DateTime]) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:34:05.653 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT e."Id", e."Capacity", e."CategoryId", e."Description", e."EndDate", e."ImageUrl", e."IsActive", e."Location", e."Name", e."Price", e."StartDate", e."Version", c."Id", c."Description", c."Name"
+FROM "Events" AS e
+LEFT JOIN "Categories" AS c ON e."CategoryId" = c."Id"
+WHERE e."IsActive"
+2026-02-12 14:34:05.688 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.Models.Event, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:34:05.699 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEvents (EventHub) in 59.3208ms
+2026-02-12 14:34:05.700 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:34:05.701 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event - 200 null application/json; charset=utf-8 68.7822ms
+2026-02-12 14:35:12.576 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event - null null
+2026-02-12 14:35:12.578 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:35:12.579 +03:00 [INF] Route matched with {action = "GetEvents", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEvents(System.String, System.Nullable`1[System.DateTime], System.Nullable`1[System.DateTime]) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:35:12.583 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT e."Id", e."Capacity", e."CategoryId", e."Description", e."EndDate", e."ImageUrl", e."IsActive", e."Location", e."Name", e."Price", e."StartDate", e."Version", c."Id", c."Description", c."Name"
+FROM "Events" AS e
+LEFT JOIN "Categories" AS c ON e."CategoryId" = c."Id"
+WHERE e."IsActive"
+2026-02-12 14:35:12.585 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.Models.Event, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:35:12.586 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEvents (EventHub) in 5.9329ms
+2026-02-12 14:35:12.587 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:35:12.588 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event - 200 null application/json; charset=utf-8 12.8356ms
+2026-02-12 14:38:32.819 +03:00 [INF] Application is shutting down...
+2026-02-12 14:40:47.586 +03:00 [INF] Executed DbCommand (27ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:40:47.759 +03:00 [INF] Executed DbCommand (13ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Int32), @p2='?', @p3='?' (DbType = DateTime), @p4='?', @p5='?' (DbType = Boolean), @p6='?', @p7='?', @p8='?' (DbType = Decimal), @p9='?' (DbType = DateTime), @p10='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Events" ("Capacity", "CategoryId", "Description", "EndDate", "ImageUrl", "IsActive", "Location", "Name", "Price", "StartDate", "Version")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10)
+RETURNING "Id";
+2026-02-12 14:40:47.792 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:40:47.824 +03:00 [INF] Executed DbCommand (11ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Int32), @p2='?', @p3='?' (DbType = DateTime), @p4='?', @p5='?' (DbType = Boolean), @p6='?', @p7='?', @p8='?' (DbType = Decimal), @p9='?' (DbType = DateTime), @p10='?' (DbType = Guid), @p11='?' (DbType = Int32), @p12='?', @p13='?', @p14='?', @p15='?', @p16='?' (DbType = Int32), @p17='?', @p18='?', @p19='?', @p20='?', @p21='?' (DbType = Int32), @p22='?', @p23='?', @p24='?', @p25='?', @p26='?' (DbType = Int32), @p27='?', @p28='?', @p29='?', @p30='?', @p31='?' (DbType = Int32), @p32='?', @p33='?', @p34='?', @p35='?', @p36='?' (DbType = Int32), @p37='?', @p38='?', @p39='?', @p40='?', @p41='?' (DbType = Int32), @p42='?', @p43='?', @p44='?', @p45='?', @p46='?' (DbType = Int32), @p47='?', @p48='?', @p49='?', @p50='?', @p51='?' (DbType = Int32), @p52='?', @p53='?', @p54='?', @p55='?', @p56='?' (DbType = Int32), @p57='?', @p58='?', @p59='?', @p60='?', @p61='?' (DbType = Int32), @p62='?', @p63='?', @p64='?', @p65='?', @p66='?' (DbType = Int32), @p67='?', @p68='?', @p69='?', @p70='?', @p71='?' (DbType = Int32), @p72='?', @p73='?', @p74='?', @p75='?', @p76='?' (DbType = Int32), @p77='?', @p78='?', @p79='?', @p80='?', @p81='?' (DbType = Int32), @p82='?', @p83='?', @p84='?', @p85='?', @p86='?' (DbType = Int32), @p87='?', @p88='?', @p89='?', @p90='?', @p91='?' (DbType = Int32), @p92='?', @p93='?', @p94='?', @p95='?', @p96='?' (DbType = Int32), @p97='?', @p98='?', @p99='?', @p100='?', @p101='?' (DbType = Int32), @p102='?', @p103='?', @p104='?', @p105='?', @p106='?' (DbType = Int32), @p107='?', @p108='?', @p109='?', @p110='?', @p111='?' (DbType = Int32), @p112='?', @p113='?', @p114='?', @p115='?', @p116='?' (DbType = Int32), @p117='?', @p118='?', @p119='?', @p120='?', @p121='?' (DbType = Int32), @p122='?', @p123='?', @p124='?', @p125='?', @p126='?' (DbType = Int32), @p127='?', @p128='?', @p129='?', @p130='?', @p131='?' (DbType = Int32), @p132='?', @p133='?', @p134='?', @p135='?', @p136='?' (DbType = Int32), @p137='?', @p138='?', @p139='?', @p140='?', @p141='?' (DbType = Int32), @p142='?', @p143='?', @p144='?', @p145='?', @p146='?' (DbType = Int32), @p147='?', @p148='?', @p149='?', @p150='?', @p151='?' (DbType = Int32), @p152='?', @p153='?', @p154='?', @p155='?', @p156='?' (DbType = Int32), @p157='?', @p158='?', @p159='?', @p160='?', @p161='?' (DbType = Int32), @p162='?', @p163='?', @p164='?', @p165='?', @p166='?' (DbType = Int32), @p167='?', @p168='?', @p169='?', @p170='?', @p171='?' (DbType = Int32), @p172='?', @p173='?', @p174='?', @p175='?', @p176='?' (DbType = Int32), @p177='?', @p178='?', @p179='?', @p180='?', @p181='?' (DbType = Int32), @p182='?', @p183='?', @p184='?', @p185='?', @p186='?' (DbType = Int32), @p187='?', @p188='?', @p189='?', @p190='?', @p191='?' (DbType = Int32), @p192='?', @p193='?', @p194='?', @p195='?', @p196='?' (DbType = Int32), @p197='?', @p198='?', @p199='?', @p200='?', @p201='?' (DbType = Int32), @p202='?', @p203='?', @p204='?', @p205='?', @p206='?' (DbType = Int32), @p207='?', @p208='?', @p209='?', @p210='?', @p211='?' (DbType = Int32), @p212='?', @p213='?', @p214='?', @p215='?', @p216='?' (DbType = Int32), @p217='?', @p218='?', @p219='?', @p220='?', @p221='?' (DbType = Int32), @p222='?', @p223='?', @p224='?', @p225='?', @p226='?' (DbType = Int32), @p227='?', @p228='?', @p229='?', @p230='?', @p231='?' (DbType = Int32), @p232='?', @p233='?', @p234='?', @p235='?', @p236='?' (DbType = Int32), @p237='?', @p238='?', @p239='?', @p240='?', @p241='?' (DbType = Int32), @p242='?', @p243='?', @p244='?', @p245='?', @p246='?' (DbType = Int32), @p247='?', @p248='?', @p249='?', @p250='?', @p251='?' (DbType = Int32), @p252='?', @p253='?', @p254='?', @p255='?', @p256='?' (DbType = Int32), @p257='?', @p258='?', @p259='?', @p260='?', @p261='?' (DbType = Int32), @p262='?', @p263='?', @p264='?', @p265='?', @p266='?' (DbType = Int32), @p267='?', @p268='?', @p269='?', @p270='?', @p271='?' (DbType = Int32), @p272='?', @p273='?', @p274='?', @p275='?', @p276='?' (DbType = Int32), @p277='?', @p278='?', @p279='?', @p280='?', @p281='?' (DbType = Int32), @p282='?', @p283='?', @p284='?', @p285='?', @p286='?' (DbType = Int32), @p287='?', @p288='?', @p289='?', @p290='?', @p291='?' (DbType = Int32), @p292='?', @p293='?', @p294='?', @p295='?', @p296='?' (DbType = Int32), @p297='?', @p298='?', @p299='?', @p300='?', @p301='?' (DbType = Int32), @p302='?', @p303='?', @p304='?', @p305='?', @p306='?' (DbType = Int32), @p307='?', @p308='?', @p309='?', @p310='?', @p311='?' (DbType = Int32), @p312='?', @p313='?', @p314='?', @p315='?', @p316='?' (DbType = Int32), @p317='?', @p318='?', @p319='?', @p320='?', @p321='?' (DbType = Int32), @p322='?', @p323='?', @p324='?', @p325='?', @p326='?' (DbType = Int32), @p327='?', @p328='?', @p329='?', @p330='?', @p331='?' (DbType = Int32), @p332='?', @p333='?', @p334='?', @p335='?', @p336='?' (DbType = Int32), @p337='?', @p338='?', @p339='?', @p340='?', @p341='?' (DbType = Int32), @p342='?', @p343='?', @p344='?', @p345='?', @p346='?' (DbType = Int32), @p347='?', @p348='?', @p349='?', @p350='?', @p351='?' (DbType = Int32), @p352='?', @p353='?', @p354='?', @p355='?', @p356='?' (DbType = Int32), @p357='?', @p358='?', @p359='?', @p360='?', @p361='?' (DbType = Int32), @p362='?', @p363='?', @p364='?', @p365='?', @p366='?' (DbType = Int32), @p367='?', @p368='?', @p369='?', @p370='?', @p371='?' (DbType = Int32), @p372='?', @p373='?', @p374='?', @p375='?', @p376='?' (DbType = Int32), @p377='?', @p378='?', @p379='?', @p380='?', @p381='?' (DbType = Int32), @p382='?', @p383='?', @p384='?', @p385='?', @p386='?' (DbType = Int32), @p387='?', @p388='?', @p389='?', @p390='?', @p391='?' (DbType = Int32), @p392='?', @p393='?', @p394='?', @p395='?', @p396='?' (DbType = Int32), @p397='?', @p398='?', @p399='?', @p400='?', @p401='?' (DbType = Int32), @p402='?', @p403='?', @p404='?', @p405='?', @p406='?' (DbType = Int32), @p407='?', @p408='?', @p409='?', @p410='?', @p411='?' (DbType = Int32), @p412='?', @p413='?', @p414='?', @p415='?', @p416='?' (DbType = Int32), @p417='?', @p418='?', @p419='?', @p420='?', @p421='?' (DbType = Int32), @p422='?', @p423='?', @p424='?', @p425='?', @p426='?' (DbType = Int32), @p427='?', @p428='?', @p429='?', @p430='?', @p431='?' (DbType = Int32), @p432='?', @p433='?', @p434='?', @p435='?', @p436='?' (DbType = Int32), @p437='?', @p438='?', @p439='?', @p440='?', @p441='?' (DbType = Int32), @p442='?', @p443='?', @p444='?', @p445='?', @p446='?' (DbType = Int32), @p447='?', @p448='?', @p449='?', @p450='?', @p451='?' (DbType = Int32), @p452='?', @p453='?', @p454='?', @p455='?', @p456='?' (DbType = Int32), @p457='?', @p458='?', @p459='?', @p460='?', @p461='?' (DbType = Int32), @p462='?', @p463='?', @p464='?', @p465='?', @p466='?' (DbType = Int32), @p467='?', @p468='?', @p469='?', @p470='?', @p471='?' (DbType = Int32), @p472='?', @p473='?', @p474='?', @p475='?', @p476='?' (DbType = Int32), @p477='?', @p478='?', @p479='?', @p480='?', @p481='?' (DbType = Int32), @p482='?', @p483='?', @p484='?', @p485='?', @p486='?' (DbType = Int32), @p487='?', @p488='?', @p489='?', @p490='?', @p491='?' (DbType = Int32), @p492='?', @p493='?', @p494='?', @p495='?', @p496='?' (DbType = Int32), @p497='?', @p498='?', @p499='?', @p500='?', @p501='?' (DbType = Int32), @p502='?', @p503='?', @p504='?', @p505='?', @p506='?' (DbType = Int32), @p507='?', @p508='?', @p509='?', @p510='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Events" ("Capacity", "CategoryId", "Description", "EndDate", "ImageUrl", "IsActive", "Location", "Name", "Price", "StartDate", "Version")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p11, @p12, @p13, @p14, @p15)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p16, @p17, @p18, @p19, @p20)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p21, @p22, @p23, @p24, @p25)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p26, @p27, @p28, @p29, @p30)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p31, @p32, @p33, @p34, @p35)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p36, @p37, @p38, @p39, @p40)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p41, @p42, @p43, @p44, @p45)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p46, @p47, @p48, @p49, @p50)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p51, @p52, @p53, @p54, @p55)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p56, @p57, @p58, @p59, @p60)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p61, @p62, @p63, @p64, @p65)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p66, @p67, @p68, @p69, @p70)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p71, @p72, @p73, @p74, @p75)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p76, @p77, @p78, @p79, @p80)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p81, @p82, @p83, @p84, @p85)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p86, @p87, @p88, @p89, @p90)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p91, @p92, @p93, @p94, @p95)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p96, @p97, @p98, @p99, @p100)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p101, @p102, @p103, @p104, @p105)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p106, @p107, @p108, @p109, @p110)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p111, @p112, @p113, @p114, @p115)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p116, @p117, @p118, @p119, @p120)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p121, @p122, @p123, @p124, @p125)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p126, @p127, @p128, @p129, @p130)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p131, @p132, @p133, @p134, @p135)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p136, @p137, @p138, @p139, @p140)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p141, @p142, @p143, @p144, @p145)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p146, @p147, @p148, @p149, @p150)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p151, @p152, @p153, @p154, @p155)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p156, @p157, @p158, @p159, @p160)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p161, @p162, @p163, @p164, @p165)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p166, @p167, @p168, @p169, @p170)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p171, @p172, @p173, @p174, @p175)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p176, @p177, @p178, @p179, @p180)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p181, @p182, @p183, @p184, @p185)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p186, @p187, @p188, @p189, @p190)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p191, @p192, @p193, @p194, @p195)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p196, @p197, @p198, @p199, @p200)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p201, @p202, @p203, @p204, @p205)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p206, @p207, @p208, @p209, @p210)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p211, @p212, @p213, @p214, @p215)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p216, @p217, @p218, @p219, @p220)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p221, @p222, @p223, @p224, @p225)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p226, @p227, @p228, @p229, @p230)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p231, @p232, @p233, @p234, @p235)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p236, @p237, @p238, @p239, @p240)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p241, @p242, @p243, @p244, @p245)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p246, @p247, @p248, @p249, @p250)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p251, @p252, @p253, @p254, @p255)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p256, @p257, @p258, @p259, @p260)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p261, @p262, @p263, @p264, @p265)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p266, @p267, @p268, @p269, @p270)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p271, @p272, @p273, @p274, @p275)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p276, @p277, @p278, @p279, @p280)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p281, @p282, @p283, @p284, @p285)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p286, @p287, @p288, @p289, @p290)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p291, @p292, @p293, @p294, @p295)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p296, @p297, @p298, @p299, @p300)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p301, @p302, @p303, @p304, @p305)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p306, @p307, @p308, @p309, @p310)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p311, @p312, @p313, @p314, @p315)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p316, @p317, @p318, @p319, @p320)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p321, @p322, @p323, @p324, @p325)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p326, @p327, @p328, @p329, @p330)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p331, @p332, @p333, @p334, @p335)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p336, @p337, @p338, @p339, @p340)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p341, @p342, @p343, @p344, @p345)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p346, @p347, @p348, @p349, @p350)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p351, @p352, @p353, @p354, @p355)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p356, @p357, @p358, @p359, @p360)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p361, @p362, @p363, @p364, @p365)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p366, @p367, @p368, @p369, @p370)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p371, @p372, @p373, @p374, @p375)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p376, @p377, @p378, @p379, @p380)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p381, @p382, @p383, @p384, @p385)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p386, @p387, @p388, @p389, @p390)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p391, @p392, @p393, @p394, @p395)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p396, @p397, @p398, @p399, @p400)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p401, @p402, @p403, @p404, @p405)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p406, @p407, @p408, @p409, @p410)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p411, @p412, @p413, @p414, @p415)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p416, @p417, @p418, @p419, @p420)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p421, @p422, @p423, @p424, @p425)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p426, @p427, @p428, @p429, @p430)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p431, @p432, @p433, @p434, @p435)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p436, @p437, @p438, @p439, @p440)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p441, @p442, @p443, @p444, @p445)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p446, @p447, @p448, @p449, @p450)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p451, @p452, @p453, @p454, @p455)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p456, @p457, @p458, @p459, @p460)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p461, @p462, @p463, @p464, @p465)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p466, @p467, @p468, @p469, @p470)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p471, @p472, @p473, @p474, @p475)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p476, @p477, @p478, @p479, @p480)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p481, @p482, @p483, @p484, @p485)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p486, @p487, @p488, @p489, @p490)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p491, @p492, @p493, @p494, @p495)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p496, @p497, @p498, @p499, @p500)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p501, @p502, @p503, @p504, @p505)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p506, @p507, @p508, @p509, @p510)
+RETURNING "Id";
+2026-02-12 14:40:47.847 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:40:47.858 +03:00 [INF] Executed DbCommand (5ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Int32), @p2='?', @p3='?' (DbType = DateTime), @p4='?', @p5='?' (DbType = Boolean), @p6='?', @p7='?', @p8='?' (DbType = Decimal), @p9='?' (DbType = DateTime), @p10='?' (DbType = Guid), @p11='?' (DbType = Int32), @p12='?', @p13='?', @p14='?', @p15='?', @p16='?' (DbType = Int32), @p17='?', @p18='?', @p19='?', @p20='?', @p21='?' (DbType = Int32), @p22='?', @p23='?', @p24='?', @p25='?', @p26='?' (DbType = Int32), @p27='?', @p28='?', @p29='?', @p30='?', @p31='?' (DbType = Int32), @p32='?', @p33='?', @p34='?', @p35='?', @p36='?' (DbType = Int32), @p37='?', @p38='?', @p39='?', @p40='?', @p41='?' (DbType = Int32), @p42='?', @p43='?', @p44='?', @p45='?', @p46='?' (DbType = Int32), @p47='?', @p48='?', @p49='?', @p50='?', @p51='?' (DbType = Int32), @p52='?', @p53='?', @p54='?', @p55='?', @p56='?' (DbType = Int32), @p57='?', @p58='?', @p59='?', @p60='?', @p61='?' (DbType = Int32), @p62='?', @p63='?', @p64='?', @p65='?', @p66='?' (DbType = Int32), @p67='?', @p68='?', @p69='?', @p70='?', @p71='?' (DbType = Int32), @p72='?', @p73='?', @p74='?', @p75='?', @p76='?' (DbType = Int32), @p77='?', @p78='?', @p79='?', @p80='?', @p81='?' (DbType = Int32), @p82='?', @p83='?', @p84='?', @p85='?', @p86='?' (DbType = Int32), @p87='?', @p88='?', @p89='?', @p90='?', @p91='?' (DbType = Int32), @p92='?', @p93='?', @p94='?', @p95='?', @p96='?' (DbType = Int32), @p97='?', @p98='?', @p99='?', @p100='?', @p101='?' (DbType = Int32), @p102='?', @p103='?', @p104='?', @p105='?', @p106='?' (DbType = Int32), @p107='?', @p108='?', @p109='?', @p110='?', @p111='?' (DbType = Int32), @p112='?', @p113='?', @p114='?', @p115='?', @p116='?' (DbType = Int32), @p117='?', @p118='?', @p119='?', @p120='?', @p121='?' (DbType = Int32), @p122='?', @p123='?', @p124='?', @p125='?', @p126='?' (DbType = Int32), @p127='?', @p128='?', @p129='?', @p130='?', @p131='?' (DbType = Int32), @p132='?', @p133='?', @p134='?', @p135='?', @p136='?' (DbType = Int32), @p137='?', @p138='?', @p139='?', @p140='?', @p141='?' (DbType = Int32), @p142='?', @p143='?', @p144='?', @p145='?', @p146='?' (DbType = Int32), @p147='?', @p148='?', @p149='?', @p150='?', @p151='?' (DbType = Int32), @p152='?', @p153='?', @p154='?', @p155='?', @p156='?' (DbType = Int32), @p157='?', @p158='?', @p159='?', @p160='?', @p161='?' (DbType = Int32), @p162='?', @p163='?', @p164='?', @p165='?', @p166='?' (DbType = Int32), @p167='?', @p168='?', @p169='?', @p170='?', @p171='?' (DbType = Int32), @p172='?', @p173='?', @p174='?', @p175='?', @p176='?' (DbType = Int32), @p177='?', @p178='?', @p179='?', @p180='?', @p181='?' (DbType = Int32), @p182='?', @p183='?', @p184='?', @p185='?', @p186='?' (DbType = Int32), @p187='?', @p188='?', @p189='?', @p190='?', @p191='?' (DbType = Int32), @p192='?', @p193='?', @p194='?', @p195='?', @p196='?' (DbType = Int32), @p197='?', @p198='?', @p199='?', @p200='?', @p201='?' (DbType = Int32), @p202='?', @p203='?', @p204='?', @p205='?', @p206='?' (DbType = Int32), @p207='?', @p208='?', @p209='?', @p210='?', @p211='?' (DbType = Int32), @p212='?', @p213='?', @p214='?', @p215='?', @p216='?' (DbType = Int32), @p217='?', @p218='?', @p219='?', @p220='?', @p221='?' (DbType = Int32), @p222='?', @p223='?', @p224='?', @p225='?', @p226='?' (DbType = Int32), @p227='?', @p228='?', @p229='?', @p230='?', @p231='?' (DbType = Int32), @p232='?', @p233='?', @p234='?', @p235='?', @p236='?' (DbType = Int32), @p237='?', @p238='?', @p239='?', @p240='?', @p241='?' (DbType = Int32), @p242='?', @p243='?', @p244='?', @p245='?', @p246='?' (DbType = Int32), @p247='?', @p248='?', @p249='?', @p250='?', @p251='?' (DbType = Int32), @p252='?', @p253='?', @p254='?', @p255='?', @p256='?' (DbType = Int32), @p257='?', @p258='?', @p259='?', @p260='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Events" ("Capacity", "CategoryId", "Description", "EndDate", "ImageUrl", "IsActive", "Location", "Name", "Price", "StartDate", "Version")
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p11, @p12, @p13, @p14, @p15)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p16, @p17, @p18, @p19, @p20)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p21, @p22, @p23, @p24, @p25)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p26, @p27, @p28, @p29, @p30)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p31, @p32, @p33, @p34, @p35)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p36, @p37, @p38, @p39, @p40)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p41, @p42, @p43, @p44, @p45)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p46, @p47, @p48, @p49, @p50)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p51, @p52, @p53, @p54, @p55)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p56, @p57, @p58, @p59, @p60)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p61, @p62, @p63, @p64, @p65)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p66, @p67, @p68, @p69, @p70)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p71, @p72, @p73, @p74, @p75)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p76, @p77, @p78, @p79, @p80)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p81, @p82, @p83, @p84, @p85)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p86, @p87, @p88, @p89, @p90)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p91, @p92, @p93, @p94, @p95)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p96, @p97, @p98, @p99, @p100)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p101, @p102, @p103, @p104, @p105)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p106, @p107, @p108, @p109, @p110)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p111, @p112, @p113, @p114, @p115)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p116, @p117, @p118, @p119, @p120)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p121, @p122, @p123, @p124, @p125)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p126, @p127, @p128, @p129, @p130)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p131, @p132, @p133, @p134, @p135)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p136, @p137, @p138, @p139, @p140)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p141, @p142, @p143, @p144, @p145)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p146, @p147, @p148, @p149, @p150)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p151, @p152, @p153, @p154, @p155)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p156, @p157, @p158, @p159, @p160)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p161, @p162, @p163, @p164, @p165)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p166, @p167, @p168, @p169, @p170)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p171, @p172, @p173, @p174, @p175)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p176, @p177, @p178, @p179, @p180)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p181, @p182, @p183, @p184, @p185)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p186, @p187, @p188, @p189, @p190)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p191, @p192, @p193, @p194, @p195)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p196, @p197, @p198, @p199, @p200)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p201, @p202, @p203, @p204, @p205)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p206, @p207, @p208, @p209, @p210)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p211, @p212, @p213, @p214, @p215)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p216, @p217, @p218, @p219, @p220)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p221, @p222, @p223, @p224, @p225)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p226, @p227, @p228, @p229, @p230)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p231, @p232, @p233, @p234, @p235)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p236, @p237, @p238, @p239, @p240)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p241, @p242, @p243, @p244, @p245)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p246, @p247, @p248, @p249, @p250)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p251, @p252, @p253, @p254, @p255)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p256, @p257, @p258, @p259, @p260)
+RETURNING "Id";
+2026-02-12 14:40:47.890 +03:00 [INF] Executed DbCommand (16ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?', @p2='?', @p3='?', @p4='?', @p5='?' (DbType = Int32), @p6='?', @p7='?', @p8='?', @p9='?', @p10='?' (DbType = Int32), @p11='?', @p12='?', @p13='?', @p14='?', @p15='?' (DbType = Int32), @p16='?', @p17='?', @p18='?', @p19='?', @p20='?' (DbType = Int32), @p21='?', @p22='?', @p23='?', @p24='?', @p25='?' (DbType = Int32), @p26='?', @p27='?', @p28='?', @p29='?', @p30='?' (DbType = Int32), @p31='?', @p32='?', @p33='?', @p34='?', @p35='?' (DbType = Int32), @p36='?', @p37='?', @p38='?', @p39='?', @p40='?' (DbType = Int32), @p41='?', @p42='?', @p43='?', @p44='?', @p45='?' (DbType = Int32), @p46='?', @p47='?', @p48='?', @p49='?', @p50='?' (DbType = Int32), @p51='?', @p52='?', @p53='?', @p54='?', @p55='?' (DbType = Int32), @p56='?', @p57='?', @p58='?', @p59='?', @p60='?' (DbType = Int32), @p61='?', @p62='?', @p63='?', @p64='?', @p65='?' (DbType = Int32), @p66='?', @p67='?', @p68='?', @p69='?', @p70='?' (DbType = Int32), @p71='?', @p72='?', @p73='?', @p74='?', @p75='?' (DbType = Int32), @p76='?', @p77='?', @p78='?', @p79='?', @p80='?' (DbType = Int32), @p81='?', @p82='?', @p83='?', @p84='?', @p85='?' (DbType = Int32), @p86='?', @p87='?', @p88='?', @p89='?', @p90='?' (DbType = Int32), @p91='?', @p92='?', @p93='?', @p94='?', @p95='?' (DbType = Int32), @p96='?', @p97='?', @p98='?', @p99='?', @p100='?' (DbType = Int32), @p101='?', @p102='?', @p103='?', @p104='?', @p105='?' (DbType = Int32), @p106='?', @p107='?', @p108='?', @p109='?', @p110='?' (DbType = Int32), @p111='?', @p112='?', @p113='?', @p114='?', @p115='?' (DbType = Int32), @p116='?', @p117='?', @p118='?', @p119='?', @p120='?' (DbType = Int32), @p121='?', @p122='?', @p123='?', @p124='?', @p125='?' (DbType = Int32), @p126='?', @p127='?', @p128='?', @p129='?', @p130='?' (DbType = Int32), @p131='?', @p132='?', @p133='?', @p134='?', @p135='?' (DbType = Int32), @p136='?', @p137='?', @p138='?', @p139='?', @p140='?' (DbType = Int32), @p141='?', @p142='?', @p143='?', @p144='?', @p145='?' (DbType = Int32), @p146='?', @p147='?', @p148='?', @p149='?', @p150='?' (DbType = Int32), @p151='?', @p152='?', @p153='?', @p154='?', @p155='?' (DbType = Int32), @p156='?', @p157='?', @p158='?', @p159='?', @p160='?' (DbType = Int32), @p161='?', @p162='?', @p163='?', @p164='?', @p165='?' (DbType = Int32), @p166='?', @p167='?', @p168='?', @p169='?', @p170='?' (DbType = Int32), @p171='?', @p172='?', @p173='?', @p174='?', @p175='?' (DbType = Int32), @p176='?', @p177='?', @p178='?', @p179='?', @p180='?' (DbType = Int32), @p181='?', @p182='?', @p183='?', @p184='?', @p185='?' (DbType = Int32), @p186='?', @p187='?', @p188='?', @p189='?', @p190='?' (DbType = Int32), @p191='?', @p192='?', @p193='?', @p194='?', @p195='?' (DbType = Int32), @p196='?', @p197='?', @p198='?', @p199='?', @p200='?' (DbType = Int32), @p201='?', @p202='?', @p203='?', @p204='?', @p205='?' (DbType = Int32), @p206='?', @p207='?', @p208='?', @p209='?', @p210='?' (DbType = Int32), @p211='?', @p212='?', @p213='?', @p214='?', @p215='?' (DbType = Int32), @p216='?', @p217='?', @p218='?', @p219='?', @p220='?' (DbType = Int32), @p221='?', @p222='?', @p223='?', @p224='?', @p225='?' (DbType = Int32), @p226='?', @p227='?', @p228='?', @p229='?', @p230='?' (DbType = Int32), @p231='?', @p232='?', @p233='?', @p234='?', @p235='?' (DbType = Int32), @p236='?', @p237='?', @p238='?', @p239='?', @p240='?' (DbType = Int32), @p241='?', @p242='?', @p243='?', @p244='?', @p245='?' (DbType = Int32), @p246='?', @p247='?', @p248='?', @p249='?', @p250='?' (DbType = Int32), @p251='?', @p252='?', @p253='?', @p254='?', @p255='?' (DbType = Int32), @p256='?', @p257='?', @p258='?', @p259='?', @p260='?' (DbType = Int32), @p261='?', @p262='?', @p263='?', @p264='?', @p265='?' (DbType = Int32), @p266='?', @p267='?', @p268='?', @p269='?', @p270='?' (DbType = Int32), @p271='?', @p272='?', @p273='?', @p274='?', @p275='?' (DbType = Int32), @p276='?', @p277='?', @p278='?', @p279='?', @p280='?' (DbType = Int32), @p281='?', @p282='?', @p283='?', @p284='?', @p285='?' (DbType = Int32), @p286='?', @p287='?', @p288='?', @p289='?', @p290='?' (DbType = Int32), @p291='?', @p292='?', @p293='?', @p294='?', @p295='?' (DbType = Int32), @p296='?', @p297='?', @p298='?', @p299='?', @p300='?' (DbType = Int32), @p301='?', @p302='?', @p303='?', @p304='?', @p305='?' (DbType = Int32), @p306='?', @p307='?', @p308='?', @p309='?', @p310='?' (DbType = Int32), @p311='?', @p312='?', @p313='?', @p314='?', @p315='?' (DbType = Int32), @p316='?', @p317='?', @p318='?', @p319='?', @p320='?' (DbType = Int32), @p321='?', @p322='?', @p323='?', @p324='?', @p325='?' (DbType = Int32), @p326='?', @p327='?', @p328='?', @p329='?', @p330='?' (DbType = Int32), @p331='?', @p332='?', @p333='?', @p334='?', @p335='?' (DbType = Int32), @p336='?', @p337='?', @p338='?', @p339='?', @p340='?' (DbType = Int32), @p341='?', @p342='?', @p343='?', @p344='?', @p345='?' (DbType = Int32), @p346='?', @p347='?', @p348='?', @p349='?', @p350='?' (DbType = Int32), @p351='?', @p352='?', @p353='?', @p354='?', @p355='?' (DbType = Int32), @p356='?', @p357='?', @p358='?', @p359='?', @p360='?' (DbType = Int32), @p361='?', @p362='?', @p363='?', @p364='?', @p365='?' (DbType = Int32), @p366='?', @p367='?', @p368='?', @p369='?', @p370='?' (DbType = Int32), @p371='?', @p372='?', @p373='?', @p374='?', @p375='?' (DbType = Int32), @p376='?', @p377='?', @p378='?', @p379='?', @p380='?' (DbType = Int32), @p381='?', @p382='?', @p383='?', @p384='?', @p385='?' (DbType = Int32), @p386='?', @p387='?', @p388='?', @p389='?', @p390='?' (DbType = Int32), @p391='?', @p392='?', @p393='?', @p394='?', @p395='?' (DbType = Int32), @p396='?', @p397='?', @p398='?', @p399='?', @p400='?' (DbType = Int32), @p401='?', @p402='?', @p403='?', @p404='?', @p405='?' (DbType = Int32), @p406='?', @p407='?', @p408='?', @p409='?', @p410='?' (DbType = Int32), @p411='?', @p412='?', @p413='?', @p414='?', @p415='?' (DbType = Int32), @p416='?', @p417='?', @p418='?', @p419='?', @p420='?' (DbType = Int32), @p421='?', @p422='?', @p423='?', @p424='?', @p425='?' (DbType = Int32), @p426='?', @p427='?', @p428='?', @p429='?', @p430='?' (DbType = Int32), @p431='?', @p432='?', @p433='?', @p434='?', @p435='?' (DbType = Int32), @p436='?', @p437='?', @p438='?', @p439='?', @p440='?' (DbType = Int32), @p441='?', @p442='?', @p443='?', @p444='?', @p445='?' (DbType = Int32), @p446='?', @p447='?', @p448='?', @p449='?', @p450='?' (DbType = Int32), @p451='?', @p452='?', @p453='?', @p454='?', @p455='?' (DbType = Int32), @p456='?', @p457='?', @p458='?', @p459='?', @p460='?' (DbType = Int32), @p461='?', @p462='?', @p463='?', @p464='?', @p465='?' (DbType = Int32), @p466='?', @p467='?', @p468='?', @p469='?', @p470='?' (DbType = Int32), @p471='?', @p472='?', @p473='?', @p474='?', @p475='?' (DbType = Int32), @p476='?', @p477='?', @p478='?', @p479='?', @p480='?' (DbType = Int32), @p481='?', @p482='?', @p483='?', @p484='?', @p485='?' (DbType = Int32), @p486='?', @p487='?', @p488='?', @p489='?', @p490='?' (DbType = Int32), @p491='?', @p492='?', @p493='?', @p494='?', @p495='?' (DbType = Int32), @p496='?', @p497='?', @p498='?', @p499='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p0, @p1, @p2, @p3, @p4)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p5, @p6, @p7, @p8, @p9)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p10, @p11, @p12, @p13, @p14)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p15, @p16, @p17, @p18, @p19)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p20, @p21, @p22, @p23, @p24)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p25, @p26, @p27, @p28, @p29)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p30, @p31, @p32, @p33, @p34)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p35, @p36, @p37, @p38, @p39)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p40, @p41, @p42, @p43, @p44)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p45, @p46, @p47, @p48, @p49)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p50, @p51, @p52, @p53, @p54)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p55, @p56, @p57, @p58, @p59)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p60, @p61, @p62, @p63, @p64)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p65, @p66, @p67, @p68, @p69)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p70, @p71, @p72, @p73, @p74)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p75, @p76, @p77, @p78, @p79)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p80, @p81, @p82, @p83, @p84)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p85, @p86, @p87, @p88, @p89)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p90, @p91, @p92, @p93, @p94)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p95, @p96, @p97, @p98, @p99)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p100, @p101, @p102, @p103, @p104)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p105, @p106, @p107, @p108, @p109)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p110, @p111, @p112, @p113, @p114)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p115, @p116, @p117, @p118, @p119)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p120, @p121, @p122, @p123, @p124)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p125, @p126, @p127, @p128, @p129)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p130, @p131, @p132, @p133, @p134)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p135, @p136, @p137, @p138, @p139)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p140, @p141, @p142, @p143, @p144)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p145, @p146, @p147, @p148, @p149)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p150, @p151, @p152, @p153, @p154)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p155, @p156, @p157, @p158, @p159)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p160, @p161, @p162, @p163, @p164)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p165, @p166, @p167, @p168, @p169)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p170, @p171, @p172, @p173, @p174)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p175, @p176, @p177, @p178, @p179)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p180, @p181, @p182, @p183, @p184)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p185, @p186, @p187, @p188, @p189)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p190, @p191, @p192, @p193, @p194)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p195, @p196, @p197, @p198, @p199)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p200, @p201, @p202, @p203, @p204)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p205, @p206, @p207, @p208, @p209)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p210, @p211, @p212, @p213, @p214)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p215, @p216, @p217, @p218, @p219)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p220, @p221, @p222, @p223, @p224)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p225, @p226, @p227, @p228, @p229)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p230, @p231, @p232, @p233, @p234)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p235, @p236, @p237, @p238, @p239)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p240, @p241, @p242, @p243, @p244)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p245, @p246, @p247, @p248, @p249)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p250, @p251, @p252, @p253, @p254)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p255, @p256, @p257, @p258, @p259)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p260, @p261, @p262, @p263, @p264)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p265, @p266, @p267, @p268, @p269)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p270, @p271, @p272, @p273, @p274)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p275, @p276, @p277, @p278, @p279)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p280, @p281, @p282, @p283, @p284)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p285, @p286, @p287, @p288, @p289)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p290, @p291, @p292, @p293, @p294)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p295, @p296, @p297, @p298, @p299)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p300, @p301, @p302, @p303, @p304)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p305, @p306, @p307, @p308, @p309)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p310, @p311, @p312, @p313, @p314)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p315, @p316, @p317, @p318, @p319)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p320, @p321, @p322, @p323, @p324)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p325, @p326, @p327, @p328, @p329)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p330, @p331, @p332, @p333, @p334)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p335, @p336, @p337, @p338, @p339)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p340, @p341, @p342, @p343, @p344)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p345, @p346, @p347, @p348, @p349)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p350, @p351, @p352, @p353, @p354)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p355, @p356, @p357, @p358, @p359)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p360, @p361, @p362, @p363, @p364)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p365, @p366, @p367, @p368, @p369)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p370, @p371, @p372, @p373, @p374)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p375, @p376, @p377, @p378, @p379)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p380, @p381, @p382, @p383, @p384)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p385, @p386, @p387, @p388, @p389)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p390, @p391, @p392, @p393, @p394)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p395, @p396, @p397, @p398, @p399)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p400, @p401, @p402, @p403, @p404)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p405, @p406, @p407, @p408, @p409)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p410, @p411, @p412, @p413, @p414)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p415, @p416, @p417, @p418, @p419)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p420, @p421, @p422, @p423, @p424)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p425, @p426, @p427, @p428, @p429)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p430, @p431, @p432, @p433, @p434)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p435, @p436, @p437, @p438, @p439)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p440, @p441, @p442, @p443, @p444)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p445, @p446, @p447, @p448, @p449)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p450, @p451, @p452, @p453, @p454)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p455, @p456, @p457, @p458, @p459)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p460, @p461, @p462, @p463, @p464)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p465, @p466, @p467, @p468, @p469)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p470, @p471, @p472, @p473, @p474)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p475, @p476, @p477, @p478, @p479)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p480, @p481, @p482, @p483, @p484)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p485, @p486, @p487, @p488, @p489)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p490, @p491, @p492, @p493, @p494)
+RETURNING "Id";
+INSERT INTO "Seats" ("EventId", "Number", "Row", "Section", "Status")
+VALUES (@p495, @p496, @p497, @p498, @p499)
+RETURNING "Id";
+2026-02-12 14:40:47.905 +03:00 [INF] Events Seeded Successfully
+2026-02-12 14:40:47.921 +03:00 [INF] User profile is available. Using 'C:\Users\deniz\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-12 14:40:47.972 +03:00 [INF] Now listening on: http://localhost:5181
+2026-02-12 14:40:47.975 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-12 14:40:47.976 +03:00 [INF] Hosting environment: Development
+2026-02-12 14:40:47.976 +03:00 [INF] Content root path: C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub
+2026-02-12 14:42:01.357 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:42:01.415 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:42:01.438 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:42:01.539 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:42:01.574 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:42:01.590 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 144.9661ms
+2026-02-12 14:42:01.596 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:42:01.602 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 246.46ms
+2026-02-12 14:42:01.607 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - application/json null
+2026-02-12 14:42:01.638 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:42:01.643 +03:00 [INF] Route matched with {action = "SeedEvents", controller = "Admin"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SeedEvents(EventHub.Services.EventSeederService) on controller EventHub.Controllers.AdminController (EventHub).
+2026-02-12 14:42:01.693 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:42:01.697 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:42:01.699 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:42:01.701 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:42:01.702 +03:00 [INF] Executed action EventHub.Controllers.AdminController.SeedEvents (EventHub) in 57.6759ms
+2026-02-12 14:42:01.703 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:42:01.705 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - 200 null text/plain; charset=utf-8 97.5252ms
+2026-02-12 14:42:01.708 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/register - application/json null
+2026-02-12 14:42:01.713 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:42:01.718 +03:00 [INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(EventHub.Controllers.RegisterRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:42:01.732 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE u."Email" = @__request_Email_0)
+2026-02-12 14:42:01.745 +03:00 [INF] Executed DbCommand (5ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "FullName", "PasswordHash", "Role")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "Id";
+2026-02-12 14:42:01.749 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:42:01.750 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Register (EventHub) in 30.6149ms
+2026-02-12 14:42:01.753 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:42:01.753 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/register - 200 null text/plain; charset=utf-8 45.8176ms
+2026-02-12 14:42:01.756 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:42:01.758 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:42:01.759 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:42:01.764 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:42:01.768 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:42:01.769 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 8.34ms
+2026-02-12 14:42:01.770 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:42:01.771 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 14.6981ms
+2026-02-12 14:42:01.775 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - application/json null
+2026-02-12 14:42:01.779 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:42:01.783 +03:00 [INF] Route matched with {action = "GetEvents", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEvents(System.String, System.Nullable`1[System.DateTime], System.Nullable`1[System.DateTime]) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:42:01.841 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__location_0_contains='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT e."Id", e."Capacity", e."CategoryId", e."Description", e."EndDate", e."ImageUrl", e."IsActive", e."Location", e."Name", e."Price", e."StartDate", e."Version", c."Id", c."Description", c."Name"
+FROM "Events" AS e
+LEFT JOIN "Categories" AS c ON e."CategoryId" = c."Id"
+WHERE e."IsActive" AND e."Location" LIKE @__location_0_contains
+2026-02-12 14:42:01.850 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.Models.Event, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:42:01.870 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEvents (EventHub) in 85.7884ms
+2026-02-12 14:42:01.873 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:42:01.874 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - 200 null application/json; charset=utf-8 99.4625ms
+2026-02-12 14:42:01.877 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - application/json null
+2026-02-12 14:42:01.880 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:42:01.883 +03:00 [INF] Route matched with {action = "GetEventSeats", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEventSeats(Int32) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:42:01.897 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."Section", s."Row", s."Number", s."Status", 100.0 AS "Price"
+FROM "Seats" AS s
+WHERE s."EventId" = @__id_0
+2026-02-12 14:42:01.901 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.DTOs.SeatDto, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:42:01.904 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEventSeats (EventHub) in 19.4116ms
+2026-02-12 14:42:01.906 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:42:01.908 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - 200 null application/json; charset=utf-8 30.6659ms
+2026-02-12 14:42:01.911 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - application/json null
+2026-02-12 14:42:01.916 +03:00 [INF] Executing endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:42:01.920 +03:00 [INF] Route matched with {action = "ReserveSeat", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ReserveSeat(EventHub.DTOs.ReserveRequest) on controller EventHub.Controllers.BookingController (EventHub).
+2026-02-12 14:42:10.081 +03:00 [INF] Executed action EventHub.Controllers.BookingController.ReserveSeat (EventHub) in 8158.1097ms
+2026-02-12 14:42:10.082 +03:00 [INF] Executed endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:42:10.085 +03:00 [ERR] An unhandled exception has occurred.
+StackExchange.Redis.RedisConnectionException: It was not possible to connect to the redis server(s). Error connecting right now. To allow this multiplexer to continue retrying until it's able to connect, use abortConnect=false in your connection string or AbortOnConnectFail=false; in your code.
+   at StackExchange.Redis.ConnectionMultiplexer.ConnectImpl(ConfigurationOptions configuration, TextWriter writer, Nullable`1 serverType, EndPointCollection endpoints) in /_/src/StackExchange.Redis/ConnectionMultiplexer.cs:line 723
+   at StackExchange.Redis.ConnectionMultiplexer.Connect(ConfigurationOptions configuration, TextWriter log) in /_/src/StackExchange.Redis/ConnectionMultiplexer.cs:line 685
+   at StackExchange.Redis.ConnectionMultiplexer.Connect(String configuration, TextWriter log) in /_/src/StackExchange.Redis/ConnectionMultiplexer.cs:line 663
+   at Program.<>c__DisplayClass0_0.<<Main>$>b__4(IServiceProvider sp) in C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub\Program.cs:line 102
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitFactory(FactoryCallSite factoryCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitCache(ServiceCallSite callSite, RuntimeResolverContext context, ServiceProviderEngineScope serviceProviderEngine, RuntimeResolverLock lockType)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitScopeCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.DynamicServiceProviderEngine.<>c__DisplayClass2_0.<RealizeService>b__0(ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(ServiceIdentifier serviceIdentifier, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at lambda_method460(Closure, IServiceProvider, Object[])
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at EventHub.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub\Middleware\GlobalExceptionMiddleware.cs:line 23
+2026-02-12 14:42:10.115 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - 500 null application/json 8203.6663ms
+2026-02-12 14:44:17.409 +03:00 [INF] Executed DbCommand (28ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:44:17.464 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:44:17.468 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:44:17.479 +03:00 [INF] Events Seeded Successfully
+2026-02-12 14:44:17.497 +03:00 [INF] User profile is available. Using 'C:\Users\deniz\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-12 14:44:17.553 +03:00 [INF] Now listening on: http://localhost:5181
+2026-02-12 14:44:17.556 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-12 14:44:17.558 +03:00 [INF] Hosting environment: Development
+2026-02-12 14:44:17.558 +03:00 [INF] Content root path: C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub
+2026-02-12 14:44:31.578 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:44:31.618 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:44:31.632 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:44:31.736 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:44:31.786 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:44:31.799 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 162.5055ms
+2026-02-12 14:44:31.805 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:44:31.811 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 234.6667ms
+2026-02-12 14:44:31.815 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - application/json null
+2026-02-12 14:44:31.844 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:44:31.849 +03:00 [INF] Route matched with {action = "SeedEvents", controller = "Admin"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SeedEvents(EventHub.Services.EventSeederService) on controller EventHub.Controllers.AdminController (EventHub).
+2026-02-12 14:44:31.897 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:44:31.900 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:44:31.903 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:44:31.905 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:44:31.907 +03:00 [INF] Executed action EventHub.Controllers.AdminController.SeedEvents (EventHub) in 54.9437ms
+2026-02-12 14:44:31.908 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:44:31.909 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - 200 null text/plain; charset=utf-8 93.7573ms
+2026-02-12 14:44:31.912 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/register - application/json null
+2026-02-12 14:44:31.917 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:44:31.921 +03:00 [INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(EventHub.Controllers.RegisterRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:44:31.934 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE u."Email" = @__request_Email_0)
+2026-02-12 14:44:31.987 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "FullName", "PasswordHash", "Role")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "Id";
+2026-02-12 14:44:32.001 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:44:32.002 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Register (EventHub) in 79.9466ms
+2026-02-12 14:44:32.004 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:44:32.005 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/register - 200 null text/plain; charset=utf-8 93.0339ms
+2026-02-12 14:44:32.008 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:44:32.010 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:44:32.011 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:44:32.016 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:44:32.019 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:44:32.020 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 7.0327ms
+2026-02-12 14:44:32.021 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:44:32.022 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 13.709ms
+2026-02-12 14:44:32.025 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - application/json null
+2026-02-12 14:44:32.030 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:44:32.034 +03:00 [INF] Route matched with {action = "GetEvents", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEvents(System.String, System.Nullable`1[System.DateTime], System.Nullable`1[System.DateTime]) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:44:32.094 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__location_0_contains='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT e."Id", e."Capacity", e."CategoryId", e."Description", e."EndDate", e."ImageUrl", e."IsActive", e."Location", e."Name", e."Price", e."StartDate", e."Version", c."Id", c."Description", c."Name"
+FROM "Events" AS e
+LEFT JOIN "Categories" AS c ON e."CategoryId" = c."Id"
+WHERE e."IsActive" AND e."Location" LIKE @__location_0_contains
+2026-02-12 14:44:32.122 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.Models.Event, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:44:32.143 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEvents (EventHub) in 107.1826ms
+2026-02-12 14:44:32.145 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:44:32.146 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - 200 null application/json; charset=utf-8 120.399ms
+2026-02-12 14:44:32.149 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - application/json null
+2026-02-12 14:44:32.152 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:44:32.156 +03:00 [INF] Route matched with {action = "GetEventSeats", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEventSeats(Int32) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:44:32.172 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."Section", s."Row", s."Number", s."Status", 100.0 AS "Price"
+FROM "Seats" AS s
+WHERE s."EventId" = @__id_0
+2026-02-12 14:44:32.176 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.DTOs.SeatDto, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:44:32.180 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEventSeats (EventHub) in 21.7807ms
+2026-02-12 14:44:32.181 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:44:32.183 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - 200 null application/json; charset=utf-8 33.6816ms
+2026-02-12 14:44:32.185 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - application/json null
+2026-02-12 14:44:32.189 +03:00 [INF] Executing endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:44:32.193 +03:00 [INF] Route matched with {action = "ReserveSeat", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ReserveSeat(EventHub.DTOs.ReserveRequest) on controller EventHub.Controllers.BookingController (EventHub).
+2026-02-12 14:44:32.205 +03:00 [INF] Executed action EventHub.Controllers.BookingController.ReserveSeat (EventHub) in 10.6949ms
+2026-02-12 14:44:32.206 +03:00 [INF] Executed endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:44:32.207 +03:00 [ERR] An unhandled exception has occurred.
+System.FormatException: The input string 'testuser_959@example.com' was not in a correct format.
+   at System.Number.ThrowFormatException[TChar](ReadOnlySpan`1 value)
+   at System.Int32.Parse(String s)
+   at EventHub.Controllers.BookingController.ReserveSeat(ReserveRequest request) in C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub\Controllers\BookingController.cs:line 76
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at EventHub.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub\Middleware\GlobalExceptionMiddleware.cs:line 23
+2026-02-12 14:44:32.225 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - 500 null application/json 39.7514ms
+2026-02-12 14:44:43.751 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:44:43.756 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:44:43.758 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:44:43.778 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:44:43.784 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:44:43.786 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 23.5874ms
+2026-02-12 14:44:43.787 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:44:43.788 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 37.2503ms
+2026-02-12 14:44:43.792 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - application/json null
+2026-02-12 14:44:43.796 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:44:43.797 +03:00 [INF] Route matched with {action = "SeedEvents", controller = "Admin"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SeedEvents(EventHub.Services.EventSeederService) on controller EventHub.Controllers.AdminController (EventHub).
+2026-02-12 14:44:43.802 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:44:43.805 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:44:43.808 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:44:43.810 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:44:43.811 +03:00 [INF] Executed action EventHub.Controllers.AdminController.SeedEvents (EventHub) in 12.7351ms
+2026-02-12 14:44:43.813 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:44:43.813 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - 200 null text/plain; charset=utf-8 21.5874ms
+2026-02-12 14:44:43.817 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/register - application/json null
+2026-02-12 14:44:43.820 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:44:43.821 +03:00 [INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(EventHub.Controllers.RegisterRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:44:43.828 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE u."Email" = @__request_Email_0)
+2026-02-12 14:44:43.836 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "FullName", "PasswordHash", "Role")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "Id";
+2026-02-12 14:44:43.840 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:44:43.842 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Register (EventHub) in 18.9893ms
+2026-02-12 14:44:43.844 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:44:43.845 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/register - 200 null text/plain; charset=utf-8 27.4493ms
+2026-02-12 14:44:43.848 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:44:43.850 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:44:43.851 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:44:43.855 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:44:43.858 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:44:43.859 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 6.2664ms
+2026-02-12 14:44:43.860 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:44:43.861 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 12.9531ms
+2026-02-12 14:44:43.864 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - application/json null
+2026-02-12 14:44:43.866 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:44:43.867 +03:00 [INF] Route matched with {action = "GetEvents", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEvents(System.String, System.Nullable`1[System.DateTime], System.Nullable`1[System.DateTime]) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:44:43.871 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__location_0_contains='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT e."Id", e."Capacity", e."CategoryId", e."Description", e."EndDate", e."ImageUrl", e."IsActive", e."Location", e."Name", e."Price", e."StartDate", e."Version", c."Id", c."Description", c."Name"
+FROM "Events" AS e
+LEFT JOIN "Categories" AS c ON e."CategoryId" = c."Id"
+WHERE e."IsActive" AND e."Location" LIKE @__location_0_contains
+2026-02-12 14:44:43.874 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.Models.Event, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:44:43.875 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEvents (EventHub) in 6.9019ms
+2026-02-12 14:44:43.877 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:44:43.878 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - 200 null application/json; charset=utf-8 13.7098ms
+2026-02-12 14:44:43.880 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - application/json null
+2026-02-12 14:44:43.883 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:44:43.884 +03:00 [INF] Route matched with {action = "GetEventSeats", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEventSeats(Int32) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:44:43.888 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."Section", s."Row", s."Number", s."Status", 100.0 AS "Price"
+FROM "Seats" AS s
+WHERE s."EventId" = @__id_0
+2026-02-12 14:44:43.890 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.DTOs.SeatDto, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:44:43.892 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEventSeats (EventHub) in 6.851ms
+2026-02-12 14:44:43.893 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:44:43.894 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - 200 null application/json; charset=utf-8 13.7523ms
+2026-02-12 14:44:43.896 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - application/json null
+2026-02-12 14:44:43.899 +03:00 [INF] Executing endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:44:43.900 +03:00 [INF] Route matched with {action = "ReserveSeat", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ReserveSeat(EventHub.DTOs.ReserveRequest) on controller EventHub.Controllers.BookingController (EventHub).
+2026-02-12 14:44:43.904 +03:00 [INF] Executed action EventHub.Controllers.BookingController.ReserveSeat (EventHub) in 1.6968ms
+2026-02-12 14:44:43.905 +03:00 [INF] Executed endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:44:43.906 +03:00 [ERR] An unhandled exception has occurred.
+System.FormatException: The input string 'testuser_690@example.com' was not in a correct format.
+   at System.Number.ThrowFormatException[TChar](ReadOnlySpan`1 value)
+   at System.Int32.Parse(String s)
+   at EventHub.Controllers.BookingController.ReserveSeat(ReserveRequest request) in C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub\Controllers\BookingController.cs:line 76
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at EventHub.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub\Middleware\GlobalExceptionMiddleware.cs:line 23
+2026-02-12 14:44:43.912 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - 500 null application/json 15.3382ms
+2026-02-12 14:46:45.049 +03:00 [INF] Executed DbCommand (29ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:46:45.105 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:46:45.108 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:46:45.121 +03:00 [INF] Events Seeded Successfully
+2026-02-12 14:46:45.141 +03:00 [INF] User profile is available. Using 'C:\Users\deniz\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-12 14:46:45.201 +03:00 [INF] Now listening on: http://localhost:5181
+2026-02-12 14:46:45.203 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-12 14:46:45.205 +03:00 [INF] Hosting environment: Development
+2026-02-12 14:46:45.205 +03:00 [INF] Content root path: C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub
+2026-02-12 14:46:49.942 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:46:49.987 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:46:50.000 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:46:50.107 +03:00 [INF] Executed DbCommand (7ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:46:50.162 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:46:50.178 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 173.4189ms
+2026-02-12 14:46:50.183 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:46:50.190 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 248.5332ms
+2026-02-12 14:46:50.195 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - application/json null
+2026-02-12 14:46:50.232 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:46:50.238 +03:00 [INF] Route matched with {action = "SeedEvents", controller = "Admin"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SeedEvents(EventHub.Services.EventSeederService) on controller EventHub.Controllers.AdminController (EventHub).
+2026-02-12 14:46:50.294 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:46:50.298 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:46:50.301 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:46:50.304 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:46:50.306 +03:00 [INF] Executed action EventHub.Controllers.AdminController.SeedEvents (EventHub) in 66.2845ms
+2026-02-12 14:46:50.308 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:46:50.310 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - 200 null text/plain; charset=utf-8 115.5074ms
+2026-02-12 14:46:50.316 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/register - application/json null
+2026-02-12 14:46:50.322 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:46:50.327 +03:00 [INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(EventHub.Controllers.RegisterRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:46:50.344 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE u."Email" = @__request_Email_0)
+2026-02-12 14:46:50.401 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "FullName", "PasswordHash", "Role")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "Id";
+2026-02-12 14:46:50.416 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:46:50.417 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Register (EventHub) in 88.4631ms
+2026-02-12 14:46:50.420 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:46:50.421 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/register - 200 null text/plain; charset=utf-8 104.9964ms
+2026-02-12 14:46:50.424 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:46:50.425 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:46:50.426 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:46:50.431 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:46:50.434 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:46:50.435 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 7.1055ms
+2026-02-12 14:46:50.436 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:46:50.437 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 13.4349ms
+2026-02-12 14:46:50.440 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - application/json null
+2026-02-12 14:46:50.445 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:46:50.449 +03:00 [INF] Route matched with {action = "GetEvents", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEvents(System.String, System.Nullable`1[System.DateTime], System.Nullable`1[System.DateTime]) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:46:50.510 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@__location_0_contains='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT e."Id", e."Capacity", e."CategoryId", e."Description", e."EndDate", e."ImageUrl", e."IsActive", e."Location", e."Name", e."Price", e."StartDate", e."Version", c."Id", c."Description", c."Name"
+FROM "Events" AS e
+LEFT JOIN "Categories" AS c ON e."CategoryId" = c."Id"
+WHERE e."IsActive" AND e."Location" LIKE @__location_0_contains
+2026-02-12 14:46:50.539 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.Models.Event, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:46:50.561 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEvents (EventHub) in 110.3579ms
+2026-02-12 14:46:50.562 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:46:50.563 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - 200 null application/json; charset=utf-8 123.3033ms
+2026-02-12 14:46:50.565 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - application/json null
+2026-02-12 14:46:50.568 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:46:50.573 +03:00 [INF] Route matched with {action = "GetEventSeats", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEventSeats(Int32) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:46:50.590 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."Section", s."Row", s."Number", s."Status", 100.0 AS "Price"
+FROM "Seats" AS s
+WHERE s."EventId" = @__id_0
+2026-02-12 14:46:50.593 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.DTOs.SeatDto, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:46:50.597 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEventSeats (EventHub) in 22.39ms
+2026-02-12 14:46:50.598 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:46:50.599 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - 200 null application/json; charset=utf-8 33.2684ms
+2026-02-12 14:46:50.602 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - application/json null
+2026-02-12 14:46:50.606 +03:00 [INF] Executing endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:46:50.610 +03:00 [INF] Route matched with {action = "ReserveSeat", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ReserveSeat(EventHub.DTOs.ReserveRequest) on controller EventHub.Controllers.BookingController (EventHub).
+2026-02-12 14:46:50.623 +03:00 [INF] Executed action EventHub.Controllers.BookingController.ReserveSeat (EventHub) in 11.3106ms
+2026-02-12 14:46:50.626 +03:00 [INF] Executed endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:46:50.627 +03:00 [ERR] An unhandled exception has occurred.
+System.FormatException: The input string 'testuser_816@example.com' was not in a correct format.
+   at System.Number.ThrowFormatException[TChar](ReadOnlySpan`1 value)
+   at System.Int32.Parse(String s)
+   at EventHub.Controllers.BookingController.ReserveSeat(ReserveRequest request) in C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub\Controllers\BookingController.cs:line 76
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at EventHub.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub\Middleware\GlobalExceptionMiddleware.cs:line 23
+2026-02-12 14:46:50.643 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - 500 null application/json 40.853ms
+2026-02-12 14:47:39.193 +03:00 [INF] Executed DbCommand (28ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:47:39.247 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:47:39.251 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:47:39.262 +03:00 [INF] Events Seeded Successfully
+2026-02-12 14:47:39.282 +03:00 [INF] User profile is available. Using 'C:\Users\deniz\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-12 14:47:39.335 +03:00 [INF] Now listening on: http://localhost:5181
+2026-02-12 14:47:39.339 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-12 14:47:39.340 +03:00 [INF] Hosting environment: Development
+2026-02-12 14:47:39.341 +03:00 [INF] Content root path: C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub
+2026-02-12 14:47:52.986 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:47:53.032 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:47:53.047 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:47:53.170 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:47:53.221 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:47:53.237 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 186.5395ms
+2026-02-12 14:47:53.241 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:47:53.248 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 263.0278ms
+2026-02-12 14:47:53.252 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - application/json null
+2026-02-12 14:47:53.282 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:47:53.289 +03:00 [INF] Route matched with {action = "SeedEvents", controller = "Admin"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SeedEvents(EventHub.Services.EventSeederService) on controller EventHub.Controllers.AdminController (EventHub).
+2026-02-12 14:47:53.336 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:47:53.342 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:47:53.344 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:47:53.348 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:47:53.349 +03:00 [INF] Executed action EventHub.Controllers.AdminController.SeedEvents (EventHub) in 58.7106ms
+2026-02-12 14:47:53.350 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:47:53.351 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - 200 null text/plain; charset=utf-8 98.83ms
+2026-02-12 14:47:53.355 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/register - application/json null
+2026-02-12 14:47:53.359 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:47:53.364 +03:00 [INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(EventHub.Controllers.RegisterRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:47:53.378 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE u."Email" = @__request_Email_0)
+2026-02-12 14:47:53.429 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "FullName", "PasswordHash", "Role")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "Id";
+2026-02-12 14:47:53.446 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:47:53.447 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Register (EventHub) in 82.1509ms
+2026-02-12 14:47:53.450 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:47:53.451 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/register - 200 null text/plain; charset=utf-8 95.6545ms
+2026-02-12 14:47:53.454 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:47:53.456 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:47:53.457 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:47:53.462 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:47:53.466 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:47:53.468 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 9.6214ms
+2026-02-12 14:47:53.469 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:47:53.470 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 16.0669ms
+2026-02-12 14:47:53.473 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - application/json null
+2026-02-12 14:47:53.478 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:47:53.482 +03:00 [INF] Route matched with {action = "GetEvents", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEvents(System.String, System.Nullable`1[System.DateTime], System.Nullable`1[System.DateTime]) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:47:53.542 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__location_0_contains='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT e."Id", e."Capacity", e."CategoryId", e."Description", e."EndDate", e."ImageUrl", e."IsActive", e."Location", e."Name", e."Price", e."StartDate", e."Version", c."Id", c."Description", c."Name"
+FROM "Events" AS e
+LEFT JOIN "Categories" AS c ON e."CategoryId" = c."Id"
+WHERE e."IsActive" AND e."Location" LIKE @__location_0_contains
+2026-02-12 14:47:53.570 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.Models.Event, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:47:53.593 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEvents (EventHub) in 108.5772ms
+2026-02-12 14:47:53.596 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:47:53.597 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - 200 null application/json; charset=utf-8 123.4558ms
+2026-02-12 14:47:53.599 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - application/json null
+2026-02-12 14:47:53.601 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:47:53.605 +03:00 [INF] Route matched with {action = "GetEventSeats", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEventSeats(Int32) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:47:53.622 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."Section", s."Row", s."Number", s."Status", 100.0 AS "Price"
+FROM "Seats" AS s
+WHERE s."EventId" = @__id_0
+2026-02-12 14:47:53.627 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.DTOs.SeatDto, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:47:53.630 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEventSeats (EventHub) in 23.8047ms
+2026-02-12 14:47:53.632 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:47:53.633 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - 200 null application/json; charset=utf-8 33.7825ms
+2026-02-12 14:47:53.635 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - application/json null
+2026-02-12 14:47:53.640 +03:00 [INF] Executing endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:47:53.643 +03:00 [INF] Route matched with {action = "ReserveSeat", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ReserveSeat(EventHub.DTOs.ReserveRequest) on controller EventHub.Controllers.BookingController (EventHub).
+2026-02-12 14:47:53.656 +03:00 [INF] Executing BadRequestObjectResult, writing value of type 'System.String'.
+2026-02-12 14:47:53.658 +03:00 [INF] Executed action EventHub.Controllers.BookingController.ReserveSeat (EventHub) in 13.1259ms
+2026-02-12 14:47:53.660 +03:00 [INF] Executed endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:47:53.661 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - 400 null text/plain; charset=utf-8 25.6016ms
+2026-02-12 14:51:23.102 +03:00 [INF] Executed DbCommand (29ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:51:23.158 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:51:23.162 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:51:23.175 +03:00 [INF] Events Seeded Successfully
+2026-02-12 14:51:23.191 +03:00 [INF] User profile is available. Using 'C:\Users\deniz\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-12 14:51:23.250 +03:00 [INF] Now listening on: http://localhost:5181
+2026-02-12 14:51:23.253 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-12 14:51:23.255 +03:00 [INF] Hosting environment: Development
+2026-02-12 14:51:23.256 +03:00 [INF] Content root path: C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub
+2026-02-12 14:51:38.937 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:51:38.979 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:51:38.992 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:51:39.096 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:51:39.149 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:51:39.166 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 168.8759ms
+2026-02-12 14:51:39.172 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:51:39.177 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 241.8847ms
+2026-02-12 14:51:39.182 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - application/json null
+2026-02-12 14:51:39.214 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:51:39.220 +03:00 [INF] Route matched with {action = "SeedEvents", controller = "Admin"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SeedEvents(EventHub.Services.EventSeederService) on controller EventHub.Controllers.AdminController (EventHub).
+2026-02-12 14:51:39.271 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:51:39.274 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:51:39.276 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:51:39.279 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:51:39.280 +03:00 [INF] Executed action EventHub.Controllers.AdminController.SeedEvents (EventHub) in 58.0482ms
+2026-02-12 14:51:39.281 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:51:39.282 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - 200 null text/plain; charset=utf-8 99.9009ms
+2026-02-12 14:51:39.286 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/register - application/json null
+2026-02-12 14:51:39.290 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:51:39.294 +03:00 [INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(EventHub.Controllers.RegisterRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:51:39.315 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE u."Email" = @__request_Email_0)
+2026-02-12 14:51:39.374 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "FullName", "PasswordHash", "Role")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "Id";
+2026-02-12 14:51:39.391 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:51:39.393 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Register (EventHub) in 96.6475ms
+2026-02-12 14:51:39.395 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:51:39.398 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/register - 200 null text/plain; charset=utf-8 112.2236ms
+2026-02-12 14:51:39.400 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:51:39.403 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:51:39.404 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:51:39.409 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:51:39.414 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:51:39.416 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 9.9918ms
+2026-02-12 14:51:39.418 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:51:39.420 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 19.3204ms
+2026-02-12 14:51:39.424 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - application/json null
+2026-02-12 14:51:39.430 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:51:39.434 +03:00 [INF] Route matched with {action = "GetEvents", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEvents(System.String, System.Nullable`1[System.DateTime], System.Nullable`1[System.DateTime]) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:51:39.504 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@__location_0_contains='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT e."Id", e."Capacity", e."CategoryId", e."Description", e."EndDate", e."ImageUrl", e."IsActive", e."Location", e."Name", e."Price", e."StartDate", e."Version", c."Id", c."Description", c."Name"
+FROM "Events" AS e
+LEFT JOIN "Categories" AS c ON e."CategoryId" = c."Id"
+WHERE e."IsActive" AND e."Location" LIKE @__location_0_contains
+2026-02-12 14:51:39.545 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.Models.Event, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:51:39.570 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEvents (EventHub) in 133.5854ms
+2026-02-12 14:51:39.573 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:51:39.575 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - 200 null application/json; charset=utf-8 150.6261ms
+2026-02-12 14:51:39.578 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - application/json null
+2026-02-12 14:51:39.580 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:51:39.584 +03:00 [INF] Route matched with {action = "GetEventSeats", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEventSeats(Int32) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:51:39.598 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."Section", s."Row", s."Number", s."Status", 100.0 AS "Price"
+FROM "Seats" AS s
+WHERE s."EventId" = @__id_0
+2026-02-12 14:51:39.601 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.DTOs.SeatDto, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:51:39.604 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEventSeats (EventHub) in 19.4368ms
+2026-02-12 14:51:39.606 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:51:39.607 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - 200 null application/json; charset=utf-8 29.3075ms
+2026-02-12 14:51:39.610 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - application/json null
+2026-02-12 14:51:39.614 +03:00 [INF] Executing endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:51:39.618 +03:00 [INF] Route matched with {action = "ReserveSeat", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ReserveSeat(EventHub.DTOs.ReserveRequest) on controller EventHub.Controllers.BookingController (EventHub).
+2026-02-12 14:51:39.633 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType2`2[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.DateTime, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:51:39.635 +03:00 [INF] Executed action EventHub.Controllers.BookingController.ReserveSeat (EventHub) in 15.4814ms
+2026-02-12 14:51:39.637 +03:00 [INF] Executed endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:51:39.638 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - 200 null application/json; charset=utf-8 27.844ms
+2026-02-12 14:51:39.640 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Booking/confirm - application/json null
+2026-02-12 14:51:39.644 +03:00 [INF] Executing endpoint 'EventHub.Controllers.BookingController.ConfirmBooking (EventHub)'
+2026-02-12 14:51:39.647 +03:00 [INF] Route matched with {action = "ConfirmBooking", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ConfirmBooking(EventHub.DTOs.ConfirmBookingRequest) on controller EventHub.Controllers.BookingController (EventHub).
+2026-02-12 14:51:39.677 +03:00 [ERR] An exception occurred while iterating over the results of a query for context type 'EventHub.Data.ApplicationDbContext'.
+System.InvalidOperationException: The configured execution strategy 'NpgsqlRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+System.InvalidOperationException: The configured execution strategy 'NpgsqlRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-02-12 14:51:39.682 +03:00 [ERR] Error booking seat 11
+System.InvalidOperationException: The configured execution strategy 'NpgsqlRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at EventHub.Services.BookingService.BookSeatAsync(BookingRequest request, Int32 seatId) in C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub\Services\BookingService.cs:line 141
+2026-02-12 14:51:39.692 +03:00 [INF] Executed action EventHub.Controllers.BookingController.ConfirmBooking (EventHub) in 43.158ms
+2026-02-12 14:51:39.693 +03:00 [INF] Executed endpoint 'EventHub.Controllers.BookingController.ConfirmBooking (EventHub)'
+2026-02-12 14:51:39.695 +03:00 [ERR] An unhandled exception has occurred.
+System.InvalidOperationException: The configured execution strategy 'NpgsqlRetryingExecutionStrategy' does not support user-initiated transactions. Use the execution strategy returned by 'DbContext.Database.CreateExecutionStrategy()' to execute all the operations in the transaction as a retriable unit.
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.OnFirstExecution()
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at EventHub.Services.BookingService.BookSeatAsync(BookingRequest request, Int32 seatId) in C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub\Services\BookingService.cs:line 141
+   at EventHub.Services.BookingService.BookSeatAsync(BookingRequest request, Int32 seatId) in C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub\Services\BookingService.cs:line 177
+   at EventHub.Controllers.BookingController.ConfirmBooking(ConfirmBookingRequest request) in C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub\Controllers\BookingController.cs:line 118
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.RateLimiting.RateLimitingMiddleware.InvokeInternal(HttpContext context, EnableRateLimitingAttribute enableRateLimitingAttribute)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at EventHub.Middleware.GlobalExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub\Middleware\GlobalExceptionMiddleware.cs:line 23
+2026-02-12 14:51:39.707 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Booking/confirm - 500 null application/json 66.997ms
+2026-02-12 14:53:58.504 +03:00 [INF] Executed DbCommand (25ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:53:58.549 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:53:58.553 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:53:58.563 +03:00 [INF] Events Seeded Successfully
+2026-02-12 14:53:58.578 +03:00 [INF] User profile is available. Using 'C:\Users\deniz\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-12 14:53:58.627 +03:00 [INF] Now listening on: http://localhost:5181
+2026-02-12 14:53:58.631 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-12 14:53:58.632 +03:00 [INF] Hosting environment: Development
+2026-02-12 14:53:58.633 +03:00 [INF] Content root path: C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub
+2026-02-12 14:54:09.232 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:54:09.272 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:54:09.285 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:54:09.390 +03:00 [INF] Executed DbCommand (7ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:54:09.440 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:54:09.454 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 165.6077ms
+2026-02-12 14:54:09.459 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:54:09.465 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 234.0701ms
+2026-02-12 14:54:09.469 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - application/json null
+2026-02-12 14:54:09.500 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:54:09.505 +03:00 [INF] Route matched with {action = "SeedEvents", controller = "Admin"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SeedEvents(EventHub.Services.EventSeederService) on controller EventHub.Controllers.AdminController (EventHub).
+2026-02-12 14:54:09.552 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:54:09.555 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:54:09.557 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 14:54:09.559 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:54:09.560 +03:00 [INF] Executed action EventHub.Controllers.AdminController.SeedEvents (EventHub) in 52.8523ms
+2026-02-12 14:54:09.561 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AdminController.SeedEvents (EventHub)'
+2026-02-12 14:54:09.562 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Admin/seed-events - 200 null text/plain; charset=utf-8 93.1165ms
+2026-02-12 14:54:09.565 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/register - application/json null
+2026-02-12 14:54:09.569 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:54:09.572 +03:00 [INF] Route matched with {action = "Register", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Register(EventHub.Controllers.RegisterRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:54:09.588 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Users" AS u
+    WHERE u."Email" = @__request_Email_0)
+2026-02-12 14:54:09.639 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@p0='?', @p1='?', @p2='?', @p3='?'], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "Users" ("Email", "FullName", "PasswordHash", "Role")
+VALUES (@p0, @p1, @p2, @p3)
+RETURNING "Id";
+2026-02-12 14:54:09.654 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.String'.
+2026-02-12 14:54:09.656 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Register (EventHub) in 81.5961ms
+2026-02-12 14:54:09.657 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Register (EventHub)'
+2026-02-12 14:54:09.658 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/register - 200 null text/plain; charset=utf-8 93.4933ms
+2026-02-12 14:54:09.662 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Auth/login - application/json null
+2026-02-12 14:54:09.665 +03:00 [INF] Executing endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:54:09.666 +03:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(EventHub.Controllers.LoginRequest) on controller EventHub.Controllers.AuthController (EventHub).
+2026-02-12 14:54:09.671 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__request_Email_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT u."Id", u."Email", u."FullName", u."PasswordHash", u."Role"
+FROM "Users" AS u
+WHERE u."Email" = @__request_Email_0
+LIMIT 2
+2026-02-12 14:54:09.674 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType1`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:54:09.675 +03:00 [INF] Executed action EventHub.Controllers.AuthController.Login (EventHub) in 7.2435ms
+2026-02-12 14:54:09.676 +03:00 [INF] Executed endpoint 'EventHub.Controllers.AuthController.Login (EventHub)'
+2026-02-12 14:54:09.677 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Auth/login - 200 null application/json; charset=utf-8 14.8586ms
+2026-02-12 14:54:09.681 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - application/json null
+2026-02-12 14:54:09.686 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:54:09.690 +03:00 [INF] Route matched with {action = "GetEvents", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEvents(System.String, System.Nullable`1[System.DateTime], System.Nullable`1[System.DateTime]) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:54:09.746 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__location_0_contains='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT e."Id", e."Capacity", e."CategoryId", e."Description", e."EndDate", e."ImageUrl", e."IsActive", e."Location", e."Name", e."Price", e."StartDate", e."Version", c."Id", c."Description", c."Name"
+FROM "Events" AS e
+LEFT JOIN "Categories" AS c ON e."CategoryId" = c."Id"
+WHERE e."IsActive" AND e."Location" LIKE @__location_0_contains
+2026-02-12 14:54:09.774 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.Models.Event, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:54:09.795 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEvents (EventHub) in 103.2958ms
+2026-02-12 14:54:09.799 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEvents (EventHub)'
+2026-02-12 14:54:09.800 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event?location=Istanbul - 200 null application/json; charset=utf-8 118.968ms
+2026-02-12 14:54:09.803 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - application/json null
+2026-02-12 14:54:09.805 +03:00 [INF] Executing endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:54:09.810 +03:00 [INF] Route matched with {action = "GetEventSeats", controller = "Event"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetEventSeats(Int32) on controller EventHub.Controllers.EventController (EventHub).
+2026-02-12 14:54:09.824 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."Section", s."Row", s."Number", s."Status", 100.0 AS "Price"
+FROM "Seats" AS s
+WHERE s."EventId" = @__id_0
+2026-02-12 14:54:09.827 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.DTOs.SeatDto, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:54:09.830 +03:00 [INF] Executed action EventHub.Controllers.EventController.GetEventSeats (EventHub) in 18.7476ms
+2026-02-12 14:54:09.831 +03:00 [INF] Executed endpoint 'EventHub.Controllers.EventController.GetEventSeats (EventHub)'
+2026-02-12 14:54:09.832 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Event/2/seats - 200 null application/json; charset=utf-8 28.915ms
+2026-02-12 14:54:09.835 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - application/json null
+2026-02-12 14:54:09.839 +03:00 [INF] Executing endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:54:09.843 +03:00 [INF] Route matched with {action = "ReserveSeat", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ReserveSeat(EventHub.DTOs.ReserveRequest) on controller EventHub.Controllers.BookingController (EventHub).
+2026-02-12 14:54:09.857 +03:00 [INF] Executing OkObjectResult, writing value of type '<>f__AnonymousType2`2[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.DateTime, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-02-12 14:54:09.861 +03:00 [INF] Executed action EventHub.Controllers.BookingController.ReserveSeat (EventHub) in 16.3507ms
+2026-02-12 14:54:09.862 +03:00 [INF] Executed endpoint 'EventHub.Controllers.BookingController.ReserveSeat (EventHub)'
+2026-02-12 14:54:09.863 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Booking/reserve - 200 null application/json; charset=utf-8 28.1297ms
+2026-02-12 14:54:09.866 +03:00 [INF] Request starting HTTP/1.1 POST http://localhost:5181/api/Booking/confirm - application/json null
+2026-02-12 14:54:09.870 +03:00 [INF] Executing endpoint 'EventHub.Controllers.BookingController.ConfirmBooking (EventHub)'
+2026-02-12 14:54:09.874 +03:00 [INF] Route matched with {action = "ConfirmBooking", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ConfirmBooking(EventHub.DTOs.ConfirmBookingRequest) on controller EventHub.Controllers.BookingController (EventHub).
+2026-02-12 14:54:09.898 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT s."Id", s."EventId", s."Number", s."Row", s."Section", s."Status"
+FROM "Seats" AS s
+WHERE s."Id" = @__p_0
+LIMIT 1
+2026-02-12 14:54:09.931 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT e."Id", e."Capacity", e."CategoryId", e."Description", e."EndDate", e."ImageUrl", e."IsActive", e."Location", e."Name", e."Price", e."StartDate", e."Version"
+FROM "Events" AS e
+WHERE e."Id" = @__p_0
+LIMIT 1
+2026-02-12 14:54:09.980 +03:00 [INF] Executed DbCommand (11ms) [Parameters=[@p1='?' (DbType = Int32), @p0='?' (DbType = Int32), @p2='?' (DbType = Guid), @p4='?' (DbType = Int32), @p3='?', @p5='?' (DbType = DateTime), @p6='?' (DbType = Int32), @p7='?' (DbType = Decimal), @p8='?' (DbType = Int32), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+UPDATE "Events" SET "Capacity" = @p0
+WHERE "Id" = @p1 AND "Version" = @p2;
+UPDATE "Seats" SET "Status" = @p3
+WHERE "Id" = @p4;
+INSERT INTO "Tickets" ("BookingDate", "EventId", "PurchasePrice", "SeatId", "Status", "UserId")
+VALUES (@p5, @p6, @p7, @p8, @p9, @p10)
+RETURNING "Id";
+2026-02-12 14:54:09.997 +03:00 [INF] Executing OkObjectResult, writing value of type 'EventHub.DTOs.BookingResponse'.
+2026-02-12 14:54:10.001 +03:00 [INF] Executed action EventHub.Controllers.BookingController.ConfirmBooking (EventHub) in 125.5939ms
+2026-02-12 14:54:10.002 +03:00 [INF] Executed endpoint 'EventHub.Controllers.BookingController.ConfirmBooking (EventHub)'
+2026-02-12 14:54:10.003 +03:00 [INF] Request finished HTTP/1.1 POST http://localhost:5181/api/Booking/confirm - 200 null application/json; charset=utf-8 136.7063ms
+2026-02-12 14:54:10.007 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Booking/user/my-bookings - application/json null
+2026-02-12 14:54:10.009 +03:00 [INF] Executing endpoint 'EventHub.Controllers.BookingController.GetUserBookings (EventHub)'
+2026-02-12 14:54:10.014 +03:00 [INF] Route matched with {action = "GetUserBookings", controller = "Booking"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetUserBookings(EventHub.Data.ApplicationDbContext) on controller EventHub.Controllers.BookingController (EventHub).
+2026-02-12 14:54:10.055 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT t."Id", e."Name" AS "EventName", e."StartDate" AS "EventDate", e."Location" AS "Venue", CASE
+    WHEN s."Id" IS NOT NULL THEN s."Section"
+    ELSE 'N/A'
+END AS "SeatSection", CASE
+    WHEN s."Id" IS NOT NULL THEN s."Row"
+    ELSE 'N/A'
+END AS "SeatRow", CASE
+    WHEN s."Id" IS NOT NULL THEN s."Number"
+    ELSE 'N/A'
+END AS "SeatNumber", t."PurchasePrice" AS "Price", t."BookingDate" AS "PurchaseDate", CASE t."Status"
+    WHEN 0 THEN 'Pending'
+    WHEN 1 THEN 'Confirmed'
+    WHEN 2 THEN 'Cancelled'
+    WHEN 3 THEN 'Sold'
+    ELSE t."Status"::text
+END AS "Status"
+FROM "Tickets" AS t
+INNER JOIN "Events" AS e ON t."EventId" = e."Id"
+LEFT JOIN "Seats" AS s ON t."SeatId" = s."Id"
+WHERE t."UserId" = @__userId_0
+ORDER BY t."BookingDate" DESC
+2026-02-12 14:54:10.058 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[EventHub.DTOs.TicketDto, EventHub, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-02-12 14:54:10.061 +03:00 [INF] Executed action EventHub.Controllers.BookingController.GetUserBookings (EventHub) in 45.0121ms
+2026-02-12 14:54:10.062 +03:00 [INF] Executed endpoint 'EventHub.Controllers.BookingController.GetUserBookings (EventHub)'
+2026-02-12 14:54:10.063 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Booking/user/my-bookings - 200 null application/json; charset=utf-8 55.7965ms
+2026-02-12 15:00:14.640 +03:00 [INF] Application is shutting down...
+2026-02-12 15:00:19.020 +03:00 [INF] Executed DbCommand (26ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 15:00:19.069 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 15:00:19.074 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 15:00:19.092 +03:00 [INF] Events Seeded Successfully
+2026-02-12 15:00:19.117 +03:00 [INF] User profile is available. Using 'C:\Users\deniz\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-12 15:00:19.186 +03:00 [INF] Now listening on: http://localhost:5181
+2026-02-12 15:00:19.188 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-12 15:00:19.189 +03:00 [INF] Hosting environment: Development
+2026-02-12 15:00:19.190 +03:00 [INF] Content root path: C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub
+2026-02-12 15:09:54.060 +03:00 [INF] Application is shutting down...
+2026-02-12 15:19:45.360 +03:00 [INF] Executed DbCommand (25ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 15:19:45.412 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 15:19:45.416 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[@__evt_Name_0='?'], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM "Events" AS e
+    WHERE e."Name" = @__evt_Name_0)
+2026-02-12 15:19:45.426 +03:00 [INF] Events Seeded Successfully
+2026-02-12 15:19:45.444 +03:00 [INF] User profile is available. Using 'C:\Users\deniz\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-02-12 15:19:45.502 +03:00 [INF] Now listening on: http://localhost:5181
+2026-02-12 15:19:45.505 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-02-12 15:19:45.506 +03:00 [INF] Hosting environment: Development
+2026-02-12 15:19:45.506 +03:00 [INF] Content root path: C:\Users\deniz\OneDrive\Belgeler\GitHub\event-hub
+2026-02-12 15:20:01.476 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Booking/events - null null
+2026-02-12 15:20:01.519 +03:00 [INF] CORS policy execution successful.
+2026-02-12 15:20:01.529 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Booking/events - 404 0 null 53.6357ms
+2026-02-12 15:20:01.536 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5181/api/Booking/events, Response status code: 404
+2026-02-12 15:20:01.539 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:5181/api/Booking/events - null null
+2026-02-12 15:20:01.546 +03:00 [INF] CORS policy execution successful.
+2026-02-12 15:20:01.547 +03:00 [INF] Request finished HTTP/1.1 GET http://localhost:5181/api/Booking/events - 404 0 null 7.8639ms
+2026-02-12 15:20:01.549 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5181/api/Booking/events, Response status code: 404
