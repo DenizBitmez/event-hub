@@ -21,6 +21,9 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
+// Disable legacy claim mapping
+System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 // Add Rate Limiter
 builder.Services.AddRateLimiter(options =>
 {
@@ -115,7 +118,9 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 
 builder.Services.AddScoped<EventHub.Services.IBookingService, EventHub.Services.BookingService>();
 builder.Services.AddScoped<EventHub.Services.IJwtService, EventHub.Services.JwtService>();
-builder.Services.AddScoped<EventHub.Services.IReservationService, EventHub.Services.RedisReservationService>();
+// builder.Services.AddScoped<EventHub.Services.IReservationService, EventHub.Services.RedisReservationService>();
+builder.Services.AddSingleton<EventHub.Services.IReservationService, EventHub.Services.InMemoryReservationService>();
+builder.Services.AddScoped<EventHub.Services.EventSeederService>();
 
 // 1.2 Authentication & Authorization
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "super_secret_key_that_is_long_enough_for_hmac_sha256";
@@ -158,30 +163,24 @@ app.UseRateLimiter(); // <--- Rate Limiting Middleware
 
 app.MapControllers();
 
-// Apply Migrations at Startup
-using (var scope = app.Services.CreateScope())
-{
+    // Apply Migrations at Startup
+    using (var scope = app.Services.CreateScope())
+    {
+        // var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        // db.Database.EnsureCreated();
 
-    // var outputConn = builder.Configuration.GetConnectionString("DefaultConnection");
-    // Console.WriteLine($"DEBUG: ConnectionString: {outputConn}");
-    
-    // var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    
-    // EnsureCreated() works for prototypes, but Migrate() is better for real apps.
-    // For this demo, EnsureCreated is fine.
-    // For this demo, we reset the DB to ensure schema is up to date
-    /*
-    try 
-    {
-        db.Database.EnsureDeleted();
-        db.Database.EnsureCreated();
+        // Seed Events
+        try 
+        {
+            var seeder = scope.ServiceProvider.GetRequiredService<EventHub.Services.EventSeederService>();
+            await seeder.SeedEventsAsync();
+            Log.Information("Events Seeded Successfully");
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error seeding events");
+        }
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"DEBUG: DB Init Failed: {ex.Message}");
-    }
-    */
-}
 
 
 app.Run();

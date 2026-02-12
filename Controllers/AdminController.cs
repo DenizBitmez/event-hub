@@ -49,4 +49,10 @@ public class AdminController : ControllerBase
         }
         return BadRequest(result);
     }
+    [HttpPost("seed-events")]
+    public async Task<IActionResult> SeedEvents([FromServices] EventSeederService seeder)
+    {
+        await seeder.SeedEventsAsync();
+        return Ok("Events and Seats Seeded successfully.");
+    }
 }
