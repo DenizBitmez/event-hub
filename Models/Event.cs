@@ -9,9 +9,22 @@ public class Event
     [Required]
     public string Name { get; set; } = string.Empty;
     
-    public int Capacity { get; set; } // Total tickets initially available
+    public string Description { get; set; } = string.Empty;
+    public string Location { get; set; } = string.Empty;
+    public string ImageUrl { get; set; } = string.Empty;
     
-    public DateTime Date { get; set; }
+    public decimal Price { get; set; }
+    
+    public bool IsActive { get; set; } = true;
+    
+    public int Capacity { get; set; } 
+    
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    
+    // Foreign Key
+    public int? CategoryId { get; set; }
+    public Category? Category { get; set; }
     
     // Concurrency Token for Optimistic Locking
     [ConcurrencyCheck] 
