@@ -73,6 +73,25 @@ public class EventController : ControllerBase
         return Ok(eventItem);
     }
 
+    [HttpGet("{id}/seats")]
+    public async Task<IActionResult> GetEventSeats(int id)
+    {
+        var seats = await _context.Seats
+            .Where(s => s.EventId == id)
+            .Select(s => new EventHub.DTOs.SeatDto
+            {
+                Id = s.Id,
+                Section = s.Section,
+                Row = s.Row,
+                Number = s.Number,
+                Status = s.Status,
+                Price = 100 // Default price, or fetch from Event/Category
+            })
+            .ToListAsync();
+
+        return Ok(seats);
+    }
+
     // Only authorized users can create events (for now, ideally Admin)
     [HttpPost]
     [Authorize] 

@@ -24,6 +24,9 @@ System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeM
 
 builder.Host.UseSerilog();
 
+// Disable legacy claim mapping
+System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 // Add Rate Limiter
 builder.Services.AddRateLimiter(options =>
 {
