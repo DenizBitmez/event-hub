@@ -19,6 +19,9 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
+// Disable legacy claim mapping to ensure NameIdentifier is not overwritten by 'sub'
+System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 builder.Host.UseSerilog();
 
 // Add Rate Limiter
@@ -109,13 +112,12 @@ builder.Services.AddSwaggerGen(c =>
 
 
 // 1.1 Register Booking Service
-// Add Redis
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp => 
-    ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis") ?? "localhost"));
-
 builder.Services.AddScoped<EventHub.Services.IBookingService, EventHub.Services.BookingService>();
 builder.Services.AddScoped<EventHub.Services.IJwtService, EventHub.Services.JwtService>();
-builder.Services.AddScoped<EventHub.Services.IReservationService, EventHub.Services.RedisReservationService>();
+
+// Use InMemory for easy verification without Redis dependency issues
+builder.Services.AddSingleton<EventHub.Services.IReservationService, EventHub.Services.InMemoryReservationService>();
+builder.Services.AddScoped<EventHub.Services.EventSeederService>();
 
 // 1.2 Authentication & Authorization
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "super_secret_key_that_is_long_enough_for_hmac_sha256";
@@ -126,6 +128,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
+    options.MapInboundClaims = false; // Prevent mapping 'sub' to NameIdentifier
     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -161,26 +164,29 @@ app.MapControllers();
 // Apply Migrations at Startup
 using (var scope = app.Services.CreateScope())
 {
-
-    // var outputConn = builder.Configuration.GetConnectionString("DefaultConnection");
-    // Console.WriteLine($"DEBUG: ConnectionString: {outputConn}");
-    
-    // var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    
-    // EnsureCreated() works for prototypes, but Migrate() is better for real apps.
-    // For this demo, EnsureCreated is fine.
-    // For this demo, we reset the DB to ensure schema is up to date
-    /*
-    try 
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    try
     {
-        db.Database.EnsureDeleted();
-        db.Database.EnsureCreated();
+        db.Database.Migrate(); // Ensure DB is up to date
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"DEBUG: DB Init Failed: {ex.Message}");
+        Console.WriteLine($"Migration Failed: {ex.Message}");
+        Log.Error(ex, "Database Migration Failed");
+        throw; // Re-throw to stop startup if DB is critical
     }
-    */
+
+    // Auto-Seed
+    try 
+    {
+        var seeder = scope.ServiceProvider.GetRequiredService<EventHub.Services.EventSeederService>();
+        await seeder.SeedEventsAsync();
+        Console.WriteLine("Events Seeded Successfully");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Seeding Failed: {ex.Message}");
+    }
 }
 
 

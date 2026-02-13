@@ -21,23 +21,10 @@ public class BookingController : ControllerBase
         _validator = validator;
     }
 
-    [HttpGet("events")]
-    public async Task<IActionResult> GetEvents()
-    {
-        var events = await _context.Events.ToListAsync();
-        return Ok(events);
-    }
-
-    [HttpGet("events/{id}")]
-    public async Task<IActionResult> GetEvent(int id)
-    {
-        var eventItem = await _context.Events.FindAsync(id);
-        if (eventItem == null) return NotFound("Event not found");
-        return Ok(eventItem);
-    }
+    // Obsolete GetEvents/GetEvent removed. Use EventController.
 
     [HttpPost("naive")]
-    public async Task<IActionResult> BookTicketNaive([FromBody] int eventId)
+    public async Task<IActionResult> BookTicketNaive([FromBody] BookingRequest request)
     {
         var validationResult = await _validator.ValidateAsync(request);
         if (!validationResult.IsValid)
@@ -47,9 +34,9 @@ public class BookingController : ControllerBase
 
         // SECURE: Get User ID from Token, don't trust the client body
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-        if (userIdClaim == null) return Unauthorized();
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId)) return Unauthorized();
         
-        request.UserId = int.Parse(userIdClaim.Value);
+        request.UserId = userId;
 
         try
         {
@@ -61,8 +48,6 @@ public class BookingController : ControllerBase
             }
             else
             {
-                // If Sold Out or other logic failure, return 409 Conflict or 400 BadRequest
-                // 409 Conflict is often semantic for "State didn't allow this" (e.g. sold out during race)
                 if (response.Message.Contains("Sold Out"))
                 {
                     return Conflict(response); 
@@ -72,18 +57,17 @@ public class BookingController : ControllerBase
         }
         catch (Exception ex)
         {
-            // Logged in Service, but return generic 500 here
             return StatusCode(500, "An internal error occurred while processing your booking.");
         }
     }
+
 
     [HttpPost("reserve")]
     [Authorize]
     public async Task<IActionResult> ReserveSeat([FromBody] ReserveRequest request)
     {
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-        if (userIdClaim == null) return Unauthorized();
-        var userId = int.Parse(userIdClaim.Value);
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId)) return Unauthorized();
 
         var success = await _reservationService.ReserveSeatAsync(request.EventId, request.SeatId, userId);
         if (success)
@@ -98,8 +82,7 @@ public class BookingController : ControllerBase
     public async Task<IActionResult> ConfirmBooking([FromBody] ConfirmBookingRequest request)
     {
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-        if (userIdClaim == null) return Unauthorized();
-        var userId = int.Parse(userIdClaim.Value);
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId)) return Unauthorized();
 
         // 1. Verify Reservation (Redis)
         var hasReservation = await _reservationService.ConfirmReservationAsync(request.EventId, request.SeatId, userId);
