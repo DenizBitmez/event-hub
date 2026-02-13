@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { Search, User, Menu, Ticket } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
+    const { user, logout } = useAuth();
     return (
         <nav className="bg-[#1a237e] text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -32,10 +34,23 @@ export default function Navbar() {
                             <Link to="/" className="hover:text-white transition-colors">Sports</Link>
                         </div>
 
-                        <button className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-colors">
-                            <User className="w-5 h-5" />
-                            <span className="hidden sm:inline text-sm font-medium">Log In</span>
-                        </button>
+                        {user ? (
+                            <div className="flex items-center gap-4">
+                                <span className="text-sm font-medium hidden sm:inline">{user.email}</span>
+                                <Link to="/my-bookings" className="text-sm font-medium hover:text-white transition-colors">My Bookings</Link>
+                                <button
+                                    onClick={logout}
+                                    className="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-colors text-sm"
+                                >
+                                    Log Out
+                                </button>
+                            </div>
+                        ) : (
+                            <Link to="/login" className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-full transition-colors">
+                                <User className="w-5 h-5" />
+                                <span className="hidden sm:inline text-sm font-medium">Log In</span>
+                            </Link>
+                        )}
 
                         <button className="md:hidden text-gray-300 hover:text-white">
                             <Menu className="w-6 h-6" />

@@ -12,6 +12,7 @@ public class InMemoryReservationService : IReservationService
         var key = $"{eventId}:{seatId}";
         var now = DateTime.UtcNow;
 
+        // Clean up expired (lazy cleanup on access, simplistic for demo)
         if (_reservations.TryGetValue(key, out var checkV))
         {
             if (checkV.Expiry < now)
@@ -31,6 +32,9 @@ public class InMemoryReservationService : IReservationService
         {
             if (val.UserId == userId && val.Expiry > DateTime.UtcNow)
             {
+                // Optionally remove here or let BookingService handle it?
+                // Usually we keep it until booked, or remove it. 
+                // Let's remove it to "consume" the reservation.
                 _reservations.TryRemove(key, out _);
                 return Task.FromResult(true);
             }

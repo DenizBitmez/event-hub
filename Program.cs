@@ -19,6 +19,9 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
+// Disable legacy claim mapping to ensure NameIdentifier is not overwritten by 'sub'
+System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 builder.Host.UseSerilog();
 
 // Disable legacy claim mapping
@@ -112,13 +115,10 @@ builder.Services.AddSwaggerGen(c =>
 
 
 // 1.1 Register Booking Service
-// Add Redis
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp => 
-    ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("Redis") ?? "localhost"));
-
 builder.Services.AddScoped<EventHub.Services.IBookingService, EventHub.Services.BookingService>();
 builder.Services.AddScoped<EventHub.Services.IJwtService, EventHub.Services.JwtService>();
-// builder.Services.AddScoped<EventHub.Services.IReservationService, EventHub.Services.RedisReservationService>();
+
+// Use InMemory for easy verification without Redis dependency issues
 builder.Services.AddSingleton<EventHub.Services.IReservationService, EventHub.Services.InMemoryReservationService>();
 builder.Services.AddScoped<EventHub.Services.EventSeederService>();
 
@@ -131,6 +131,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
+    options.MapInboundClaims = false; // Prevent mapping 'sub' to NameIdentifier
     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -163,24 +164,33 @@ app.UseRateLimiter(); // <--- Rate Limiting Middleware
 
 app.MapControllers();
 
-    // Apply Migrations at Startup
-    using (var scope = app.Services.CreateScope())
+// Apply Migrations at Startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    try
     {
-        // var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        // db.Database.EnsureCreated();
-
-        // Seed Events
-        try 
-        {
-            var seeder = scope.ServiceProvider.GetRequiredService<EventHub.Services.EventSeederService>();
-            await seeder.SeedEventsAsync();
-            Log.Information("Events Seeded Successfully");
-        }
-        catch (Exception ex)
-        {
-            Log.Error(ex, "Error seeding events");
-        }
+        db.Database.Migrate(); // Ensure DB is up to date
     }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Migration Failed: {ex.Message}");
+        Log.Error(ex, "Database Migration Failed");
+        throw; // Re-throw to stop startup if DB is critical
+    }
+
+    // Auto-Seed
+    try 
+    {
+        var seeder = scope.ServiceProvider.GetRequiredService<EventHub.Services.EventSeederService>();
+        await seeder.SeedEventsAsync();
+        Console.WriteLine("Events Seeded Successfully");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Seeding Failed: {ex.Message}");
+    }
+}
 
 
 app.Run();

@@ -51,14 +51,28 @@ public class EventSeederService
 
         foreach (var evt in events)
         {
-            if (!_context.Events.Any(e => e.Name == evt.Name))
+            var existingEvent = _context.Events.FirstOrDefault(e => e.Name == evt.Name);
+            
+            if (existingEvent == null)
             {
                 _context.Events.Add(evt);
                 await _context.SaveChangesAsync(); // Save to get ID
+                existingEvent = evt; // Set for seat generation
+                Console.WriteLine($"Event Created: {evt.Name}");
+            }
 
-                // Generate Seats
-                var seats = GenerateSeatsForEvent(evt.Id, evt.Capacity);
+            // Ensure seats exist
+            if (!_context.Seats.Any(s => s.EventId == existingEvent.Id))
+            {
+                Console.WriteLine($"Generating seats for event: {existingEvent.Name} (ID: {existingEvent.Id})");
+                var seats = GenerateSeatsForEvent(existingEvent.Id, existingEvent.Capacity);
                 _context.Seats.AddRange(seats);
+                await _context.SaveChangesAsync();
+                Console.WriteLine($"Seats generated for event: {existingEvent.Name}");
+            }
+            else 
+            {
+                Console.WriteLine($"Seats already exist for event: {existingEvent.Name} (ID: {existingEvent.Id})");
             }
         }
 

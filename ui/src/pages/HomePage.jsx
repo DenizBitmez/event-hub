@@ -1,27 +1,41 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Calendar, MapPin, ChevronRight, Ticket } from 'lucide-react';
+import { Calendar, MapPin, ChevronRight, Ticket, Filter, X } from 'lucide-react';
 
-const API_BASE_URL = 'http://localhost:5181/api/Booking';
+const API_BASE_URL = 'http://localhost:5181/api';
 
 export default function HomePage() {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Filter State
+    const [location, setLocation] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+
+    const fetchEvents = async () => {
+        setLoading(true);
+        try {
+            const params = {};
+            if (location) params.location = location;
+            if (startDate) params.startDate = startDate;
+            if (endDate) params.endDate = endDate;
+
+            const response = await axios.get(`${API_BASE_URL}/Event`, { params });
+            // Sort by Date
+            const sorted = response.data.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+            setEvents(sorted);
+        } catch (error) {
+            console.error('Error fetching events:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                const response = await axios.get(`${API_BASE_URL}/events`);
-                setEvents(response.data);
-            } catch (error) {
-                console.error('Error fetching events:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchEvents();
-    }, []);
+    }, []); // Initial load
 
     // Mock images for demonstration
     const getEventImage = (id) => {
@@ -32,6 +46,24 @@ export default function HomePage() {
             "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=1000"  // Art
         ];
         return images[id % images.length];
+    };
+
+    const handleFilterSubmit = (e) => {
+        e.preventDefault();
+        fetchEvents();
+    };
+
+    const clearFilters = () => {
+        setLocation('');
+        setStartDate('');
+        setEndDate('');
+        // We need to trigger fetch, but state updates are async. 
+        // Best to just reload or manually call with empty params.
+        // A simple way is to force a re-fetch with empty params
+        axios.get(`${API_BASE_URL}/Event`).then(res => {
+            const sorted = res.data.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+            setEvents(sorted);
+        });
     };
 
     return (
@@ -58,24 +90,56 @@ export default function HomePage() {
                         <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-full font-bold transition-all transform hover:scale-105 flex items-center gap-2">
                             <Ticket className="w-5 h-5" /> Buy Tickets
                         </button>
-                        <button className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full font-bold backdrop-blur-sm transition-all">
-                            Learn More
-                        </button>
                     </div>
                 </div>
             </div>
 
             {/* Events Filter (Visual Only) */}
-            <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+            <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm py-4">
                 <div className="max-w-7xl mx-auto px-4">
-                    <div className="flex overflow-x-auto gap-8 py-4 text-sm font-medium text-gray-500 no-scrollbar">
-                        <button className="text-orange-600 border-b-2 border-orange-600 pb-4 -mb-4 whitespace-nowrap">All Events</button>
-                        <button className="hover:text-gray-900 whitespace-nowrap">Concerts</button>
-                        <button className="hover:text-gray-900 whitespace-nowrap">Theater</button>
-                        <button className="hover:text-gray-900 whitespace-nowrap">Stand-up</button>
-                        <button className="hover:text-gray-900 whitespace-nowrap">Festivals</button>
-                        <button className="hover:text-gray-900 whitespace-nowrap">Sports</button>
-                    </div>
+                    <form onSubmit={handleFilterSubmit} className="flex flex-col md:flex-row gap-4 items-end">
+                        <div className="flex-1 w-full">
+                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Location</label>
+                            <div className="relative">
+                                <MapPin className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+                                <input
+                                    type="text"
+                                    placeholder="Istanbul, Ankara..."
+                                    className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    value={location}
+                                    onChange={(e) => setLocation(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <div className="w-full md:w-48">
+                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Start Date</label>
+                            <input
+                                type="date"
+                                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                            />
+                        </div>
+                        <div className="w-full md:w-48">
+                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">End Date</label>
+                            <input
+                                type="date"
+                                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                            />
+                        </div>
+                        <div className="flex gap-2 w-full md:w-auto">
+                            <button type="submit" className="flex-1 md:flex-none bg-gray-900 text-white px-6 py-2 rounded-lg font-bold hover:bg-black transition-colors flex items-center justify-center gap-2">
+                                <Filter className="w-4 h-4" /> Filter
+                            </button>
+                            {(location || startDate || endDate) && (
+                                <button type="button" onClick={clearFilters} className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg font-bold hover:bg-gray-200 transition-colors">
+                                    <X className="w-4 h-4" />
+                                </button>
+                            )}
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -94,38 +158,44 @@ export default function HomePage() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {events.map((event) => (
-                            <Link to={`/event/${event.id}`} key={event.id} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full">
-                                <div className="relative h-48 overflow-hidden">
-                                    <img
-                                        src={getEventImage(event.id)}
-                                        alt={event.name}
-                                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                                    />
-                                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-gray-900 shadow-sm">
-                                        {event.capacity} Left
-                                    </div>
-                                </div>
-                                <div className="p-5 flex-grow flex flex-col">
-                                    <div className="flex items-center gap-2 text-xs font-bold text-orange-500 mb-2 uppercase tracking-wide">
-                                        <Calendar className="w-3 h-3" />
-                                        {new Date(event.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', weekday: 'short' })}
-                                    </div>
-                                    <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
-                                        {event.name}
-                                    </h3>
-                                    <div className="mt-auto pt-4 flex items-center justify-between text-sm text-gray-500 border-t border-gray-100">
-                                        <div className="flex items-center gap-1">
-                                            <MapPin className="w-3 h-3" />
-                                            <span>Istanbul</span>
+                        {events.length > 0 ? (
+                            events.map((event) => (
+                                <Link to={`/event/${event.id}`} key={event.id} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full">
+                                    <div className="relative h-48 overflow-hidden">
+                                        <img
+                                            src={getEventImage(event.id)}
+                                            alt={event.name}
+                                            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                                        />
+                                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-gray-900 shadow-sm">
+                                            {event.capacity} Left
                                         </div>
-                                        <span className="flex items-center text-orange-600 font-semibold group-hover:translate-x-1 transition-transform">
-                                            Buy Ticket <ChevronRight className="w-4 h-4" />
-                                        </span>
                                     </div>
-                                </div>
-                            </Link>
-                        ))}
+                                    <div className="p-5 flex-grow flex flex-col">
+                                        <div className="flex items-center gap-2 text-xs font-bold text-orange-500 mb-2 uppercase tracking-wide">
+                                            <Calendar className="w-3 h-3" />
+                                            {new Date(event.startDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', weekday: 'short' })}
+                                        </div>
+                                        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
+                                            {event.name}
+                                        </h3>
+                                        <div className="mt-auto pt-4 flex items-center justify-between text-sm text-gray-500 border-t border-gray-100">
+                                            <div className="flex items-center gap-1">
+                                                <MapPin className="w-3 h-3" />
+                                                <span className="truncate max-w-[100px]">{event.location}</span>
+                                            </div>
+                                            <span className="flex items-center text-orange-600 font-semibold group-hover:translate-x-1 transition-transform">
+                                                Buy <ChevronRight className="w-4 h-4" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))
+                        ) : (
+                            <div className="col-span-full text-center py-12 text-gray-500">
+                                No events found matching your criteria.
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

@@ -20,10 +20,7 @@ public class EventController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetEvents([FromQuery] string? location, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
     {
-        var query = _context.Events
-            .Include(e => e.Category)
-            .Where(e => e.IsActive)
-            .AsQueryable();
+        var query = _context.Events.AsQueryable();
 
         if (!string.IsNullOrEmpty(location))
         {
@@ -41,8 +38,27 @@ public class EventController : ControllerBase
         }
 
         var events = await query.ToListAsync();
-        
         return Ok(events);
+    }
+
+    [HttpGet("{id}/seats")]
+    [AllowAnonymous] // Allow public access to seat availability for now
+    public async Task<IActionResult> GetEventSeats(int id)
+    {
+        var seats = await _context.Seats
+            .Where(s => s.EventId == id)
+            .Select(s => new EventHub.DTOs.SeatDto
+            {
+                Id = s.Id,
+                Section = s.Section,
+                Row = s.Row,
+                Number = s.Number,
+                Status = s.Status,
+                Price = 100 // Placeholder, could be from Event or SeatType
+            })
+            .ToListAsync();
+
+        return Ok(seats);
     }
 
     [HttpGet("{id}")]

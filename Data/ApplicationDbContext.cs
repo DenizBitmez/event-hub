@@ -34,10 +34,10 @@ public class ApplicationDbContext : DbContext
                 Location = "Stadium Arena",
                 Price = 100,
                 Capacity = 10, 
-                StartDate = DateTime.UtcNow.AddDays(10), 
-                EndDate = DateTime.UtcNow.AddDays(10).AddHours(3),
+                StartDate = new DateTime(2026, 6, 1, 20, 0, 0, DateTimeKind.Utc), 
+                EndDate = new DateTime(2026, 6, 1, 23, 0, 0, DateTimeKind.Utc),
                 CategoryId = 1,
-                Version = Guid.NewGuid() 
+                Version = Guid.Parse("550e8400-e29b-41d4-a716-446655440000") 
             }
         );
 
