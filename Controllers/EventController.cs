@@ -3,6 +3,7 @@ using EventHub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using EventHub.Services;
 
 namespace EventHub.Controllers;
 
@@ -11,10 +12,12 @@ namespace EventHub.Controllers;
 public class EventController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
+    private readonly IEventSyncService _syncService;
 
-    public EventController(ApplicationDbContext context)
+    public EventController(ApplicationDbContext context, IEventSyncService syncService)
     {
         _context = context;
+        _syncService = syncService;
     }
 
     [HttpGet]
@@ -73,24 +76,6 @@ public class EventController : ControllerBase
         return Ok(eventItem);
     }
 
-    [HttpGet("{id}/seats")]
-    public async Task<IActionResult> GetEventSeats(int id)
-    {
-        var seats = await _context.Seats
-            .Where(s => s.EventId == id)
-            .Select(s => new EventHub.DTOs.SeatDto
-            {
-                Id = s.Id,
-                Section = s.Section,
-                Row = s.Row,
-                Number = s.Number,
-                Status = s.Status,
-                Price = 100 // Default price, or fetch from Event/Category
-            })
-            .ToListAsync();
-
-        return Ok(seats);
-    }
 
     // Only authorized users can create events (for now, ideally Admin)
     [HttpPost]
@@ -107,5 +92,20 @@ public class EventController : ControllerBase
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetEvent), new { id = eventItem.Id }, eventItem);
+    }
+
+    [HttpPost("sync")]
+    [AllowAnonymous] // For testing, ideally should be Admin only
+    public async Task<IActionResult> SyncEvents([FromQuery] string? keyword, [FromQuery] string? category)
+    {
+        try
+        {
+            var count = await _syncService.SyncEventsFromExternalApi(keyword, category);
+            return Ok(new { Message = $"{count} new events synced successfully." });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { Message = "Error syncing events.", Error = ex.Message });
+        }
     }
 }

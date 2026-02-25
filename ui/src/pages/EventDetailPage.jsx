@@ -99,7 +99,7 @@ export default function EventDetailPage() {
         return acc;
     }, {});
 
-    const eventImage = "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&q=80&w=1000";
+    const eventImage = event?.imageUrl || "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&q=80&w=1000";
 
     return (
         <div className="bg-gray-50 min-h-screen pb-20">

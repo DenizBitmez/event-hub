@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 
 using Serilog;
+using EventHub.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -121,6 +122,8 @@ builder.Services.AddScoped<EventHub.Services.IJwtService, EventHub.Services.JwtS
 // Use InMemory for easy verification without Redis dependency issues
 builder.Services.AddSingleton<EventHub.Services.IReservationService, EventHub.Services.InMemoryReservationService>();
 builder.Services.AddScoped<EventHub.Services.EventSeederService>();
+builder.Services.AddScoped<IEventSyncService, TicketmasterSyncService>();
+builder.Services.AddHttpClient<TicketmasterSyncService>();
 
 // 1.2 Authentication & Authorization
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "super_secret_key_that_is_long_enough_for_hmac_sha256";
