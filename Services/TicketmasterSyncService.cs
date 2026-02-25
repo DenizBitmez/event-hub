@@ -75,7 +75,7 @@ public class TicketmasterSyncService : IEventSyncService
             var newEvent = new Event
             {
                 Name = tmEvent.name,
-                Description = tmEvent.description ?? tmEvent.name,
+                Description = tmEvent.info ?? tmEvent.description ?? tmEvent.pleaseNote ?? tmEvent.name,
                 Location = tmEvent._embedded?.venues?.FirstOrDefault()?.name ?? "Unknown Venue",
                 ImageUrl = tmEvent.images?.FirstOrDefault(i => i.width > 500)?.url ?? tmEvent.images?.FirstOrDefault()?.url ?? "",
                 Price = tmEvent.priceRanges?.FirstOrDefault()?.min ?? 50.0m,
@@ -83,7 +83,7 @@ public class TicketmasterSyncService : IEventSyncService
                 EndDate = eventDate.AddHours(2),
                 CategoryId = category.Id,
                 IsActive = true,
-                Capacity = 1000
+                Capacity = 500 // Default capacity for Ticketmaster events
             };
 
             _context.Events.Add(newEvent);

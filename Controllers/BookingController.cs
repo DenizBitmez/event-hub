@@ -56,7 +56,7 @@ public class BookingController : ControllerBase
                 return BadRequest(response);
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return StatusCode(500, "An internal error occurred while processing your booking.");
         }
@@ -76,6 +76,21 @@ public class BookingController : ControllerBase
             return Ok(new { Message = "Seat Reserved for 10 minutes", ExpiresAt = DateTime.UtcNow.AddMinutes(10) });
         }
         return Conflict(new { Message = "Seat already reserved or unavailable" });
+    }
+
+    [HttpPost("reserve-multiple")]
+    [Authorize]
+    public async Task<IActionResult> ReserveSeats([FromBody] ReserveMultipleRequest request)
+    {
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId)) return Unauthorized();
+
+        var success = await _reservationService.ReserveSeatsAsync(request.EventId, request.SeatIds, userId);
+        if (success)
+        {
+            return Ok(new { Message = $"{request.SeatIds.Count} Seats Reserved for 10 minutes", ExpiresAt = DateTime.UtcNow.AddMinutes(10) });
+        }
+        return Conflict(new { Message = "One or more seats are already reserved or unavailable" });
     }
 
     [HttpPost("confirm")]
@@ -100,6 +115,28 @@ public class BookingController : ControllerBase
         return BadRequest(result);
     }
 
+    [HttpPost("confirm-multiple")]
+    [Authorize]
+    public async Task<IActionResult> ConfirmMultipleBooking([FromBody] ConfirmMultipleBookingRequest request)
+    {
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId)) return Unauthorized();
+
+        // 1. Verify Reservations
+        var hasReservations = await _reservationService.ConfirmReservationsAsync(request.EventId, request.SeatIds, userId);
+        if (!hasReservations)
+        {
+            return BadRequest("One or more reservations expired or are invalid");
+        }
+
+        // 2. Finalize Bookings
+        var bookingRequest = new BookingRequest { EventId = request.EventId, Quantity = request.SeatIds.Count, UserId = userId };
+        var result = await _bookingService.BookSeatsAsync(bookingRequest, request.SeatIds);
+        
+        if (result.Success) return Ok(result);
+        return BadRequest(result);
+    }
+
     [HttpGet("user/my-bookings")]
     [Authorize]
     public async Task<IActionResult> GetUserBookings([FromServices] EventHub.Data.ApplicationDbContext context)
@@ -115,9 +152,9 @@ public class BookingController : ControllerBase
             .Select(t => new EventHub.DTOs.TicketDto
             {
                 Id = t.Id,
-                EventName = t.Event.Name,
-                EventDate = t.Event.StartDate,
-                Venue = t.Event.Location,
+                EventName = t.Event != null ? t.Event.Name : "Unknown Event",
+                EventDate = t.Event != null ? t.Event.StartDate : DateTime.MinValue,
+                Venue = t.Event != null ? t.Event.Location : "Unknown Venue",
                 SeatSection = t.Seat != null ? t.Seat.Section : "N/A",
                 SeatRow = t.Seat != null ? t.Seat.Row : "N/A",
                 SeatNumber = t.Seat != null ? t.Seat.Number : "N/A",

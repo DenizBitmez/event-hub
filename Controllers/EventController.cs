@@ -21,7 +21,7 @@ public class EventController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetEvents([FromQuery] string? location, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+    public async Task<IActionResult> GetEvents([FromQuery] string? location, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] int? categoryId)
     {
         var query = _context.Events.AsQueryable();
 
@@ -38,6 +38,11 @@ public class EventController : ControllerBase
         if (endDate.HasValue)
         {
             query = query.Where(e => e.EndDate <= endDate.Value);
+        }
+
+        if (categoryId.HasValue)
+        {
+            query = query.Where(e => e.CategoryId == categoryId.Value);
         }
 
         var events = await query.ToListAsync();
@@ -74,6 +79,13 @@ public class EventController : ControllerBase
         if (eventItem == null) return NotFound();
 
         return Ok(eventItem);
+    }
+
+    [HttpGet("categories")]
+    public async Task<IActionResult> GetCategories()
+    {
+        var categories = await _context.Categories.ToListAsync();
+        return Ok(categories);
     }
 
 

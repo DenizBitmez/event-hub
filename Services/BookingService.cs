@@ -11,6 +11,7 @@ public interface IBookingService
     Task<BookingResponse> BookTicketAsync(BookingRequest request);
     Task<BookingResponse> CancelTicketAsync(int ticketId);
     Task<BookingResponse> BookSeatAsync(BookingRequest request, int seatId);
+    Task<BookingResponse> BookSeatsAsync(BookingRequest request, List<int> seatIds);
 }
 
 public class BookingService : IBookingService
@@ -155,12 +156,13 @@ public class BookingService : IBookingService
                 seat.Status = "Sold";
 
                 // 3. Create Ticket
+                var eventItem = await _context.Events.FindAsync(request.EventId);
                 var ticket = new Ticket
                 {
                     EventId = request.EventId,
                     UserId = request.UserId,
                     SeatId = seatId,
-                    PurchasePrice = 100, // Ideally fetch from Event or Seat Category
+                    PurchasePrice = seat.Price > 0 ? seat.Price : (eventItem?.Price ?? 100),
                     Status = TicketStatus.Confirmed,
                     BookingDate = DateTime.UtcNow
                 };
@@ -168,7 +170,6 @@ public class BookingService : IBookingService
                 _context.Tickets.Add(ticket);
                 
                 // 4. Decrement Capacity (Optional, but keeps stats consistent)
-                var eventItem = await _context.Events.FindAsync(request.EventId);
                 if(eventItem != null) eventItem.Capacity--;
 
                 await _context.SaveChangesAsync();
@@ -179,6 +180,62 @@ public class BookingService : IBookingService
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error booking seat {SeatId}", seatId);
+                await transaction.RollbackAsync();
+                throw;
+            }
+        });
+    }
+
+    public async Task<BookingResponse> BookSeatsAsync(BookingRequest request, List<int> seatIds)
+    {
+        var strategy = _context.Database.CreateExecutionStrategy();
+        return await strategy.ExecuteAsync(async () =>
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var eventItem = await _context.Events.FindAsync(request.EventId);
+                var tickets = new List<Ticket>();
+                foreach (var seatId in seatIds)
+                {
+                    var seat = await _context.Seats.FindAsync(seatId);
+                    if (seat == null || seat.EventId != request.EventId || seat.Status == "Sold")
+                    {
+                        await transaction.RollbackAsync();
+                        return new BookingResponse { Success = false, Message = $"Seat {seatId} unavailable" };
+                    }
+
+                    seat.Status = "Sold";
+                    
+                    var ticket = new Ticket
+                    {
+                        EventId = request.EventId,
+                        UserId = request.UserId,
+                        SeatId = seatId,
+                        PurchasePrice = seat.Price > 0 ? seat.Price : (eventItem?.Price ?? 100),
+                        Status = TicketStatus.Confirmed,
+                        BookingDate = DateTime.UtcNow
+                    };
+                    tickets.Add(ticket);
+                }
+
+                _context.Tickets.AddRange(tickets);
+
+                if (eventItem != null) eventItem.Capacity -= seatIds.Count;
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return new BookingResponse 
+                { 
+                    Success = true, 
+                    Message = $"{seatIds.Count} Seats Booked Successfully", 
+                    TicketId = tickets[0].Id // Return first ticket ID or modify response DTO to return list
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error booking multiple seats for Event {EventId}", request.EventId);
                 await transaction.RollbackAsync();
                 throw;
             }

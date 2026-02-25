@@ -182,7 +182,8 @@ using (var scope = app.Services.CreateScope())
         throw; // Re-throw to stop startup if DB is critical
     }
 
-    // Auto-Seed
+    // Auto-Seed disabled to use real Ticketmaster data
+    /*
     try 
     {
         var seeder = scope.ServiceProvider.GetRequiredService<EventHub.Services.EventSeederService>();
@@ -193,6 +194,7 @@ using (var scope = app.Services.CreateScope())
     {
         Console.WriteLine($"Seeding Failed: {ex.Message}");
     }
+    */
 }
 
 

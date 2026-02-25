@@ -51,4 +51,25 @@ public class RedisReservationService : IReservationService
             return false;
         });
     }
+
+    public async Task<bool> ReserveSeatsAsync(int eventId, List<int> seatIds, int userId)
+    {
+        // For plural operations, we just iterate. In a more advanced Redis impl, we might use a script or transaction.
+        foreach (var seatId in seatIds)
+        {
+            var success = await ReserveSeatAsync(eventId, seatId, userId);
+            if (!success) return false;
+        }
+        return true;
+    }
+
+    public async Task<bool> ConfirmReservationsAsync(int eventId, List<int> seatIds, int userId)
+    {
+        foreach (var seatId in seatIds)
+        {
+            var success = await ConfirmReservationAsync(eventId, seatId, userId);
+            if (!success) return false;
+        }
+        return true;
+    }
 }
