@@ -57,13 +57,21 @@ export default function HomePage() {
         setLocation('');
         setStartDate('');
         setEndDate('');
-        // We need to trigger fetch, but state updates are async. 
-        // Best to just reload or manually call with empty params.
-        // A simple way is to force a re-fetch with empty params
-        axios.get(`${API_BASE_URL}/Event`).then(res => {
-            const sorted = res.data.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
-            setEvents(sorted);
-        });
+        fetchEvents();
+    };
+
+    const handleSync = async () => {
+        try {
+            setLoading(true);
+            await axios.post(`${API_BASE_URL}/Event/sync?keyword=concert`);
+            alert("Sync successful! Real events from Ticketmaster added.");
+            fetchEvents();
+        } catch (error) {
+            console.error('Sync error:', error);
+            alert("Sync failed: " + (error.response?.data?.error || error.message));
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -138,6 +146,14 @@ export default function HomePage() {
                                     <X className="w-4 h-4" />
                                 </button>
                             )}
+                            <button
+                                type="button"
+                                onClick={handleSync}
+                                className="bg-orange-100 text-orange-600 px-4 py-2 rounded-lg font-bold hover:bg-orange-200 transition-colors flex items-center gap-2"
+                                title="Sync with Ticketmaster"
+                            >
+                                <ChevronRight className="w-4 h-4" /> Sync
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -163,7 +179,7 @@ export default function HomePage() {
                                 <Link to={`/event/${event.id}`} key={event.id} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full">
                                     <div className="relative h-48 overflow-hidden">
                                         <img
-                                            src={getEventImage(event.id)}
+                                            src={event.imageUrl || "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&q=80&w=1000"}
                                             alt={event.name}
                                             className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                                         />
