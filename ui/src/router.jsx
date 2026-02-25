@@ -5,6 +5,8 @@ import EventDetailPage from './pages/EventDetailPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import MyBookingsPage from './pages/MyBookingsPage';
+import HelpCenterPage from './pages/HelpCenterPage';
+import ContactSupportPage from './pages/ContactSupportPage';
 
 export const router = createBrowserRouter([
     {
@@ -30,6 +32,14 @@ export const router = createBrowserRouter([
             {
                 path: 'my-bookings',
                 element: <MyBookingsPage />,
+            },
+            {
+                path: 'help',
+                element: <HelpCenterPage />,
+            },
+            {
+                path: 'contact',
+                element: <ContactSupportPage />,
             },
         ],
     },

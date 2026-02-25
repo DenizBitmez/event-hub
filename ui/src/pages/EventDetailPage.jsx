@@ -103,16 +103,53 @@ export default function EventDetailPage() {
 
     return (
         <div className="bg-gray-50 min-h-screen pb-20">
-            {/* Header Image */}
-            <div className="relative h-[40vh] overflow-hidden">
-                <img src={eventImage} className="absolute inset-0 w-full h-full object-cover blur-sm opacity-50" />
-                <div className="absolute inset-0 bg-gradient-to-b from-gray-900/40 via-gray-900/60 to-gray-50"></div>
-                <div className="absolute bottom-0 left-0 w-full p-8 text-white max-w-7xl mx-auto">
-                    <h1 className="text-4xl font-extrabold mb-2">{event.name}</h1>
-                    <div className="flex items-center gap-4 text-sm font-medium">
-                        <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {new Date(event.startDate).toLocaleDateString()}</span>
-                        <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> {event.location}</span>
-                        {event.category && <span className="bg-orange-500/20 px-2 py-0.5 rounded text-orange-200 text-xs uppercase font-bold">{event.category.name}</span>}
+            {/* Header / Hero Section */}
+            <div className="relative h-[55vh] min-h-[400px]">
+                <img src={eventImage} className="absolute inset-0 w-full h-full object-cover" alt={event.name} />
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/40 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-50 via-transparent to-transparent"></div>
+
+                <div className="absolute inset-0 flex items-center">
+                    <div className="max-w-7xl mx-auto px-4 w-full">
+                        <div className="max-w-2xl space-y-6">
+                            <div className="flex flex-wrap gap-2">
+                                {event.category && (
+                                    <span className="bg-orange-600 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg shadow-orange-900/20">
+                                        {event.category.name}
+                                    </span>
+                                )}
+                                {event.genre && (
+                                    <span className="bg-white/10 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-white/20">
+                                        {event.genre}
+                                    </span>
+                                )}
+                            </div>
+
+                            <h1 className="text-5xl md:text-6xl font-black text-white leading-tight filter drop-shadow-2xl">
+                                {event.name}
+                            </h1>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-white/90">
+                                <div className="flex items-center gap-3 group">
+                                    <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:bg-orange-500/20 transition-colors">
+                                        <Calendar className="w-5 h-5 text-orange-400" />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-white/50 font-bold uppercase tracking-widest">Date</p>
+                                        <p className="font-semibold">{new Date(event.startDate).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-3 group">
+                                    <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:bg-orange-500/20 transition-colors">
+                                        <MapPin className="w-5 h-5 text-orange-400" />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-white/50 font-bold uppercase tracking-widest">Location</p>
+                                        <p className="font-semibold">{event.venue || event.location}, {event.city}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -121,13 +158,37 @@ export default function EventDetailPage() {
             <div className="max-w-7xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Left: Seat Map & About */}
                 <div className="lg:col-span-2 space-y-8">
-                    <div className="bg-white rounded-3xl p-8 shadow-sm">
-                        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-gray-900">
-                            <Info className="w-6 h-6 text-orange-500" /> About This Event
+                    <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+                        <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 text-gray-900">
+                            <div className="w-10 h-10 rounded-xl bg-orange-100 flex items-center justify-center">
+                                <Info className="w-6 h-6 text-orange-600" />
+                            </div>
+                            About This Event
                         </h2>
-                        <p className="text-gray-600 leading-relaxed whitespace-pre-line border-l-4 border-orange-100 pl-4 py-2 bg-orange-50/30 rounded-r-xl italic">
-                            {event.description}
-                        </p>
+                        <div className="space-y-4">
+                            <p className="text-gray-600 leading-relaxed whitespace-pre-line pl-6 border-l-2 border-orange-200">
+                                {event.description || `${event.name} will take place at ${event.venue || event.location} on ${new Date(event.startDate).toLocaleDateString()}. Don't miss this amazing ${event.genre || 'event'}!`}
+                            </p>
+
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-8 border-t border-gray-100">
+                                <div className="space-y-1">
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Venue</p>
+                                    <p className="text-sm font-bold text-gray-700">{event.venue || 'TBA'}</p>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">City</p>
+                                    <p className="text-sm font-bold text-gray-700">{event.city || 'TBA'}</p>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Genre</p>
+                                    <p className="text-sm font-bold text-gray-700">{event.genre || 'Live Event'}</p>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Price From</p>
+                                    <p className="text-sm font-bold text-orange-600">${event.price}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div className="bg-white rounded-3xl p-8 shadow-sm">

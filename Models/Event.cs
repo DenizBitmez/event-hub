@@ -15,6 +15,11 @@ public class Event
     
     public decimal Price { get; set; }
     
+    public string Venue { get; set; } = string.Empty;
+    public string City { get; set; } = string.Empty;
+    public string? Genre { get; set; }
+    public string? Promoter { get; set; }
+    
     public bool IsActive { get; set; } = true;
     
     public int Capacity { get; set; } 

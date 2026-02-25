@@ -91,27 +91,45 @@ export default function HomePage() {
     return (
         <div>
             {/* Hero Section */}
-            <div className="relative h-[500px] w-full overflow-hidden bg-gray-900">
+            <div className="relative h-[600px] w-full overflow-hidden bg-gray-900 flex items-center">
                 <div className="absolute inset-0">
                     <img
-                        src="https://images.unsplash.com/photo-1459749411177-287ce63e3ba6?auto=format&fit=crop&q=80&w=1920"
+                        src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=1920"
                         alt="Hero"
-                        className="w-full h-full object-cover opacity-60"
+                        className="w-full h-full object-cover scale-105 animate-slow-zoom"
                     />
+                    <div className="absolute inset-0 bg-black/40"></div>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-transparent to-transparent"></div>
-                <div className="relative max-w-7xl mx-auto px-4 h-full flex flex-col justify-center">
-                    <span className="text-orange-500 font-bold uppercase tracking-wider mb-2">Featured Event</span>
-                    <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight">
-                        Eras Tour <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-pink-600">Global Experience</span>
-                    </h1>
-                    <p className="text-gray-300 text-lg md:text-xl max-w-2xl mb-8">
-                        Join the most anticipated musical event of the decade. Experience the magic, the music, and the memories.
-                    </p>
-                    <div className="flex gap-4">
-                        <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-full font-bold transition-all transform hover:scale-105 flex items-center gap-2">
-                            <Ticket className="w-5 h-5" /> Buy Tickets
-                        </button>
+                <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/60 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
+
+                <div className="relative max-w-7xl mx-auto px-4 w-full">
+                    <div className="max-w-3xl space-y-8">
+                        <div>
+                            <span className="bg-orange-600 text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-xl shadow-orange-950/20 mb-6 inline-block">
+                                Featured Experience
+                            </span>
+                            <h1 className="text-6xl md:text-8xl font-black text-white leading-[1.1] filter drop-shadow-2xl">
+                                Eras Tour <br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600">
+                                    Global Experience
+                                </span>
+                            </h1>
+                        </div>
+
+                        <p className="text-gray-300 text-lg md:text-2xl max-w-2xl font-medium leading-relaxed">
+                            Join the most anticipated musical event of the decade. <br className="hidden md:block" />
+                            Experience the magic, the music, and the memories in high definition.
+                        </p>
+
+                        <div className="flex flex-wrap gap-4 pt-4">
+                            <button className="bg-white text-gray-900 px-10 py-4 rounded-full font-black transition-all transform hover:scale-105 hover:bg-orange-500 hover:text-white flex items-center gap-3 shadow-2xl shadow-white/10 group">
+                                <Ticket className="w-6 h-6 text-orange-500 group-hover:text-white transition-colors" /> Buy Tickets Now
+                            </button>
+                            <button className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-10 py-4 rounded-full font-black transition-all hover:bg-white/20">
+                                View Details
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
