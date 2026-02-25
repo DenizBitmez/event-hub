@@ -14,6 +14,8 @@ public class ApplicationDbContext : DbContext
     public DbSet<Category> Categories { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Seat> Seats { get; set; }
+    public DbSet<HelpArticle> HelpArticles { get; set; }
+    public DbSet<SupportRequest> SupportRequests { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

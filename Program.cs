@@ -9,6 +9,7 @@ using System.Threading.RateLimiting;
 
 using Serilog;
 using EventHub.Services;
+using EventHub.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -118,6 +119,7 @@ builder.Services.AddSwaggerGen(c =>
 // 1.1 Register Booking Service
 builder.Services.AddScoped<EventHub.Services.IBookingService, EventHub.Services.BookingService>();
 builder.Services.AddScoped<EventHub.Services.IJwtService, EventHub.Services.JwtService>();
+builder.Services.AddScoped<EventHub.Services.IEmailService, EventHub.Services.EmailService>();
 
 // Use InMemory for easy verification without Redis dependency issues
 builder.Services.AddSingleton<EventHub.Services.IReservationService, EventHub.Services.InMemoryReservationService>();
@@ -182,19 +184,28 @@ using (var scope = app.Services.CreateScope())
         throw; // Re-throw to stop startup if DB is critical
     }
 
-    // Auto-Seed disabled to use real Ticketmaster data
-    /*
-    try 
+    // Seed Help Articles
+    try
     {
-        var seeder = scope.ServiceProvider.GetRequiredService<EventHub.Services.EventSeederService>();
-        await seeder.SeedEventsAsync();
-        Console.WriteLine("Events Seeded Successfully");
+        if (!await db.HelpArticles.AnyAsync())
+        {
+            var helpArticles = new List<HelpArticle>
+            {
+                new HelpArticle { Category = "Booking", Title = "How to book a ticket?", Content = "To book a ticket, navigate to the event details page, select your preferred seats from the interactive map, and click 'Reserve'. Once reserved, you have 10 minutes to confirm your purchase.", Icon = "Ticket" },
+                new HelpArticle { Category = "Booking", Title = "Can I book multiple seats?", Content = "Yes, you can select multiple seats at once. The total price will be displayed in your booking summary before you confirm.", Icon = "Users" },
+                new HelpArticle { Category = "Payments", Title = "Supported payment methods", Content = "We currently support all major credit and debit cards. Your payment is processed securely through our encrypted payment gateway.", Icon = "CreditCard" },
+                new HelpArticle { Category = "Refunds", Title = "Refund Policy", Content = "Tickets are generally non-refundable unless the event is cancelled or rescheduled. Please contact our support team for specific inquiries.", Icon = "RefreshCw" },
+                new HelpArticle { Category = "Account", Title = "Resetting your password", Content = "If you've forgotten your password, go to the login page and click 'Forgot Password' to receive a reset link via email.", Icon = "Lock" }
+            };
+            db.HelpArticles.AddRange(helpArticles);
+            await db.SaveChangesAsync();
+            Console.WriteLine("Help Articles Seeded Successfully");
+        }
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Seeding Failed: {ex.Message}");
+        Console.WriteLine($"Help Seeding Failed: {ex.Message}");
     }
-    */
 }
 
 
