@@ -22,4 +22,6 @@ public class Seat
     // Note: In high-scale systems, "Locked" status is often ephemeral in Redis, 
     // but having a DB status can be useful for permanent blocks (VIP, Maintenance).
     public string Status { get; set; } = "Available"; 
+    
+    public decimal Price { get; set; }
 }

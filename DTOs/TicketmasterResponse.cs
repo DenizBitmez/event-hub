@@ -15,6 +15,8 @@ public class TicketmasterEvent
     public string id { get; set; } = string.Empty;
     public string name { get; set; } = string.Empty;
     public string? description { get; set; }
+    public string? info { get; set; }
+    public string? pleaseNote { get; set; }
     public string? url { get; set; }
     public List<TicketmasterImage>? images { get; set; }
     public TicketmasterDates? dates { get; set; }

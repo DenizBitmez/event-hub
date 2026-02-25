@@ -28,11 +28,6 @@ export default function Navbar() {
 
                     {/* Right Actions */}
                     <div className="flex items-center gap-6">
-                        <div className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-300">
-                            <Link to="/" className="hover:text-white transition-colors">Concerts</Link>
-                            <Link to="/" className="hover:text-white transition-colors">Theaters</Link>
-                            <Link to="/" className="hover:text-white transition-colors">Sports</Link>
-                        </div>
 
                         {user ? (
                             <div className="flex items-center gap-4">

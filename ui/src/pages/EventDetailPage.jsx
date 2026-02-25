@@ -12,7 +12,7 @@ export default function EventDetailPage() {
     const [event, setEvent] = useState(null);
     const [seats, setSeats] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedSeat, setSelectedSeat] = useState(null);
+    const [selectedSeats, setSelectedSeats] = useState([]);
     const [reservationId, setReservationId] = useState(null); // Just a flag or expiry
     const [bookingStep, setBookingStep] = useState('select'); // select, reserved, confirmed
     const [message, setMessage] = useState(null);
@@ -47,17 +47,17 @@ export default function EventDetailPage() {
             setError("Please login to book a seat.");
             return;
         }
-        if (!selectedSeat) return;
+        if (selectedSeats.length === 0) return;
 
         try {
             setMessage(null);
             setError(null);
-            await axios.post(`${API_BASE_URL}/Booking/reserve`, {
+            await axios.post(`${API_BASE_URL}/Booking/reserve-multiple`, {
                 eventId: parseInt(id),
-                seatId: selectedSeat.id
+                seatIds: selectedSeats.map(s => s.id)
             });
             setBookingStep('reserved');
-            setMessage("Seat reserved! You have 10 minutes to confirm.");
+            setMessage(`${selectedSeats.length} seats reserved! You have 10 minutes to confirm.`);
             fetchData(); // Refresh seat status
         } catch (err) {
             if (err.response && err.response.status === 401) {
@@ -69,15 +69,15 @@ export default function EventDetailPage() {
     };
 
     const handleConfirm = async () => {
-        if (!user || !selectedSeat) return;
+        if (!user || selectedSeats.length === 0) return;
 
         try {
-            const res = await axios.post(`${API_BASE_URL}/Booking/confirm`, {
+            const res = await axios.post(`${API_BASE_URL}/Booking/confirm-multiple`, {
                 eventId: parseInt(id),
-                seatId: selectedSeat.id
+                seatIds: selectedSeats.map(s => s.id)
             });
             setBookingStep('confirmed');
-            setMessage(`Booking Confirmed! Ticket ID: ${res.data.ticketId}`);
+            setMessage(`Booking Confirmed! Main Ticket ID: ${res.data.ticketId}`);
             fetchData();
         } catch (err) {
             if (err.response && err.response.status === 401) {
@@ -112,55 +112,76 @@ export default function EventDetailPage() {
                     <div className="flex items-center gap-4 text-sm font-medium">
                         <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {new Date(event.startDate).toLocaleDateString()}</span>
                         <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> {event.location}</span>
+                        {event.category && <span className="bg-orange-500/20 px-2 py-0.5 rounded text-orange-200 text-xs uppercase font-bold">{event.category.name}</span>}
                     </div>
                 </div>
             </div>
 
+
             <div className="max-w-7xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Left: Seat Map */}
-                <div className="lg:col-span-2 bg-white rounded-3xl p-8 shadow-sm">
-                    <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-                        <Armchair className="w-6 h-6 text-orange-500" /> Select Your Seat
-                    </h2>
+                {/* Left: Seat Map & About */}
+                <div className="lg:col-span-2 space-y-8">
+                    <div className="bg-white rounded-3xl p-8 shadow-sm">
+                        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2 text-gray-900">
+                            <Info className="w-6 h-6 text-orange-500" /> About This Event
+                        </h2>
+                        <p className="text-gray-600 leading-relaxed whitespace-pre-line border-l-4 border-orange-100 pl-4 py-2 bg-orange-50/30 rounded-r-xl italic">
+                            {event.description}
+                        </p>
+                    </div>
 
-                    <div className="overflow-x-auto">
-                        <div className="min-w-[500px] flex flex-col gap-4 items-center">
-                            <div className="w-2/3 h-8 bg-gray-300 rounded-b-xl mb-8 flex items-center justify-center text-gray-600 text-sm font-bold tracking-widest uppercase">Stage</div>
+                    <div className="bg-white rounded-3xl p-8 shadow-sm">
+                        <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                            <Armchair className="w-6 h-6 text-orange-500" /> Select Your Seat
+                        </h2>
 
-                            {Object.entries(seatsByRow).sort().map(([row, rowSeats]) => (
-                                <div key={row} className="flex gap-2 items-center">
-                                    <span className="w-6 text-center font-bold text-gray-400">{row}</span>
-                                    {rowSeats.sort((a, b) => parseInt(a.number) - parseInt(b.number)).map(seat => (
-                                        <button
-                                            key={seat.id}
-                                            onClick={() => {
-                                                if (seat.status === 'Available') {
-                                                    setBookingStep('select');
-                                                    setSelectedSeat(seat);
-                                                }
-                                            }}
-                                            disabled={seat.status !== 'Available'}
-                                            className={`w-8 h-8 rounded-lg text-xs font-medium transition-all ${selectedSeat?.id === seat.id
-                                                ? 'bg-orange-500 text-white ring-2 ring-orange-300 ring-offset-2'
-                                                : seat.status === 'Available'
-                                                    ? 'bg-green-100 text-green-700 hover:bg-green-200 border border-green-200'
-                                                    : 'bg-gray-100 text-gray-300 cursor-not-allowed'
-                                                }`}
-                                            title={`Row ${seat.row} - Seat ${seat.number} (${seat.status})`}
-                                        >
-                                            {seat.number}
-                                        </button>
-                                    ))}
-                                </div>
-                            ))}
+                        <div className="overflow-x-auto">
+                            <div className="min-w-[500px] flex flex-col gap-4 items-center">
+                                <div className="w-2/3 h-8 bg-gray-300 rounded-b-xl mb-8 flex items-center justify-center text-gray-600 text-sm font-bold tracking-widest uppercase">Stage</div>
+
+                                {Object.entries(seatsByRow).sort().map(([row, rowSeats]) => (
+                                    <div key={row} className="flex gap-2 items-center">
+                                        <span className="w-6 text-center font-bold text-gray-400">{row}</span>
+                                        {rowSeats.sort((a, b) => parseInt(a.number) - parseInt(b.number)).map(seat => (
+                                            <button
+                                                key={seat.id}
+                                                onClick={() => {
+                                                    if (seat.status === 'Available') {
+                                                        setBookingStep('select');
+                                                        setSelectedSeats(prev => {
+                                                            const isSelected = prev.find(ps => ps.id === seat.id);
+                                                            if (isSelected) {
+                                                                return prev.filter(ps => ps.id !== seat.id);
+                                                            } else {
+                                                                return [...prev, seat];
+                                                            }
+                                                        });
+                                                    }
+                                                }}
+                                                disabled={seat.status !== 'Available'}
+                                                className={`w-8 h-8 rounded-lg text-xs font-medium transition-all ${selectedSeats.some(ps => ps.id === seat.id)
+                                                    ? 'bg-orange-500 text-white ring-2 ring-orange-300 ring-offset-2'
+                                                    : seat.status === 'Available'
+                                                        ? 'bg-green-100 text-green-700 hover:bg-green-200 border border-green-200'
+                                                        : 'bg-gray-100 text-gray-300 cursor-not-allowed'
+                                                    }`}
+                                                title={`Row ${seat.row} - Seat ${seat.number} (${seat.status})`}
+                                            >
+                                                {seat.number}
+                                            </button>
+                                        ))}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="mt-8 flex gap-4 justify-center text-sm text-gray-600">
+                            <div className="flex items-center gap-2"><div className="w-4 h-4 bg-green-100 border border-green-200 rounded"></div> Available</div>
+                            <div className="flex items-center gap-2"><div className="w-4 h-4 bg-gray-100 rounded"></div> Sold / Reserved</div>
+                            <div className="flex items-center gap-2"><div className="w-4 h-4 bg-orange-500 rounded"></div> Selected</div>
                         </div>
                     </div>
 
-                    <div className="mt-8 flex gap-4 justify-center text-sm text-gray-600">
-                        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-green-100 border border-green-200 rounded"></div> Available</div>
-                        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-gray-100 rounded"></div> Sold / Reserved</div>
-                        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-orange-500 rounded"></div> Selected</div>
-                    </div>
                 </div>
 
                 {/* Right: Booking Summary */}
@@ -168,20 +189,20 @@ export default function EventDetailPage() {
                     <div className="sticky top-24 bg-white rounded-3xl shadow-xl p-6 border border-gray-100">
                         <h3 className="text-xl font-bold mb-4">Booking Summary</h3>
 
-                        {selectedSeat ? (
+                        {selectedSeats.length > 0 ? (
                             <div className="space-y-4">
-                                <div className="p-4 bg-gray-50 rounded-xl space-y-2">
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-500">Section</span>
-                                        <span className="font-semibold">{selectedSeat.section}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-500">Seat</span>
-                                        <span className="font-semibold text-orange-600">Row {selectedSeat.row} - {selectedSeat.number}</span>
-                                    </div>
+                                <div className="p-4 bg-gray-50 rounded-xl space-y-2 max-h-60 overflow-y-auto">
+                                    {selectedSeats.map(seat => (
+                                        <div key={seat.id} className="flex justify-between text-sm py-1 border-b border-gray-100 last:border-0">
+                                            <span className="text-gray-500">Row {seat.row} - {seat.number}</span>
+                                            <span className="font-semibold text-orange-600">${seat.price || 100}</span>
+                                        </div>
+                                    ))}
                                     <div className="flex justify-between border-t border-gray-200 pt-2 mt-2">
-                                        <span className="text-gray-900 font-bold">Price</span>
-                                        <span className="text-xl font-bold text-gray-900">${selectedSeat.price}</span>
+                                        <span className="text-gray-900 font-bold">Total ({selectedSeats.length})</span>
+                                        <span className="text-xl font-bold text-gray-900">
+                                            ${selectedSeats.reduce((sum, s) => sum + (s.price || 100), 0).toFixed(2)}
+                                        </span>
                                     </div>
                                 </div>
 

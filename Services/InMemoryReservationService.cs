@@ -25,6 +25,18 @@ public class InMemoryReservationService : IReservationService
         return Task.FromResult(success);
     }
 
+    public async Task<bool> ReserveSeatsAsync(int eventId, List<int> seatIds, int userId)
+    {
+        // Try to reserve all. If one fails, we should ideally rollback others for a "real" system, 
+        // but for this demo concurrent dictionary, we'll just try to add all and return false if any fails.
+        foreach (var seatId in seatIds)
+        {
+            var success = await ReserveSeatAsync(eventId, seatId, userId);
+            if (!success) return false; 
+        }
+        return true;
+    }
+
     public Task<bool> ConfirmReservationAsync(int eventId, int seatId, int userId)
     {
         var key = $"{eventId}:{seatId}";
@@ -40,5 +52,15 @@ public class InMemoryReservationService : IReservationService
             }
         }
         return Task.FromResult(false);
+    }
+
+    public async Task<bool> ConfirmReservationsAsync(int eventId, List<int> seatIds, int userId)
+    {
+        foreach (var seatId in seatIds)
+        {
+            var success = await ConfirmReservationAsync(eventId, seatId, userId);
+            if (!success) return false;
+        }
+        return true;
     }
 }

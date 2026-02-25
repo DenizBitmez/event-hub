@@ -13,6 +13,8 @@ export default function HomePage() {
     const [location, setLocation] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [categories, setCategories] = useState([]);
+    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
     const fetchEvents = async () => {
         setLoading(true);
@@ -21,6 +23,7 @@ export default function HomePage() {
             if (location) params.location = location;
             if (startDate) params.startDate = startDate;
             if (endDate) params.endDate = endDate;
+            if (selectedCategoryId) params.categoryId = selectedCategoryId;
 
             const response = await axios.get(`${API_BASE_URL}/Event`, { params });
             // Sort by Date
@@ -33,9 +36,19 @@ export default function HomePage() {
         }
     };
 
+    const fetchCategories = async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/Event/categories`);
+            setCategories(response.data);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
+
     useEffect(() => {
         fetchEvents();
-    }, []); // Initial load
+        fetchCategories();
+    }, [selectedCategoryId]); // Reload events when category changes
 
     // Mock images for demonstration
     const getEventImage = (id) => {
@@ -57,6 +70,7 @@ export default function HomePage() {
         setLocation('');
         setStartDate('');
         setEndDate('');
+        setSelectedCategoryId(null);
         fetchEvents();
     };
 
@@ -102,9 +116,28 @@ export default function HomePage() {
                 </div>
             </div>
 
-            {/* Events Filter (Visual Only) */}
+            {/* Categories & Filter */}
             <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm py-4">
                 <div className="max-w-7xl mx-auto px-4">
+                    {/* Category Buttons */}
+                    <div className="flex flex-wrap gap-2 mb-6 justify-center">
+                        <button
+                            onClick={() => setSelectedCategoryId(null)}
+                            className={`px-6 py-2 rounded-full font-bold transition-all ${!selectedCategoryId ? 'bg-orange-500 text-white shadow-lg' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                        >
+                            All
+                        </button>
+                        {categories.map(cat => (
+                            <button
+                                key={cat.id}
+                                onClick={() => setSelectedCategoryId(cat.id)}
+                                className={`px-6 py-2 rounded-full font-bold transition-all ${selectedCategoryId === cat.id ? 'bg-orange-500 text-white shadow-lg' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                            >
+                                {cat.name}
+                            </button>
+                        ))}
+                    </div>
+
                     <form onSubmit={handleFilterSubmit} className="flex flex-col md:flex-row gap-4 items-end">
                         <div className="flex-1 w-full">
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Location</label>
