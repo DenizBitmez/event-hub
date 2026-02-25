@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { Calendar, MapPin, ChevronRight, Ticket, Filter, X } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { Calendar, MapPin, ChevronRight, Ticket, Filter, X, Search } from 'lucide-react';
 
 const API_BASE_URL = 'http://localhost:5181/api';
 
 export default function HomePage() {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
 
     // Filter State
+    const [keyword, setKeyword] = useState(searchParams.get('search') || '');
     const [location, setLocation] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -20,6 +22,8 @@ export default function HomePage() {
         setLoading(true);
         try {
             const params = {};
+            const searchKeyword = searchParams.get('search') || keyword;
+            if (searchKeyword) params.searchTerm = searchKeyword;
             if (location) params.location = location;
             if (startDate) params.startDate = startDate;
             if (endDate) params.endDate = endDate;
@@ -46,38 +50,48 @@ export default function HomePage() {
     };
 
     useEffect(() => {
+        // Sync local keyword with URL param if it changes
+        const urlSearch = searchParams.get('search');
+        if (urlSearch !== null) {
+            setKeyword(urlSearch);
+        }
         fetchEvents();
         fetchCategories();
-    }, [selectedCategoryId]); // Reload events when category changes
+    }, [selectedCategoryId, searchParams]); // Reload when category or URL search changes
 
-    // Mock images for demonstration
-    const getEventImage = (id) => {
-        const images = [
-            "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?auto=format&fit=crop&q=80&w=1000", // Concert
-            "https://images.unsplash.com/photo-1514525253440-b393452e8d26?auto=format&fit=crop&q=80&w=1000", // Club
-            "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&q=80&w=1000", // Party
-            "https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=1000"  // Art
-        ];
-        return images[id % images.length];
-    };
+    // ... (rest of the helper functions remain the same)
 
     const handleFilterSubmit = (e) => {
         e.preventDefault();
+        // Clear category selection when performing a keyword search to avoid restricted results
+        // but KEEP location and date filters so they can be used together
+        if (keyword) {
+            setSelectedCategoryId(null);
+        }
+
+        // Construct search params based on ALL current filter states
+        const newParams = {};
+        if (keyword) newParams.search = keyword;
+        // We don't necessarily want to put location/dates in URL if not requested, 
+        // but setSearchParams will trigger the useEffect which calls fetchEvents.
+        setSearchParams(newParams);
         fetchEvents();
     };
 
     const clearFilters = () => {
+        setKeyword('');
         setLocation('');
         setStartDate('');
         setEndDate('');
         setSelectedCategoryId(null);
+        setSearchParams({});
         fetchEvents();
     };
 
     const handleSync = async () => {
         try {
             setLoading(true);
-            await axios.post(`${API_BASE_URL}/Event/sync?keyword=concert`);
+            await axios.post(`${API_BASE_URL}/Event/sync?keyword=${keyword || 'concert'}`);
             alert("Sync successful! Real events from Ticketmaster added.");
             fetchEvents();
         } catch (error) {
@@ -107,27 +121,40 @@ export default function HomePage() {
                     <div className="max-w-3xl space-y-8">
                         <div>
                             <span className="bg-orange-600 text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-xl shadow-orange-950/20 mb-6 inline-block">
-                                Featured Experience
+                                Discover Events
                             </span>
                             <h1 className="text-6xl md:text-8xl font-black text-white leading-[1.1] filter drop-shadow-2xl">
-                                Eras Tour <br />
+                                Find Your <br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600">
-                                    Global Experience
+                                    Next Experience
                                 </span>
                             </h1>
                         </div>
 
-                        <p className="text-gray-300 text-lg md:text-2xl max-w-2xl font-medium leading-relaxed">
-                            Join the most anticipated musical event of the decade. <br className="hidden md:block" />
-                            Experience the magic, the music, and the memories in high definition.
-                        </p>
-
-                        <div className="flex flex-wrap gap-4 pt-4">
-                            <button className="bg-white text-gray-900 px-10 py-4 rounded-full font-black transition-all transform hover:scale-105 hover:bg-orange-500 hover:text-white flex items-center gap-3 shadow-2xl shadow-white/10 group">
-                                <Ticket className="w-6 h-6 text-orange-500 group-hover:text-white transition-colors" /> Buy Tickets Now
-                            </button>
-                            <button className="bg-white/10 backdrop-blur-md text-white border border-white/20 px-10 py-4 rounded-full font-black transition-all hover:bg-white/20">
-                                View Details
+                        {/* Search Bar in Hero */}
+                        <div className="relative max-w-2xl">
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400" />
+                            <input
+                                type="text"
+                                placeholder="Search for artists, venues, or events..."
+                                className="w-full pl-16 pr-24 py-6 bg-white rounded-2xl shadow-2xl focus:outline-none focus:ring-4 focus:ring-orange-500/20 text-lg font-medium"
+                                value={keyword}
+                                onChange={(e) => setKeyword(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleFilterSubmit(e)}
+                            />
+                            {keyword && (
+                                <button
+                                    onClick={() => { setKeyword(''); setSearchParams({}); fetchEvents(); }}
+                                    className="absolute right-32 top-1/2 -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+                            )}
+                            <button
+                                onClick={handleFilterSubmit}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white px-8 py-3.5 rounded-xl font-bold hover:bg-orange-600 transition-all shadow-lg"
+                            >
+                                Search
                             </button>
                         </div>
                     </div>
@@ -157,7 +184,7 @@ export default function HomePage() {
                     </div>
 
                     <form onSubmit={handleFilterSubmit} className="flex flex-col md:flex-row gap-4 items-end">
-                        <div className="flex-1 w-full">
+                        <div className="flex-1 w-full text-sm">
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Location</label>
                             <div className="relative">
                                 <MapPin className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
@@ -170,20 +197,20 @@ export default function HomePage() {
                                 />
                             </div>
                         </div>
-                        <div className="w-full md:w-48">
+                        <div className="w-full md:w-40">
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Start Date</label>
                             <input
                                 type="date"
-                                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
                                 value={startDate}
                                 onChange={(e) => setStartDate(e.target.value)}
                             />
                         </div>
-                        <div className="w-full md:w-48">
+                        <div className="w-full md:w-40">
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-1">End Date</label>
                             <input
                                 type="date"
-                                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
                                 value={endDate}
                                 onChange={(e) => setEndDate(e.target.value)}
                             />
@@ -192,7 +219,7 @@ export default function HomePage() {
                             <button type="submit" className="flex-1 md:flex-none bg-gray-900 text-white px-6 py-2 rounded-lg font-bold hover:bg-black transition-colors flex items-center justify-center gap-2">
                                 <Filter className="w-4 h-4" /> Filter
                             </button>
-                            {(location || startDate || endDate) && (
+                            {(keyword || location || startDate || endDate) && (
                                 <button type="button" onClick={clearFilters} className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg font-bold hover:bg-gray-200 transition-colors">
                                     <X className="w-4 h-4" />
                                 </button>

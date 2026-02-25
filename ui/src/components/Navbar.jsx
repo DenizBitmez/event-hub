@@ -1,9 +1,22 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Search, User, Menu, Ticket } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
     const { user, logout } = useAuth();
+    const [searchTerm, setSearchTerm] = useState('');
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const handleSearch = (e) => {
+        if (e.key === 'Enter') {
+            navigate(`/?search=${encodeURIComponent(searchTerm)}`);
+        }
+    };
+
+    const isHomePage = location.pathname === '/';
+
     return (
         <nav className="bg-[#1a237e] text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,12 +29,15 @@ export default function Navbar() {
                         <span className="font-bold text-2xl tracking-tight">EventHub</span>
                     </Link>
 
-                    {/* Search Bar (Hidden on mobile) */}
-                    <div className="hidden md:flex flex-1 max-w-lg mx-8 relative">
+                    {/* Search Bar (Hidden on mobile and Home Page) */}
+                    <div className={`hidden md:flex flex-1 max-w-lg mx-8 relative transition-opacity duration-300 ${isHomePage ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                         <input
                             type="text"
                             placeholder="Search for events, artists, or venues..."
                             className="w-full bg-white/10 border border-white/20 rounded-full py-2.5 px-6 pl-12 text-sm text-white placeholder-gray-300 focus:outline-none focus:bg-white focus:text-gray-900 focus:placeholder-gray-500 transition-all duration-300"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onKeyDown={handleSearch}
                         />
                         <Search className="absolute left-4 top-2.5 w-5 h-5 text-gray-300 pointer-events-none" />
                     </div>

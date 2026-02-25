@@ -1,5 +1,6 @@
 using EventHub.Data;
 using EventHub.Models;
+using EventHub.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventHub.Controllers;
