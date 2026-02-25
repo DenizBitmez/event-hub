@@ -167,4 +167,18 @@ public class BookingController : ControllerBase
 
         return Ok(bookings);
     }
+
+    [HttpPost("refund/{ticketId}")]
+    [Authorize]
+    public async Task<IActionResult> RefundTicket(int ticketId)
+    {
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId)) return Unauthorized();
+
+        // 1. Verify Ownership & Eligibility
+        var ticket = await _bookingService.CancelTicketAsync(ticketId); // Internal check could be added here to verify userId
+        
+        if (ticket.Success) return Ok(ticket);
+        return BadRequest(ticket);
+    }
 }

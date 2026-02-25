@@ -121,6 +121,16 @@ public class BookingService : IBookingService
                     eventItem.Capacity++; // Restore inventory
                 }
 
+                // 3. Restore Seat Status (if applicable)
+                if (ticket.SeatId.HasValue)
+                {
+                    var seat = await _context.Seats.FindAsync(ticket.SeatId.Value);
+                    if (seat != null)
+                    {
+                        seat.Status = "Available";
+                    }
+                }
+
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 

@@ -21,13 +21,18 @@ public class EventController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetEvents([FromQuery] string? location, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] int? categoryId)
+    public async Task<IActionResult> GetEvents([FromQuery] string? location, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] int? categoryId, [FromQuery] string? searchTerm)
     {
         var query = _context.Events.AsQueryable();
 
+        if (!string.IsNullOrEmpty(searchTerm))
+        {
+            query = query.Where(e => e.Name.ToLower().Contains(searchTerm.ToLower()));
+        }
+
         if (!string.IsNullOrEmpty(location))
         {
-            query = query.Where(e => e.Location.Contains(location));
+            query = query.Where(e => e.Location.ToLower().Contains(location.ToLower()));
         }
 
         if (startDate.HasValue)
@@ -37,7 +42,7 @@ public class EventController : ControllerBase
 
         if (endDate.HasValue)
         {
-            query = query.Where(e => e.EndDate <= endDate.Value);
+            query = query.Where(e => e.EndDate < endDate.Value.AddDays(1));
         }
 
         if (categoryId.HasValue)

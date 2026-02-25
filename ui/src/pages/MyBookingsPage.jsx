@@ -11,22 +11,35 @@ export default function MyBookingsPage() {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchBookings = async () => {
-            try {
-                const response = await axios.get(`${API_BASE_URL}/Booking/user/my-bookings`);
-                setBookings(response.data);
-            } catch (error) {
-                console.error('Error fetching bookings:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+    const fetchBookings = async () => {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/Booking/user/my-bookings`);
+            setBookings(response.data);
+        } catch (error) {
+            console.error('Error fetching bookings:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
+    useEffect(() => {
         if (user) {
             fetchBookings();
         }
     }, [user]);
+
+    const handleRefund = async (ticketId) => {
+        if (!window.confirm('Are you sure you want to refund this ticket? This action cannot be undone.')) return;
+
+        try {
+            await axios.post(`${API_BASE_URL}/Booking/refund/${ticketId}`);
+            // Update local state or re-fetch
+            fetchBookings();
+        } catch (error) {
+            console.error('Error refunding ticket:', error);
+            alert('Failed to refund ticket. Please try again.');
+        }
+    };
 
     if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full"></div></div>;
 
@@ -91,6 +104,17 @@ export default function MyBookingsPage() {
                                             ${booking.price}
                                         </div>
                                     </div>
+
+                                    {booking.status === 'Confirmed' && (
+                                        <div className="mt-4 flex justify-end">
+                                            <button
+                                                onClick={() => handleRefund(booking.id)}
+                                                className="text-xs font-bold text-red-500 hover:text-red-600 uppercase tracking-widest border border-red-200 px-4 py-2 rounded-lg hover:bg-red-50 transition-all"
+                                            >
+                                                Refund Ticket
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ))}
