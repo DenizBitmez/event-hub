@@ -11,7 +11,13 @@ using Serilog;
 using EventHub.Services;
 using EventHub.Models;
 
+// Load .env file
+DotNetEnv.Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Add environment variables to configuration so we can read them
+builder.Configuration.AddEnvironmentVariables();
 
 // Configure Serilog
 Log.Logger = new LoggerConfiguration()

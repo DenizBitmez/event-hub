@@ -3,6 +3,9 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Calendar, MapPin, Clock, Info, ShieldCheck, Ticket, Armchair } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import CheckoutForm from '../components/CheckoutForm';
 
 const API_BASE_URL = 'http://localhost:5181/api';
 
@@ -14,9 +17,22 @@ export default function EventDetailPage() {
     const [loading, setLoading] = useState(true);
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [reservationId, setReservationId] = useState(null); // Just a flag or expiry
-    const [bookingStep, setBookingStep] = useState('select'); // select, reserved, confirmed
+    const [bookingStep, setBookingStep] = useState('select'); // select, reserved, payment, confirmed
     const [message, setMessage] = useState(null);
     const [error, setError] = useState(null);
+    const [clientSecret, setClientSecret] = useState(''); // New state for Stripe Payment Intent
+    const [stripePromise, setStripePromise] = useState(null);
+
+    useEffect(() => {
+        axios.get(`${API_BASE_URL}/Stripe/config`).then(async (r) => {
+            const { publishableKey } = r.data;
+            if (publishableKey) {
+                setStripePromise(loadStripe(publishableKey));
+            } else {
+                console.warn('No Stripe publishable key configured on the server.');
+            }
+        });
+    }, []);
 
     // Fetch Event and Seats
     const fetchData = async () => {
@@ -41,6 +57,33 @@ export default function EventDetailPage() {
         const interval = setInterval(fetchData, 5000); // Poll for updates
         return () => clearInterval(interval);
     }, [id]);
+
+    // Note: Kept the old success query params logic in case the redirect is ever needed, 
+    // but the inline CheckoutForm doesn't use it anymore by default.
+    useEffect(() => {
+        if (!user) return; // Wait for user context
+        const query = new URLSearchParams(window.location.search);
+
+        if (query.get('success') && query.get('session_id')) {
+            const sessionId = query.get('session_id');
+            const finalizeCheckout = async () => {
+                try {
+                    const res = await axios.post(`${API_BASE_URL}/Stripe/complete-checkout`, { sessionId });
+                    setBookingStep('confirmed');
+                    setMessage(`Booking Confirmed! Main Ticket ID: ${res.data?.ticketId || ''}`);
+                    fetchData();
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                } catch (err) {
+                    setError(err.response?.data?.message || err.response?.data || 'Failed to finalize booking.');
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+            };
+            finalizeCheckout();
+        } else if (query.get('canceled')) {
+            setError('Payment was canceled. You can try again.');
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    }, [id, user]);
 
     const handleReserve = async () => {
         if (!user) {
@@ -72,21 +115,34 @@ export default function EventDetailPage() {
         if (!user || selectedSeats.length === 0) return;
 
         try {
-            const res = await axios.post(`${API_BASE_URL}/Booking/confirm-multiple`, {
+            const res = await axios.post(`${API_BASE_URL}/Stripe/create-payment-intent`, {
                 eventId: parseInt(id),
                 seatIds: selectedSeats.map(s => s.id)
             });
-            setBookingStep('confirmed');
-            setMessage(`Booking Confirmed! Main Ticket ID: ${res.data.ticketId}`);
-            fetchData();
+
+            // Set client secret and move to payment step
+            setClientSecret(res.data.clientSecret);
+            setBookingStep('payment');
+            setError(null);
         } catch (err) {
             if (err.response && err.response.status === 401) {
                 setError("Session expired. Please logout and login again.");
             } else {
-                setError(err.response?.data?.message || 'Confirmation failed.');
+                setError(err.response?.data?.error || err.response?.data?.message || 'Payment initiation failed.');
             }
-            setBookingStep('select'); // Reset on failure
         }
+    };
+
+    const handlePaymentSuccess = (data) => {
+        setBookingStep('confirmed');
+        setMessage(`Booking Confirmed! Main Ticket ID: ${data?.ticketId || ''}`);
+        fetchData();
+        setClientSecret('');
+    };
+
+    const handlePaymentCancel = () => {
+        setBookingStep('reserved'); // Send them back to reserved step
+        setClientSecret('');
     };
 
     if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin w-10 h-10 border-4 border-orange-500 border-t-transparent rounded-full"></div></div>;
@@ -290,8 +346,31 @@ export default function EventDetailPage() {
                                         onClick={handleConfirm}
                                         className="w-full py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-colors shadow-lg shadow-green-200"
                                     >
-                                        Confirm & Pay
+                                        Proceed to Pay
                                     </button>
+                                )}
+
+                                {user && bookingStep === 'payment' && clientSecret && (
+                                    <div className="mt-4 border-t border-gray-100 pt-4">
+                                        <Elements
+                                            stripe={stripePromise}
+                                            options={{
+                                                clientSecret,
+                                                appearance: {
+                                                    theme: 'stripe',
+                                                }
+                                            }}
+                                        >
+                                            <CheckoutForm
+                                                clientSecret={clientSecret}
+                                                baseUrl={API_BASE_URL}
+                                                onSuccess={handlePaymentSuccess}
+                                                onCancel={handlePaymentCancel}
+                                                selectedSeatsCount={selectedSeats.length}
+                                                totalAmount={selectedSeats.reduce((sum, s) => sum + (s.price || 100), 0)}
+                                            />
+                                        </Elements>
+                                    </div>
                                 )}
 
                                 {user && bookingStep === 'confirmed' && (
