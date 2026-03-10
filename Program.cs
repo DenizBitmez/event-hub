@@ -62,6 +62,9 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
+// Add SignalR Configuration
+builder.Services.AddSignalR();
+
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 
@@ -127,8 +130,11 @@ builder.Services.AddScoped<EventHub.Services.IBookingService, EventHub.Services.
 builder.Services.AddScoped<EventHub.Services.IJwtService, EventHub.Services.JwtService>();
 builder.Services.AddScoped<EventHub.Services.IEmailService, EventHub.Services.EmailService>();
 
-// Use InMemory for easy verification without Redis dependency issues
-builder.Services.AddSingleton<EventHub.Services.IReservationService, EventHub.Services.InMemoryReservationService>();
+// Use Redis for distributed seat locks and reservations
+var redisConnectionString = builder.Configuration.GetConnectionString("Redis") ?? "localhost:6379";
+builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
+builder.Services.AddSingleton<EventHub.Services.IReservationService, EventHub.Services.RedisReservationService>();
+
 builder.Services.AddScoped<EventHub.Services.EventSeederService>();
 builder.Services.AddScoped<IEventSyncService, TicketmasterSyncService>();
 builder.Services.AddHttpClient<TicketmasterSyncService>();
@@ -174,6 +180,7 @@ app.UseAuthorization();
 app.UseRateLimiter(); // <--- Rate Limiting Middleware
 
 app.MapControllers();
+app.MapHub<EventHub.Hubs.SeatHub>("/hubs/seats");
 
 // Apply Migrations at Startup
 using (var scope = app.Services.CreateScope())

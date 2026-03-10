@@ -3,6 +3,8 @@ using EventHub.DTOs;
 using EventHub.Models;
 using EventHub.Models.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+using EventHub.Hubs;
 
 namespace EventHub.Services;
 
@@ -18,11 +20,13 @@ public class BookingService : IBookingService
 {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<BookingService> _logger;
+    private readonly IHubContext<SeatHub> _hubContext;
 
-    public BookingService(ApplicationDbContext context, ILogger<BookingService> logger)
+    public BookingService(ApplicationDbContext context, ILogger<BookingService> logger, IHubContext<SeatHub> hubContext)
     {
         _context = context;
         _logger = logger;
+        _hubContext = hubContext;
     }
 
     public async Task<BookingResponse> BookTicketAsync(BookingRequest request)
@@ -134,6 +138,11 @@ public class BookingService : IBookingService
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
+                if (ticket.SeatId.HasValue)
+                {
+                    await _hubContext.Clients.Group($"Event_{ticket.EventId}").SendAsync("SeatUpdated", ticket.SeatId.Value, "Available");
+                }
+
                 _logger.LogInformation("Cancelled Ticket {TicketId} and restored capacity for Event {EventId}", ticketId, ticket.EventId);
                 
                 return new BookingResponse { Success = true, Message = "Ticket cancelled and refunded" };
@@ -185,6 +194,8 @@ public class BookingService : IBookingService
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
+                await _hubContext.Clients.Group($"Event_{request.EventId}").SendAsync("SeatUpdated", seatId, "Sold");
+
                 return new BookingResponse { Success = true, Message = "Seat Booked", TicketId = ticket.Id };
             }
             catch (Exception ex)
@@ -235,6 +246,11 @@ public class BookingService : IBookingService
 
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
+
+                foreach(var seatId in seatIds)
+                {
+                    await _hubContext.Clients.Group($"Event_{request.EventId}").SendAsync("SeatUpdated", seatId, "Sold");
+                }
 
                 return new BookingResponse 
                 { 

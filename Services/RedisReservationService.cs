@@ -1,5 +1,7 @@
 using StackExchange.Redis;
 using Polly;
+using Microsoft.AspNetCore.SignalR;
+using EventHub.Hubs;
 
 namespace EventHub.Services;
 
@@ -9,11 +11,13 @@ public class RedisReservationService : IReservationService
 {
     private readonly IConnectionMultiplexer _redis;
     private readonly Polly.Retry.AsyncRetryPolicy _retryPolicy;
+    private readonly IHubContext<SeatHub> _hubContext;
     private const int EXPIRATION_MINUTES = 10;
 
-    public RedisReservationService(IConnectionMultiplexer redis)
+    public RedisReservationService(IConnectionMultiplexer redis, IHubContext<SeatHub> hubContext)
     {
         _redis = redis;
+        _hubContext = hubContext;
         // Retry 3 times with exponential backoff on connection errors
         _retryPolicy = Polly.Policy
             .Handle<RedisConnectionException>()
@@ -23,7 +27,7 @@ public class RedisReservationService : IReservationService
 
     public async Task<bool> ReserveSeatAsync(int eventId, int seatId, int userId)
     {
-        return await _retryPolicy.ExecuteAsync(async () => 
+        var result = await _retryPolicy.ExecuteAsync(async () => 
         {
             var db = _redis.GetDatabase();
             var key = $"seat:{eventId}:{seatId}";
@@ -33,6 +37,14 @@ public class RedisReservationService : IReservationService
             // Only returns true if the key did NOT exist (meaning we got the lock)
             return await db.StringSetAsync(key, value, TimeSpan.FromMinutes(EXPIRATION_MINUTES), When.NotExists);
         });
+
+        if (result)
+        {
+            // Broadcast to all clients viewing this event
+            await _hubContext.Clients.Group($"Event_{eventId}").SendAsync("SeatUpdated", seatId, "Reserved");
+        }
+
+        return result;
     }
 
     public async Task<bool> ConfirmReservationAsync(int eventId, int seatId, int userId)
