@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from '../components/CheckoutForm';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 const API_BASE_URL = 'http://localhost:5181/api';
 
@@ -54,8 +55,43 @@ export default function EventDetailPage() {
 
     useEffect(() => {
         fetchData();
-        const interval = setInterval(fetchData, 5000); // Poll for updates
-        return () => clearInterval(interval);
+        // Fallback polling removed to test Real-time updates purely via SignalR
+        // const interval = setInterval(fetchData, 5000); 
+        // return () => clearInterval(interval);
+    }, [id]);
+
+    // SignalR Real-Time Connection
+    useEffect(() => {
+        if (!id) return;
+
+        const connection = new HubConnectionBuilder()
+            .withUrl(`${API_BASE_URL.replace('/api', '')}/hubs/seats`) // e.g. http://localhost:5181/hubs/seats
+            .configureLogging(LogLevel.Information)
+            .withAutomaticReconnect()
+            .build();
+
+        connection.start()
+            .then(() => {
+                console.log("SignalR Connected to SeatHub");
+                connection.invoke("JoinEventGroup", id.toString());
+
+                connection.on("SeatUpdated", (seatId, status) => {
+                    console.log(`Real-time update: Seat ${seatId} is now ${status}`);
+                    setSeats(prevSeats =>
+                        prevSeats.map(seat =>
+                            seat.id === seatId ? { ...seat, status: status } : seat
+                        )
+                    );
+                });
+            })
+            .catch(err => console.error("SignalR Connection Error: ", err));
+
+        return () => {
+            if (connection.state === "Connected") {
+                connection.invoke("LeaveEventGroup", id.toString()).catch(console.error);
+                connection.stop();
+            }
+        };
     }, [id]);
 
     // Note: Kept the old success query params logic in case the redirect is ever needed, 
