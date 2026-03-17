@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Stripe.Checkout;
 using System.Security.Claims;
+using MediatR;
+using EventHub.Features.Bookings.Commands;
 
 namespace EventHub.Controllers;
 
@@ -15,16 +17,14 @@ namespace EventHub.Controllers;
 public class StripeController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
-    private readonly IBookingService _bookingService;
     private readonly IConfiguration _configuration;
-    private readonly IEmailService _emailService;
+    private readonly IMediator _mediator;
 
-    public StripeController(ApplicationDbContext context, IBookingService bookingService, IConfiguration configuration, IEmailService emailService)
+    public StripeController(ApplicationDbContext context, IConfiguration configuration, IMediator _mediator)
     {
         _context = context;
-        _bookingService = bookingService;
         _configuration = configuration;
-        _emailService = emailService;
+        this._mediator = _mediator;
         StripeConfiguration.ApiKey = _configuration["STRIPE_SECRET_KEY"] ?? Environment.GetEnvironmentVariable("STRIPE_SECRET_KEY");
     }
 
@@ -200,39 +200,10 @@ public class StripeController : ControllerBase
         }
 
         // 2. Finalize Bookings
-        var bookingRequest = new BookingRequest { EventId = eventId, Quantity = seatIds.Count, UserId = userId };
-        var result = await _bookingService.BookSeatsAsync(bookingRequest, seatIds);
+        var command = new ConfirmPaymentCommand(eventId, seatIds, userId);
+        var result = await _mediator.Send(command);
         
-        if (result.Success)
-        {
-            var user = await _context.Users.FindAsync(userId);
-            if (user != null)
-            {
-                var eventDetails = await _context.Events.FindAsync(eventId);
-                var seats = await _context.Seats.Where(s => seatIds.Contains(s.Id)).ToListAsync();
-                string seatNames = string.Join(", ", seats.Select(s => $"Row {s.Row}-{s.Number}"));
-                
-                string emailBody = $@"
-                <div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;'>
-                    <h2 style='color: #ea580c; text-align: center;'>Your Ticket is Confirmed! 🎟️</h2>
-                    <p>Hi {user.FullName},</p>
-                    <p>Thank you for your purchase. Here are your booking details:</p>
-                    <div style='background-color: #f9fafb; padding: 15px; border-radius: 8px; margin: 20px 0;'>
-                        <p><strong>Event:</strong> {eventDetails?.Name}</p>
-                        <p><strong>Venue:</strong> {eventDetails?.Venue}</p>
-                        <p><strong>Date:</strong> {eventDetails?.StartDate.ToShortDateString()}</p>
-                        <p><strong>Seats:</strong> {seatNames}</p>
-                    </div>
-                    <p style='text-align: center;'>
-                        <a href='http://localhost:5173/my-bookings' style='background-color: #ea580c; color: white; padding: 12px 24px; text-decoration: none; border-radius: 30px; font-weight: bold; display: inline-block;'>View and Download PDF Ticket</a>
-                    </p>
-                    <p style='color: #6b7280; font-size: 12px; text-align: center; margin-top: 30px;'>&copy; 2026 EventHub. All rights reserved.</p>
-                </div>";
-                
-                await _emailService.SendEmailAsync(user.Email ?? "test@example.com", $"Your Ticket for {eventDetails?.Name}", emailBody);
-            }
-            return Ok(result);
-        }
+        if (result.Success) return Ok(result);
         
         return BadRequest(result);
     }
@@ -276,13 +247,8 @@ public class StripeController : ControllerBase
         }
 
         // 2. Finalize Bookings
-        // Note: For a robust system, we should check if this session was already fulfilled 
-        // to prevent duplicate bookings for the same session ID. 
-        // We could store SessionId in the Ticket model or another table.
-        // For simplicity, we just rely on booking service rejecting duplicate seat bookings.
-        
-        var bookingRequest = new BookingRequest { EventId = eventId, Quantity = seatIds.Count, UserId = userId };
-        var result = await _bookingService.BookSeatsAsync(bookingRequest, seatIds);
+        var command = new ConfirmPaymentCommand(eventId, seatIds, userId);
+        var result = await _mediator.Send(command);
         
         if (result.Success) return Ok(result);
         

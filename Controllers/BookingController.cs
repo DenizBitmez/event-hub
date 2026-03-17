@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using MediatR;
+using EventHub.Features.Bookings.Queries;
+using EventHub.Features.Bookings.Commands;
 
 namespace EventHub.Controllers;
 
@@ -11,15 +14,11 @@ namespace EventHub.Controllers;
 [Route("api/[controller]")]
 public class BookingController : ControllerBase
 {
-    private readonly IBookingService _bookingService;
-    private readonly IReservationService _reservationService;
-    private readonly IValidator<BookingRequest> _validator;
+    private readonly IMediator _mediator;
 
-    public BookingController(IBookingService bookingService, IReservationService reservationService, IValidator<BookingRequest> validator)
+    public BookingController(IMediator mediator)
     {
-        _bookingService = bookingService;
-        _reservationService = reservationService;
-        _validator = validator;
+        _mediator = mediator;
     }
 
     // Obsolete GetEvents/GetEvent removed. Use EventController.
@@ -27,39 +26,18 @@ public class BookingController : ControllerBase
     [HttpPost("naive")]
     public async Task<IActionResult> BookTicketNaive([FromBody] BookingRequest request)
     {
-        var validationResult = await _validator.ValidateAsync(request);
-        if (!validationResult.IsValid)
-        {
-            return BadRequest(validationResult.Errors);
-        }
-
         // SECURE: Get User ID from Token, don't trust the client body
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
         if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId)) return Unauthorized();
         
         request.UserId = userId;
 
-        try
-        {
-            var response = await _bookingService.BookTicketAsync(request);
+        var command = new BookTicketNaiveCommand(request);
+        var result = await _mediator.Send(command);
 
-            if (response.Success)
-            {
-                return Ok(response);
-            }
-            else
-            {
-                if (response.Message.Contains("Sold Out"))
-                {
-                    return Conflict(response); 
-                }
-                return BadRequest(response);
-            }
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, "An internal error occurred while processing your booking.");
-        }
+        if (result.Success) return Ok(result);
+        if (result.Message.Contains("Sold Out")) return Conflict(result);
+        return BadRequest(result);
     }
 
 
@@ -70,7 +48,9 @@ public class BookingController : ControllerBase
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
         if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId)) return Unauthorized();
 
-        var success = await _reservationService.ReserveSeatAsync(request.EventId, request.SeatId, userId);
+        var command = new ReserveSeatsCommand(request.EventId, new List<int> { request.SeatId }, userId);
+        var success = await _mediator.Send(command);
+        
         if (success)
         {
             return Ok(new { Message = "Seat Reserved for 10 minutes", ExpiresAt = DateTime.UtcNow.AddMinutes(10) });
@@ -85,7 +65,9 @@ public class BookingController : ControllerBase
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
         if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId)) return Unauthorized();
 
-        var success = await _reservationService.ReserveSeatsAsync(request.EventId, request.SeatIds, userId);
+        var command = new ReserveSeatsCommand(request.EventId, request.SeatIds, userId);
+        var success = await _mediator.Send(command);
+        
         if (success)
         {
             return Ok(new { Message = $"{request.SeatIds.Count} Seats Reserved for 10 minutes", ExpiresAt = DateTime.UtcNow.AddMinutes(10) });
@@ -100,16 +82,8 @@ public class BookingController : ControllerBase
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
         if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId)) return Unauthorized();
 
-        // 1. Verify Reservation (Redis)
-        var hasReservation = await _reservationService.ConfirmReservationAsync(request.EventId, request.SeatId, userId);
-        if (!hasReservation)
-        {
-            return BadRequest("Reservation expired or invalid");
-        }
-
-        // 2. Finalize Booking (DB)
-        var bookingRequest = new BookingRequest { EventId = request.EventId, Quantity = 1, UserId = userId };
-        var result = await _bookingService.BookSeatAsync(bookingRequest, request.SeatId);
+        var command = new ConfirmBookingCommand(request.EventId, new List<int> { request.SeatId }, userId);
+        var result = await _mediator.Send(command);
         
         if (result.Success) return Ok(result);
         return BadRequest(result);
@@ -122,16 +96,8 @@ public class BookingController : ControllerBase
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
         if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId)) return Unauthorized();
 
-        // 1. Verify Reservations
-        var hasReservations = await _reservationService.ConfirmReservationsAsync(request.EventId, request.SeatIds, userId);
-        if (!hasReservations)
-        {
-            return BadRequest("One or more reservations expired or are invalid");
-        }
-
-        // 2. Finalize Bookings
-        var bookingRequest = new BookingRequest { EventId = request.EventId, Quantity = request.SeatIds.Count, UserId = userId };
-        var result = await _bookingService.BookSeatsAsync(bookingRequest, request.SeatIds);
+        var command = new ConfirmBookingCommand(request.EventId, request.SeatIds, userId);
+        var result = await _mediator.Send(command);
         
         if (result.Success) return Ok(result);
         return BadRequest(result);
@@ -139,31 +105,13 @@ public class BookingController : ControllerBase
 
     [HttpGet("user/my-bookings")]
     [Authorize]
-    public async Task<IActionResult> GetUserBookings([FromServices] EventHub.Data.ApplicationDbContext context)
+    public async Task<IActionResult> GetUserBookings()
     {
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
-        if (userIdClaim == null) return Unauthorized();
-        var userId = int.Parse(userIdClaim.Value);
+        if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId)) return Unauthorized();
 
-        var bookings = await context.Tickets
-            .Include(t => t.Event)
-            .Include(t => t.Seat)
-            .Where(t => t.UserId == userId)
-            .Select(t => new EventHub.DTOs.TicketDto
-            {
-                Id = t.Id,
-                EventName = t.Event != null ? t.Event.Name : "Unknown Event",
-                EventDate = t.Event != null ? t.Event.StartDate : DateTime.MinValue,
-                Venue = t.Event != null ? t.Event.Location : "Unknown Venue",
-                SeatSection = t.Seat != null ? t.Seat.Section : "N/A",
-                SeatRow = t.Seat != null ? t.Seat.Row : "N/A",
-                SeatNumber = t.Seat != null ? t.Seat.Number : "N/A",
-                Price = t.PurchasePrice,
-                PurchaseDate = t.BookingDate,
-                Status = t.Status.ToString()
-            })
-            .OrderByDescending(t => t.PurchaseDate)
-            .ToListAsync();
+        var query = new GetMyBookingsQuery(userId);
+        var bookings = await _mediator.Send(query);
 
         return Ok(bookings);
     }
@@ -175,10 +123,10 @@ public class BookingController : ControllerBase
         var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
         if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out var userId)) return Unauthorized();
 
-        // 1. Verify Ownership & Eligibility
-        var ticket = await _bookingService.CancelTicketAsync(ticketId); // Internal check could be added here to verify userId
+        var command = new CancelTicketCommand(ticketId, userId);
+        var result = await _mediator.Send(command);
         
-        if (ticket.Success) return Ok(ticket);
-        return BadRequest(ticket);
+        if (result.Success) return Ok(result);
+        return BadRequest(result);
     }
 }
