@@ -2,7 +2,7 @@
 
 EventHub is a robust, high-performance backend API for event ticketing, designed to handle **high concurrency** and prevent **overselling** (Race Conditions) using strictly strongly-consistent locking mechanisms.
 
-## 🚀 Key Features
+## Key Features
 
 ### 1. Concurrency Control (Race Condition Proof)
 - Uses **Pessimistic Locking** (`SELECT ... FOR UPDATE`) within PostgreSQL transactions.
@@ -34,7 +34,7 @@ EventHub is a robust, high-performance backend API for event ticketing, designed
 
 ---
 
-## ⚡ Getting Started
+## Getting Started
 
 ### Prerequisites
 - Docker Desktop
@@ -71,7 +71,7 @@ node verify-admin.js
 
 ---
 
-## 📚 API Endpoints
+## API Endpoints
 
 ### Auth
 - `POST /api/auth/register` - Create new user
@@ -92,7 +92,7 @@ node verify-admin.js
 
 ---
 
-## 👤 Default Credentials
+## Default Credentials
 **Admin User:**
 - Email: `admin@eventhub.com`
 - Password: `admin123`

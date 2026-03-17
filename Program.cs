@@ -10,6 +10,9 @@ using System.Threading.RateLimiting;
 using Serilog;
 using EventHub.Services;
 using EventHub.Models;
+using Hangfire;
+using Hangfire.PostgreSql;
+using EventHub.Jobs;
 
 // Load .env file
 DotNetEnv.Env.Load();
@@ -66,6 +69,18 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // Register MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+builder.Services.AddHangfire(config => config
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UsePostgreSqlStorage(options => 
+    {
+        options.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"));
+    }));
+
+// Add the processing server as IHostedService
+builder.Services.AddHangfireServer();
 
 
 // Add CORS
@@ -177,10 +192,21 @@ app.UseCors("AllowFrontend");
 
 app.UseAuthorization();
 
+// Add Hangfire Dashboard
+app.UseHangfireDashboard();
+
 app.UseRateLimiter(); // <--- Rate Limiting Middleware
 
 app.MapControllers();
 app.MapHub<EventHub.Hubs.SeatHub>("/hubs/seats");
+
+// Schedule Background Jobs
+using (var scope = app.Services.CreateScope())
+{
+    var recurringJobManager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
+    recurringJobManager.AddOrUpdate<EventReminderJob>("daily-event-reminder", x => x.SendReminders(), Cron.Hourly); // Running hourly to check for next 24h window
+    recurringJobManager.AddOrUpdate<ReservationCleanupJob>("reservation-cleanup", x => x.Cleanup(), Cron.Daily);
+}
 
 // Apply Migrations at Startup
 using (var scope = app.Services.CreateScope())
