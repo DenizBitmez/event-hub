@@ -32,9 +32,6 @@ System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeM
 
 builder.Host.UseSerilog();
 
-// Disable legacy claim mapping
-System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
 // Add Rate Limiter
 builder.Services.AddRateLimiter(options =>
 {
@@ -66,6 +63,9 @@ builder.Services.AddControllers()
 builder.Services.AddSignalR();
 
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
+// Register MediatR
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 
 // Add CORS

@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EventHub.Services;
+using MediatR;
+using EventHub.Features.Events.Queries;
+using EventHub.Features.Events.Commands;
 
 namespace EventHub.Controllers;
 
@@ -11,46 +14,18 @@ namespace EventHub.Controllers;
 [Route("api/[controller]")]
 public class EventController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
-    private readonly IEventSyncService _syncService;
+    private readonly IMediator _mediator;
 
-    public EventController(ApplicationDbContext context, IEventSyncService syncService)
+    public EventController(IMediator mediator)
     {
-        _context = context;
-        _syncService = syncService;
+        _mediator = mediator;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetEvents([FromQuery] string? location, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] int? categoryId, [FromQuery] string? searchTerm)
     {
-        var query = _context.Events.AsQueryable();
-
-        if (!string.IsNullOrEmpty(searchTerm))
-        {
-            query = query.Where(e => e.Name.ToLower().Contains(searchTerm.ToLower()));
-        }
-
-        if (!string.IsNullOrEmpty(location))
-        {
-            query = query.Where(e => e.Location.ToLower().Contains(location.ToLower()));
-        }
-
-        if (startDate.HasValue)
-        {
-            query = query.Where(e => e.StartDate >= startDate.Value);
-        }
-
-        if (endDate.HasValue)
-        {
-            query = query.Where(e => e.EndDate < endDate.Value.AddDays(1));
-        }
-
-        if (categoryId.HasValue)
-        {
-            query = query.Where(e => e.CategoryId == categoryId.Value);
-        }
-
-        var events = await query.ToListAsync();
+        var query = new GetEventsQuery(searchTerm, location, startDate, endDate, categoryId);
+        var events = await _mediator.Send(query);
         return Ok(events);
     }
 
@@ -58,28 +33,16 @@ public class EventController : ControllerBase
     [AllowAnonymous] // Allow public access to seat availability for now
     public async Task<IActionResult> GetEventSeats(int id)
     {
-        var seats = await _context.Seats
-            .Where(s => s.EventId == id)
-            .Select(s => new EventHub.DTOs.SeatDto
-            {
-                Id = s.Id,
-                Section = s.Section,
-                Row = s.Row,
-                Number = s.Number,
-                Status = s.Status,
-                Price = 100 // Placeholder, could be from Event or SeatType
-            })
-            .ToListAsync();
-
+        var query = new GetEventSeatsQuery(id);
+        var seats = await _mediator.Send(query);
         return Ok(seats);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetEvent(int id)
     {
-        var eventItem = await _context.Events
-            .Include(e => e.Category)
-            .SingleOrDefaultAsync(e => e.Id == id);
+        var query = new GetEventByIdQuery(id);
+        var eventItem = await _mediator.Send(query);
 
         if (eventItem == null) return NotFound();
 
@@ -89,7 +52,8 @@ public class EventController : ControllerBase
     [HttpGet("categories")]
     public async Task<IActionResult> GetCategories()
     {
-        var categories = await _context.Categories.ToListAsync();
+        var query = new GetCategoriesQuery();
+        var categories = await _mediator.Send(query);
         return Ok(categories);
     }
 
@@ -101,14 +65,10 @@ public class EventController : ControllerBase
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        // Reset some sensitive fields
-        eventItem.Id = 0; 
-        eventItem.Capacity = eventItem.Capacity > 0 ? eventItem.Capacity : 100;
+        var command = new CreateEventCommand(eventItem);
+        var result = await _mediator.Send(command);
 
-        _context.Events.Add(eventItem);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetEvent), new { id = eventItem.Id }, eventItem);
+        return CreatedAtAction(nameof(GetEvent), new { id = result.Id }, result);
     }
 
     [HttpPost("sync")]
@@ -117,7 +77,8 @@ public class EventController : ControllerBase
     {
         try
         {
-            var count = await _syncService.SyncEventsFromExternalApi(keyword, category);
+            var command = new SyncEventsCommand(keyword, category);
+            var count = await _mediator.Send(command);
             return Ok(new { Message = $"{count} new events synced successfully." });
         }
         catch (Exception ex)
