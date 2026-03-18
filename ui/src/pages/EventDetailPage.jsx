@@ -7,8 +7,9 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from '../components/CheckoutForm';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { API_BASE_URL, API_ORIGIN } from '../config';
 
-const API_BASE_URL = 'http://localhost:5181/api';
+const PAGE_API_BASE_URL = API_BASE_URL;
 
 export default function EventDetailPage() {
     const { id } = useParams();
@@ -25,7 +26,7 @@ export default function EventDetailPage() {
     const [stripePromise, setStripePromise] = useState(null);
 
     useEffect(() => {
-        axios.get(`${API_BASE_URL}/Stripe/config`).then(async (r) => {
+        axios.get(`${PAGE_API_BASE_URL}/Stripe/config`).then(async (r) => {
             const { publishableKey } = r.data;
             if (publishableKey) {
                 setStripePromise(loadStripe(publishableKey));
@@ -39,8 +40,8 @@ export default function EventDetailPage() {
     const fetchData = async () => {
         try {
             const [eventRes, seatsRes] = await Promise.all([
-                axios.get(`${API_BASE_URL}/Event/${id}`),
-                axios.get(`${API_BASE_URL}/Event/${id}/seats`)
+                axios.get(`${PAGE_API_BASE_URL}/Event/${id}`),
+                axios.get(`${PAGE_API_BASE_URL}/Event/${id}/seats`)
             ]);
             setEvent(eventRes.data);
             console.log("Seats Response:", seatsRes.data);
@@ -65,7 +66,7 @@ export default function EventDetailPage() {
         if (!id) return;
 
         const connection = new HubConnectionBuilder()
-            .withUrl(`${API_BASE_URL.replace('/api', '')}/hubs/seats`) // e.g. http://localhost:5181/hubs/seats
+            .withUrl(`${API_ORIGIN}/hubs/seats`) // e.g. http://localhost:5181/hubs/seats
             .configureLogging(LogLevel.Information)
             .withAutomaticReconnect()
             .build();
@@ -104,7 +105,7 @@ export default function EventDetailPage() {
             const sessionId = query.get('session_id');
             const finalizeCheckout = async () => {
                 try {
-                    const res = await axios.post(`${API_BASE_URL}/Stripe/complete-checkout`, { sessionId });
+                    const res = await axios.post(`${PAGE_API_BASE_URL}/Stripe/complete-checkout`, { sessionId });
                     setBookingStep('confirmed');
                     setMessage(`Booking Confirmed! Main Ticket ID: ${res.data?.ticketId || ''}`);
                     fetchData();
@@ -131,7 +132,7 @@ export default function EventDetailPage() {
         try {
             setMessage(null);
             setError(null);
-            await axios.post(`${API_BASE_URL}/Booking/reserve-multiple`, {
+            await axios.post(`${PAGE_API_BASE_URL}/Booking/reserve-multiple`, {
                 eventId: parseInt(id),
                 seatIds: selectedSeats.map(s => s.id)
             });

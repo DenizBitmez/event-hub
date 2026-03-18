@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Search, HelpCircle, Ticket, CreditCard, RefreshCw, Lock, ChevronDown, ChevronUp, MessageSquare } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
-const API_BASE_URL = 'http://localhost:5181/api';
+const HELP_API_BASE_URL = API_BASE_URL;
 
 const IconMap = {
     HelpCircle,
@@ -23,7 +24,7 @@ export default function HelpCenterPage() {
     useEffect(() => {
         const fetchHelpData = async () => {
             try {
-                const response = await axios.get(`${API_BASE_URL}/Help`);
+                const response = await axios.get(`${HELP_API_BASE_URL}/Help`);
                 setCategories(response.data);
             } catch (error) {
                 console.error('Error fetching help articles:', error);

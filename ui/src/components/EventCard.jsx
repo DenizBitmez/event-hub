@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Calendar, Users, Ticket, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
-const API_BASE_URL = 'http://localhost:5181/api/Booking';
+const CARD_API_BASE_URL = `${CARD_API_BASE_URL}/Booking`;
 
 const strategies = [
     { id: 'naive', name: 'Naive (Race Condition)', color: 'bg-red-100 text-red-800 border-red-200' },
@@ -22,7 +23,7 @@ export default function EventCard({ event, refreshEvents }) {
         setError(null);
 
         try {
-            const response = await axios.post(`${API_BASE_URL}/${strategy}`, event.id, {
+            const response = await axios.post(`${CARD_API_BASE_URL}/${strategy}`, event.id, {
                 headers: { 'Content-Type': 'application/json' }
             });
             setMessage(response.data);

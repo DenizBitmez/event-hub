@@ -7,11 +7,13 @@ using EventHub.Services;
 using MediatR;
 using EventHub.Features.Events.Queries;
 using EventHub.Features.Events.Commands;
+using Asp.Versioning;
 
 namespace EventHub.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class EventController : ControllerBase
 {
     private readonly IMediator _mediator;

@@ -13,6 +13,7 @@ using EventHub.Models;
 using Hangfire;
 using Hangfire.PostgreSql;
 using EventHub.Jobs;
+using Asp.Versioning;
 
 // Load .env file
 DotNetEnv.Env.Load();
@@ -62,6 +63,23 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
+// 1. Add API Versioning
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = ApiVersionReader.Combine(
+        new UrlSegmentApiVersionReader(),
+        new HeaderApiVersionReader("x-api-version"),
+        new QueryStringApiVersionReader("api-version")
+    );
+}).AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
+
 // Add SignalR Configuration
 builder.Services.AddSignalR();
 
@@ -110,7 +128,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
+    // Hardcode v1 for now, but in a real app we'd iterate through provider descriptions
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "EventHub API", Version = "v1" });
+    c.SwaggerDoc("v2", new OpenApiInfo { Title = "EventHub API", Version = "v2" });
     
     // Add JWT Authentication Support to Swagger UI
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -185,7 +205,11 @@ if (app.Environment.IsDevelopment())
 {
     // app.MapOpenApi(); // Using Swashbuckle instead
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        options.SwaggerEndpoint("/swagger/v2/swagger.json", "v2");
+    });
 }
 
 app.UseCors("AllowFrontend");

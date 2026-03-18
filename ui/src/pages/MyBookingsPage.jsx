@@ -4,8 +4,9 @@ import { useAuth } from '../context/AuthContext';
 import { Ticket, Calendar, MapPin, Armchair, Download, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import html2pdf from 'html2pdf.js';
+import { API_BASE_URL } from '../config';
 
-const API_BASE_URL = 'http://localhost:5181/api';
+const PAGE_API_BASE_URL = API_BASE_URL;
 
 export default function MyBookingsPage() {
     const { user } = useAuth();
@@ -38,7 +39,7 @@ export default function MyBookingsPage() {
 
     const fetchBookings = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/Booking/user/my-bookings`);
+            const response = await axios.get(`${PAGE_API_BASE_URL}/Booking/user/my-bookings`);
             setBookings(response.data);
         } catch (error) {
             console.error('Error fetching bookings:', error);
