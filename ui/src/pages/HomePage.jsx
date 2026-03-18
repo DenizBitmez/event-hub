@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Calendar, MapPin, ChevronRight, Ticket, Filter, X, Search } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 
-const API_BASE_URL = 'http://localhost:5181/api';
+const HOME_API_BASE_URL = API_BASE_URL;
 
 export default function HomePage() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -29,7 +30,7 @@ export default function HomePage() {
             if (endDate) params.endDate = endDate;
             if (selectedCategoryId) params.categoryId = selectedCategoryId;
 
-            const response = await axios.get(`${API_BASE_URL}/Event`, { params });
+            const response = await axios.get(`${HOME_API_BASE_URL}/Event`, { params });
             // Sort by Date
             const sorted = response.data.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
             setEvents(sorted);
@@ -42,7 +43,7 @@ export default function HomePage() {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/Event/categories`);
+            const response = await axios.get(`${HOME_API_BASE_URL}/Event/categories`);
             setCategories(response.data);
         } catch (error) {
             console.error('Error fetching categories:', error);

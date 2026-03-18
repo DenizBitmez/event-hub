@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Send, User, Mail, MessageSquare, Info, CheckCircle2, AlertCircle } from 'lucide-react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
-const API_BASE_URL = 'http://localhost:5181/api';
+const CONTACT_API_BASE_URL = API_BASE_URL;
 
 export default function ContactSupportPage() {
     const [formData, setFormData] = useState({
@@ -18,7 +19,7 @@ export default function ContactSupportPage() {
         e.preventDefault();
         setStatus('loading');
         try {
-            await axios.post(`${API_BASE_URL}/Support`, formData);
+            await axios.post(`${CONTACT_API_BASE_URL}/Support`, formData);
             setStatus('success');
             setFormData({ name: '', email: '', subject: '', message: '' });
         } catch (error) {

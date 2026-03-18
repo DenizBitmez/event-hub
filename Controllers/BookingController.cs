@@ -7,11 +7,13 @@ using Microsoft.EntityFrameworkCore;
 using MediatR;
 using EventHub.Features.Bookings.Queries;
 using EventHub.Features.Bookings.Commands;
+using Asp.Versioning;
 
 namespace EventHub.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class BookingController : ControllerBase
 {
     private readonly IMediator _mediator;

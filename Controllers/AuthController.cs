@@ -3,11 +3,13 @@ using EventHub.Models;
 using EventHub.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Asp.Versioning;
 
 namespace EventHub.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class AuthController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
