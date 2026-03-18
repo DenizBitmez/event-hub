@@ -7,15 +7,22 @@ import RegisterPage from './pages/RegisterPage';
 import MyBookingsPage from './pages/MyBookingsPage';
 import HelpCenterPage from './pages/HelpCenterPage';
 import ContactSupportPage from './pages/ContactSupportPage';
+import ErrorPage from './pages/ErrorPage';
+import HealthDashboardPage from './pages/HealthDashboardPage';
 
 export const router = createBrowserRouter([
     {
         path: '/',
         element: <MainLayout />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 index: true,
                 element: <HomePage />,
+            },
+            {
+                path: 'admin/health',
+                element: <HealthDashboardPage />,
             },
             {
                 path: 'event/:id',

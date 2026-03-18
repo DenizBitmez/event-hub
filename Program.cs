@@ -14,6 +14,9 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using EventHub.Jobs;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using EventHub.Health;
 
 // Load .env file
 DotNetEnv.Env.Load();
@@ -57,6 +60,15 @@ builder.Services.AddRateLimiter(options =>
 
 // Add services to the container.
 // Add services to the container.
+// Add Health Checks
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection")!)
+    .AddRedis(builder.Configuration.GetConnectionString("Redis")!)
+    .AddCheck<StripeHealthCheck>("Stripe");
+
+// Configure Stripe Globally
+Stripe.StripeConfiguration.ApiKey = builder.Configuration["STRIPE_SECRET_KEY"] ?? Environment.GetEnvironmentVariable("STRIPE_SECRET_KEY");
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -222,6 +234,27 @@ app.UseHangfireDashboard();
 app.UseRateLimiter(); // <--- Rate Limiting Middleware
 
 app.MapControllers();
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = async (context, report) =>
+    {
+        context.Response.ContentType = "application/json";
+        var response = new
+        {
+            status = report.Status.ToString(),
+            duration = report.TotalDuration,
+            results = report.Entries.Select(e => new
+            {
+                key = e.Key,
+                status = Enum.GetName(typeof(HealthStatus), e.Value.Status),
+                description = e.Value.Description,
+                duration = e.Value.Duration,
+                error = e.Value.Exception?.Message
+            })
+        };
+        await context.Response.WriteAsJsonAsync(response);
+    }
+});
 app.MapHub<EventHub.Hubs.SeatHub>("/hubs/seats");
 
 // Schedule Background Jobs

@@ -61,6 +61,10 @@ export default function Footer() {
                 <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-semibold text-gray-500">
                     <p>&copy; {new Date().getFullYear()} EventHub Inc. All rights reserved.</p>
                     <div className="flex gap-6">
+                        <Link to="/admin/health" className="hover:text-white transition-colors flex items-center gap-1">
+                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+                            System Status
+                        </Link>
                         <Link to="/" className="hover:text-white transition-colors">Privacy Policy</Link>
                         <Link to="/" className="hover:text-white transition-colors">Terms of Service</Link>
                     </div>
